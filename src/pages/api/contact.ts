@@ -27,6 +27,8 @@ const subjectMap: Record<string, Record<string, string>> = {
   },
 };
 
+export const prerender = false;
+
 export const POST: APIRoute = async ({ request }) => {
   // Instanciar Resend dentro del handler para evitar errores en build time
   const resend = new Resend(import.meta.env.RESEND_API_KEY);

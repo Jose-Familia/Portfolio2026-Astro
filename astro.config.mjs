@@ -1,6 +1,5 @@
 import markdoc from "@astrojs/markdoc";
 import react from "@astrojs/react";
-import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
 import keystatic from "@keystatic/astro";
@@ -16,9 +15,6 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     react(),
-    sitemap({
-      filter: (page) => !page.includes("/keystatic"),
-    }),
     markdoc(),
     keystatic(),
   ],

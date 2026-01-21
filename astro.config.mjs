@@ -9,7 +9,9 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://josefamilia.vercel.app",
   output: "hybrid",
-  adapter: vercel(),
+  adapter: vercel({
+    runtime: "nodejs20.x",
+  }),
   integrations: [
     tailwind({
       applyBaseStyles: false,

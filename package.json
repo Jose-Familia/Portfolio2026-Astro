@@ -5,6 +5,9 @@
   "description": "Portfolio profesional minimalista con Astro, Keystatic y TailwindCSS",
   "author": "Tu Nombre",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

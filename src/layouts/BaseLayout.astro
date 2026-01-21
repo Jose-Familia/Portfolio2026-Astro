@@ -10,7 +10,7 @@
  * - Scripts globales
  */
 
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import '@/styles/global.css';
@@ -118,8 +118,8 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
       "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Astro", "Tailwind CSS"]
     })} />
     
-    <!-- View Transitions para navegación suave -->
-    <ViewTransitions />
+    <!-- Client Router para navegación suave -->
+    <ClientRouter />
   </head>
   
   <body class="flex flex-col min-h-screen antialiased">

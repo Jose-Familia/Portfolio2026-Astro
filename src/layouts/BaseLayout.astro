@@ -104,7 +104,7 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
     <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
     
     <!-- JSON-LD Schema -->
-    <script type="application/ld+json" set:html={JSON.stringify({
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
       "name": author,

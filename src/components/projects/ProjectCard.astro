@@ -1,0 +1,179 @@
+---
+/**
+ * ProjectCard.astro
+ * Tarjeta de proyecto para el listado
+ * Diseño minimalista con hover effects
+ */
+
+import Badge from '@/components/ui/Badge.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  slug: string;
+  thumbnail?: string;
+  technologies: string[];
+  tags?: string[];
+  featured?: boolean;
+  links?: {
+    live?: string;
+    github?: string;
+  };
+  index?: number;
+}
+
+const {
+  title,
+  description,
+  slug,
+  thumbnail,
+  technologies,
+  tags = [],
+  featured = false,
+  links,
+  index = 0,
+} = Astro.props;
+
+const projectUrl = `/proyectos/${slug}`;
+---
+
+<article
+  class:list={[
+    'group card-hover relative flex flex-col',
+    featured ? 'md:col-span-2 md:flex-row' : '',
+  ]}
+  style={`--stagger: ${index}`}
+  data-tags={tags.join(',').toLowerCase()}
+>
+  <!-- Imagen -->
+  <a
+    href={projectUrl}
+    class:list={[
+      'block overflow-hidden',
+      featured ? 'md:w-1/2' : '',
+    ]}
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <div class="relative aspect-project overflow-hidden">
+      {thumbnail ? (
+        <img
+          src={thumbnail}
+          alt=""
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+          transition:name={`project-image-${slug}`}
+        />
+      ) : (
+        <div class="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900 flex items-center justify-center">
+          <span class="text-4xl font-bold text-neutral-300 dark:text-neutral-700">
+            {title.charAt(0)}
+          </span>
+        </div>
+      )}
+      
+      <!-- Overlay en hover -->
+      <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+    </div>
+  </a>
+  
+  <!-- Contenido -->
+  <div class:list={[
+    'flex flex-col flex-1 p-6',
+    featured ? 'md:w-1/2 md:p-8' : '',
+  ]}>
+    <!-- Featured badge -->
+    {featured && (
+      <Badge variant="primary" size="sm" class="self-start mb-3">
+        Destacado
+      </Badge>
+    )}
+    
+    <!-- Título -->
+    <h3 class:list={[
+      'font-semibold tracking-tight mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors',
+      featured ? 'text-2xl' : 'text-xl',
+    ]}>
+      <a href={projectUrl} class="after:absolute after:inset-0">
+        {title}
+      </a>
+    </h3>
+    
+    <!-- Descripción -->
+    <p class:list={[
+      'text-neutral-600 dark:text-neutral-400 mb-4 flex-1',
+      featured ? 'text-base' : 'text-sm line-clamp-2',
+    ]}>
+      {description}
+    </p>
+    
+    <!-- Tecnologías -->
+    <div class="flex flex-wrap gap-2 mb-4">
+      {technologies.slice(0, featured ? 6 : 4).map((tech) => (
+        <Badge size="sm">{tech}</Badge>
+      ))}
+      {technologies.length > (featured ? 6 : 4) && (
+        <Badge size="sm">+{technologies.length - (featured ? 6 : 4)}</Badge>
+      )}
+    </div>
+    
+    <!-- Links externos -->
+    {links && (links.live || links.github) && (
+      <div class="flex items-center gap-4 relative z-10">
+        {links.live && (
+          <a
+            href={links.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            aria-label={`Ver demo de ${title}`}
+          >
+            <Icon name="external-link" size={16} />
+            <span>Demo</span>
+          </a>
+        )}
+        {links.github && (
+          <a
+            href={links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            aria-label={`Ver código de ${title} en GitHub`}
+          >
+            <Icon name="github" size={16} />
+            <span>Código</span>
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  /* Animación de entrada escalonada */
+  article {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+    animation-delay: calc(var(--stagger, 0) * 100ms);
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Respetar preferencia de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    article {
+      opacity: 1;
+      animation: none;
+    }
+  }
+</style>

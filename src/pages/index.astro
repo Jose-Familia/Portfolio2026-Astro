@@ -1,0 +1,281 @@
+---
+/**
+ * Home Page - Portfolio José Familia
+ * Diseño minimalista con animaciones suaves
+ */
+
+import Hero from '@/components/home/Hero.astro';
+import Magnetic from '@/components/ui/Magnetic';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const homeData = {
+  hero: {
+    title: 'Construyo experiencias digitales únicas',
+    subtitle: 'Estudiante de Ingeniería en Sistemas formándome de manera autodidacta en desarrollo web.',
+    primaryCTA: { text: 'Ver Proyectos', link: '/proyectos' },
+    secondaryCTA: { text: 'Contacto', link: '/contacto' },
+  },
+};
+
+// Get featured projects
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter(project => project.data.featured)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 4);
+
+// Get recent blog posts
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+
+const hasProjects = featuredProjects.length > 0;
+const hasPosts = recentPosts.length > 0;
+
+// Tech stack - solo nombres
+const technologies = ['React', 'TypeScript', 'Node.js', 'Astro', 'Tailwind', 'PostgreSQL'];
+---
+
+<BaseLayout title="Inicio">
+  <!-- Hero -->
+  <Hero
+    title="Construyo experiencias digitales únicas"
+    subtitle={homeData.hero.subtitle}
+    primaryCTA={homeData.hero.primaryCTA}
+    secondaryCTA={homeData.hero.secondaryCTA}
+  />
+  
+  <!-- About Section -->
+  <section id="about" class="py-24 md:py-32 bg-white dark:bg-black">
+    <div class="container-main">
+      <div class="max-w-4xl">
+        <!-- Encabezado -->
+        <span class="text-sm font-semibold text-black dark:text-white tracking-wide uppercase mb-4 block animate-fade-in-up">
+          Sobre mí
+        </span>
+        
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-black dark:text-white mb-8 leading-tight animate-fade-in-up" style="--stagger: 1">
+          Código limpio,<br />
+          <span class="text-neutral-500 dark:text-neutral-400">diseño intencional</span>
+        </h2>
+        
+        <!-- Texto -->
+        <div class="space-y-6 mb-10">
+          <p class="text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed animate-fade-in-up" style="--stagger: 2">
+            Soy José, estudiante de Ingeniería en Sistemas en la Universidad APEC. Aunque aún no tengo experiencia laboral formal, llevo desde 2023 formándome de manera autodidacta en desarrollo web.
+          </p>
+          
+          <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed animate-fade-in-up" style="--stagger: 3">
+            Cada proyecto es un paso más en mi camino—errores incluidos, porque de ahí es donde más aprendo. Mi objetivo es prepararme para cuando llegue la oportunidad.
+          </p>
+        </div>
+        
+        <!-- Stack Tecnológico -->
+        <div class="mb-10 animate-fade-in-up" style="--stagger: 4">
+          <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-5 uppercase tracking-wide font-medium">Stack Tecnológico</p>
+          <div class="flex flex-wrap gap-2">
+            {technologies.map((tech, index) => (
+              <span 
+                class="px-4 py-2 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white transition-all duration-300 cursor-default animate-fade-in-up"
+                style={`--stagger: ${4 + index * 0.3}`}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+        
+        <!-- Link -->
+        <a 
+          href="/sobre-mi" 
+          class="inline-flex items-center gap-2 text-black dark:text-white font-semibold hover:gap-3 transition-all group animate-fade-in-up"
+          style="--stagger: 8"
+        >
+          Conoce mi historia
+          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Projects Section -->
+  {hasProjects && (
+    <section class="py-24 md:py-32 bg-neutral-100 dark:bg-neutral-950">
+      <div class="container-main">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 animate-fade-in-up">
+          <div>
+            <span class="text-sm font-semibold text-black dark:text-white tracking-wide uppercase mb-4 block">
+              Proyectos
+            </span>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-black dark:text-white">
+              Trabajo seleccionado
+            </h2>
+          </div>
+          <a 
+            href="/proyectos" 
+            class="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white font-medium transition-colors group"
+          >
+            Ver todos los proyectos
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+          {featuredProjects.map((project, index) => (
+            <a 
+              href={`/proyectos/${project.slug}`}
+              class="group block relative overflow-hidden rounded-2xl bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 hover:border-black dark:hover:border-white transition-all duration-300 hover:shadow-xl animate-fade-in-up"
+              style={`--stagger: ${index}`}
+            >
+              <!-- Image -->
+              <div class="aspect-[16/10] bg-neutral-100 dark:bg-neutral-900 overflow-hidden">
+                {project.data.thumbnail ? (
+                  <img 
+                    src={project.data.thumbnail} 
+                    alt={project.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center text-neutral-300 dark:text-neutral-700">
+                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              
+              <!-- Content -->
+              <div class="p-6">
+                <div class="flex items-start justify-between gap-4 mb-3">
+                  <h3 class="text-xl font-bold text-black dark:text-white group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
+                    {project.data.title}
+                  </h3>
+                  <svg class="w-5 h-5 text-neutral-400 group-hover:text-black dark:group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10" />
+                  </svg>
+                </div>
+                <p class="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2 mb-4">
+                  {project.data.description}
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  {project.data.technologies?.slice(0, 4).map((tech: string) => (
+                    <span class="text-xs px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-medium">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+  
+  <!-- Blog Section -->
+  {hasPosts && (
+    <section class="py-24 md:py-32 bg-white dark:bg-black">
+      <div class="container-main">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 animate-fade-in-up">
+          <div>
+            <span class="text-sm font-semibold text-black dark:text-white tracking-wide uppercase mb-4 block">
+              Blog
+            </span>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-black dark:text-white">
+              Artículos recientes
+            </h2>
+          </div>
+          <a 
+            href="/blog" 
+            class="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-medium transition-colors group"
+          >
+            Ver todos los artículos
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+        
+        <div class="space-y-4">
+          {recentPosts.map((post, index) => (
+            <a 
+              href={`/blog/${post.slug}`}
+              class="group flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-2xl border border-transparent hover:border-neutral-200 dark:hover:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-all animate-fade-in-up"
+              style={`--stagger: ${index}`}
+            >
+              <div class="md:w-40 flex-shrink-0">
+                <time class="text-sm text-neutral-500 font-medium">
+                  {new Date(post.data.publishDate).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </time>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-bold text-black dark:text-white group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors mb-2">
+                  {post.data.title}
+                </h3>
+                <p class="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-1">
+                  {post.data.excerpt}
+                </p>
+              </div>
+              <svg class="w-5 h-5 text-neutral-400 group-hover:text-black dark:group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+  
+  <!-- CTA Section -->
+  <section class="py-24 md:py-32 bg-neutral-100 dark:bg-neutral-900 relative overflow-hidden">
+    <!-- Decoración de fondo -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0); background-size: 40px 40px;"></div>
+    </div>
+    
+    <div class="container-main relative">
+      <div class="max-w-3xl mx-auto text-center animate-fade-in-up">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
+          ¿Quieres colaborar conmigo?
+        </h2>
+        <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-10 max-w-xl mx-auto">
+          Estoy abierto a proyectos colaborativos, prácticas profesionales y oportunidades de aprendizaje. ¡Conectemos!
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <Magnetic client:visible strength={0.1}>
+            <a 
+              href="/contacto"
+              class="group inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-semibold rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all shadow-lg"
+            >
+              Conectar ahora
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </Magnetic>
+          <a 
+            href="mailto:familiajoserene@gmail.com"
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold rounded-full border-2 border-neutral-400 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:border-neutral-900 dark:hover:border-white hover:text-neutral-900 dark:hover:text-white transition-all"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Enviar email
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

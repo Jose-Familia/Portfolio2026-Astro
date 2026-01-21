@@ -1,0 +1,35 @@
+---
+/**
+ * TableOfContents.astro
+ * Tabla de contenidos para artículos del blog
+ */
+
+export interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+
+// Filtrar solo h2 y h3
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{toc.length > 0 && (
+  <nav class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800" aria-label="Tabla de contenidos">
+    <h2 class="text-sm font-semibold text-neutral-900 dark:text-neutral-50 mb-3">
+      En este artículo
+    </h2>
+    <ul class="space-y-2 text-sm" role="list">
+      {toc.map((heading) => (
+        <li class:list={[heading.depth === 3 && 'ml-4']}>
+          <a
+            href={`#${heading.slug}`}
+            class="block py-1 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

@@ -1,0 +1,195 @@
+---
+/**
+ * Página del Blog
+ * Listado de todos los artículos
+ */
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogPostCard from '@/components/blog/BlogPostCard.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { getCollection } from 'astro:content';
+
+// Cargar posts desde Keystatic
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .map(post => ({
+    title: post.data.title,
+    excerpt: post.data.excerpt,
+    slug: post.slug,
+    publishDate: post.data.publishDate,
+    coverImage: post.data.coverImage,
+    category: post.data.category,
+    readingTime: post.data.readingTime || 5,
+    featured: post.data.featured || false,
+  }));
+
+const hasPosts = posts.length > 0;
+
+const categories = [
+  { value: 'all', label: 'Todos' },
+  { value: 'development', label: 'Desarrollo' },
+  { value: 'design', label: 'Diseño' },
+  { value: 'tutorials', label: 'Tutoriales' },
+  { value: 'opinion', label: 'Opinión' },
+  { value: 'career', label: 'Carrera' },
+];
+
+const featuredPosts = posts.filter((p) => p.featured);
+const regularPosts = posts.filter((p) => !p.featured);
+---
+
+<BaseLayout
+  title="Blog"
+  description="Artículos sobre desarrollo web, diseño, tutoriales y reflexiones sobre la carrera en tecnología."
+>
+  <section class="section-sm">
+    <div class="container-main">
+      <!-- Header -->
+      <header class="max-w-3xl mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 animate-fade-in-up">
+          Blog
+        </h1>
+        <p class="text-xl text-neutral-600 dark:text-neutral-400 animate-fade-in-up" style="--stagger: 1">
+          Reflexiones, tutoriales y aprendizajes sobre desarrollo web y diseño de interfaces.
+        </p>
+      </header>
+      
+      {hasPosts ? (
+        <>
+          <!-- Búsqueda y filtros -->
+          <div class="flex flex-col sm:flex-row gap-4 mb-12">
+            <!-- Buscador -->
+            <div class="relative flex-1 max-w-md">
+              <Icon name="search" size={20} class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+              <input
+                type="search"
+                placeholder="Buscar artículos..."
+                class="input pl-12"
+                id="search-input"
+                aria-label="Buscar artículos"
+              />
+            </div>
+            
+            <!-- Filtro por categoría -->
+            <select
+              class="input max-w-[200px]"
+              id="category-filter"
+              aria-label="Filtrar por categoría"
+            >
+              {categories.map((cat) => (
+                <option value={cat.value}>{cat.label}</option>
+              ))}
+            </select>
+          </div>
+          
+          <!-- Posts destacados -->
+          {featuredPosts.length > 0 && (
+            <div class="mb-16">
+              <h2 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-6">
+                Artículos destacados
+              </h2>
+              <div class="grid gap-6 lg:gap-8">
+                {featuredPosts.map((post, index) => (
+                  <BlogPostCard {...post} featured={true} index={index} />
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <!-- Todos los posts -->
+          {regularPosts.length > 0 && (
+            <div>
+              <h2 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-6">
+                Todos los artículos
+              </h2>
+              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="posts-grid">
+                {regularPosts.map((post, index) => (
+                  <BlogPostCard
+                    {...post}
+                    index={index + featuredPosts.length}
+                  />
+                ))}
+              </div>
+              
+              <!-- Estado vacío (para filtros) -->
+              <div id="empty-state" class="hidden py-16 text-center">
+                <p class="text-neutral-500 mb-4">No se encontraron artículos</p>
+                <Button variant="ghost" id="reset-filters">
+                  Limpiar filtros
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <!-- Estado vacío (sin posts) -->
+        <div class="py-16 text-center">
+          <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+            <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+            </svg>
+          </div>
+          <h2 class="text-xl font-semibold mb-2">Blog en construcción</h2>
+          <p class="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
+            Estoy trabajando en nuevos artículos. Pronto encontrarás contenido sobre desarrollo web, diseño y más.
+          </p>
+          <Button href="/contacto" variant="primary">
+            Contáctame
+          </Button>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Búsqueda y filtrado client-side
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const categoryFilter = document.getElementById('category-filter') as HTMLSelectElement;
+  const postsGrid = document.getElementById('posts-grid');
+  const emptyState = document.getElementById('empty-state');
+  const resetBtn = document.getElementById('reset-filters');
+  
+  const filterPosts = () => {
+    const searchTerm = searchInput?.value.toLowerCase() || '';
+    const category = categoryFilter?.value || 'all';
+    
+    const cards = postsGrid?.querySelectorAll('article') || [];
+    let visibleCount = 0;
+    
+    cards.forEach((card) => {
+      const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+      const excerpt = card.querySelector('p')?.textContent?.toLowerCase() || '';
+      const cardCategory = card.getAttribute('data-category') || '';
+      
+      const matchesSearch = title.includes(searchTerm) || excerpt.includes(searchTerm);
+      const matchesCategory = category === 'all' || cardCategory === category;
+      
+      if (matchesSearch && matchesCategory) {
+        card.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Mostrar estado vacío si no hay resultados
+    if (visibleCount === 0) {
+      emptyState?.classList.remove('hidden');
+    } else {
+      emptyState?.classList.add('hidden');
+    }
+  };
+  
+  searchInput?.addEventListener('input', filterPosts);
+  categoryFilter?.addEventListener('change', filterPosts);
+  
+  resetBtn?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    if (categoryFilter) categoryFilter.value = 'all';
+    filterPosts();
+  });
+</script>

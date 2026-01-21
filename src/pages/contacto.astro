@@ -1,0 +1,225 @@
+---
+/**
+ * Página de Contacto (ES)
+ * Formulario y enlaces de contacto
+ */
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+const contactInfo = [
+  {
+    icon: 'mail',
+    label: 'Email',
+    value: 'familiajoserene@gmail.com',
+    href: 'mailto:familiajoserene@gmail.com',
+  },
+  {
+    icon: 'github',
+    label: 'GitHub',
+    value: '@Jose-Familia',
+    href: 'https://github.com/Jose-Familia',
+  },
+  {
+    icon: 'linkedin',
+    label: 'LinkedIn',
+    value: 'José R. Familia',
+    href: 'https://www.linkedin.com/in/jrfamilia/',
+  },
+];
+---
+
+<BaseLayout
+  title="Contacto"
+  description="¿Tienes un proyecto en mente? Hablemos. Estoy disponible para proyectos freelance y colaboraciones."
+>
+  <section class="section-sm">
+    <div class="container-main">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        <!-- Información de contacto -->
+        <div>
+          <header class="mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 animate-fade-in-up">
+              Hablemos
+            </h1>
+            <p class="text-xl text-neutral-600 dark:text-neutral-400 animate-fade-in-up" style="--stagger: 1">
+              ¿Tienes un proyecto en mente o simplemente quieres saludar? 
+              Me encantaría escucharte.
+            </p>
+          </header>
+          
+          <!-- Lista de contactos -->
+          <div class="space-y-4 mb-10">
+            {contactInfo.map((contact, index) => (
+              <a
+                href={contact.href}
+                target={contact.href.startsWith('http') ? '_blank' : undefined}
+                rel={contact.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                class="flex items-center gap-4 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors group animate-fade-in-up"
+                style={`--stagger: ${index + 2}`}
+              >
+                <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  <Icon name={contact.icon} size={24} />
+                </div>
+                <div>
+                  <p class="text-sm text-neutral-500">{contact.label}</p>
+                  <p class="font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                    {contact.value}
+                  </p>
+                </div>
+                <Icon name="arrow-up-right" size={20} class="ml-auto text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
+              </a>
+            ))}
+          </div>
+          
+          <!-- Disponibilidad -->
+          <div class="p-6 rounded-xl bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+              </span>
+              <span class="font-semibold text-green-800 dark:text-green-300">
+                Disponible para proyectos
+              </span>
+            </div>
+            <p class="text-sm text-green-700 dark:text-green-400">
+              Actualmente tengo disponibilidad para nuevos proyectos freelance. 
+              Tiempo de respuesta típico: 24-48 horas.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Formulario de contacto -->
+        <div class="card p-6 md:p-8 lg:p-10">
+          <h2 class="text-2xl font-semibold mb-6">Envíame un mensaje</h2>
+          
+          <form
+            id="contact-form"
+            class="space-y-6"
+          >
+            <!-- Nombre -->
+            <div>
+              <label for="name" class="block text-sm font-medium mb-2">
+                Nombre <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                autocomplete="name"
+                class="input"
+                placeholder="Tu nombre"
+              />
+            </div>
+            
+            <!-- Email -->
+            <div>
+              <label for="email" class="block text-sm font-medium mb-2">
+                Email <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                autocomplete="email"
+                class="input"
+                placeholder="tu@email.com"
+              />
+            </div>
+            
+            <!-- Asunto -->
+            <div>
+              <label for="subject" class="block text-sm font-medium mb-2">
+                Asunto
+              </label>
+              <select id="subject" name="subject" class="input">
+                <option value="">Selecciona un asunto</option>
+                <option value="proyecto">Tengo un proyecto</option>
+                <option value="colaboracion">Propuesta de colaboración</option>
+                <option value="consulta">Consulta técnica</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            
+            <!-- Mensaje -->
+            <div>
+              <label for="message" class="block text-sm font-medium mb-2">
+                Mensaje <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                rows="5"
+                class="textarea"
+                placeholder="Cuéntame sobre tu proyecto o idea..."
+              ></textarea>
+            </div>
+            
+
+            
+            <!-- Submit -->
+            <Button type="submit" variant="primary" class="w-full">
+              Enviar mensaje
+              <Icon name="arrow-right" size={18} />
+            </Button>
+            
+            <p class="text-xs text-neutral-500 text-center">
+              Se abrirá tu aplicación de correo para enviar el mensaje.
+            </p>
+          </form>
+          
+          <!-- Nota informativa -->
+          <div class="mt-6 p-4 rounded-lg bg-primary-50 dark:bg-primary-950/30 border border-primary-200 dark:border-primary-800">
+            <p class="text-sm text-primary-700 dark:text-primary-300">
+              <strong>Nota:</strong> Al enviar, se abrirá tu cliente de correo con el mensaje prellenado.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const EMAIL = 'familiajoserene@gmail.com';
+  
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = (document.getElementById('name') as HTMLInputElement)?.value || '';
+      const email = (document.getElementById('email') as HTMLInputElement)?.value || '';
+      const subject = (document.getElementById('subject') as HTMLSelectElement)?.value || '';
+      const message = (document.getElementById('message') as HTMLTextAreaElement)?.value || '';
+      
+      // Construir asunto del email
+      const subjectMap: Record<string, string> = {
+        'proyecto': 'Tengo un proyecto',
+        'colaboracion': 'Propuesta de colaboración',
+        'consulta': 'Consulta técnica',
+        'otro': 'Otro',
+      };
+      const emailSubject = `[Portfolio] ${subjectMap[subject] || 'Contacto'}  - ${name}`;
+      
+      // Construir cuerpo del email
+      const emailBody = `Hola José,\n\n${message}\n\n---\nNombre: ${name}\nEmail: ${email}`;
+      
+      // Abrir cliente de email
+      const mailtoLink = `mailto:${EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      window.location.href = mailtoLink;
+    });
+  }
+  
+  // Inicializar
+  initContactForm();
+  
+  // Re-inicializar con View Transitions
+  document.addEventListener('astro:after-swap', initContactForm);
+</script>

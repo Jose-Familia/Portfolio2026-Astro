@@ -1,0 +1,237 @@
+---
+/**
+ * ProjectLayout.astro
+ * Layout para páginas individuales de proyectos
+ */
+
+import ProjectGallery from '@/components/projects/ProjectGallery.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { formatDate } from '@/utils/formatDate';
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  slug: string;
+  thumbnail?: string;
+  images?: string[];
+  technologies: string[];
+  tags: string[];
+  publishDate: Date;
+  status: 'in-progress' | 'completed' | 'archived';
+  links: {
+    live?: string;
+    github?: string;
+    case_study?: string;
+  };
+}
+
+const {
+  title,
+  description,
+  slug,
+  thumbnail,
+  images = [],
+  technologies,
+  tags,
+  publishDate,
+  status,
+  links,
+} = Astro.props;
+
+const statusLabels = {
+  'in-progress': 'En desarrollo',
+  'completed': 'Completado',
+  'archived': 'Archivado',
+};
+
+const statusColors = {
+  'in-progress': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+  'completed': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  'archived': 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400',
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={thumbnail}
+>
+  <article class="section-sm">
+    <!-- Header del proyecto -->
+    <header class="container-main mb-12">
+      <!-- Navegación de regreso -->
+      <a
+        href="/proyectos"
+        class="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors mb-8"
+      >
+        <Icon name="arrow-left" size={16} />
+        <span>Volver a proyectos</span>
+      </a>
+      
+      <div class="max-w-3xl">
+        <!-- Estado y fecha -->
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <span class={`inline-flex items-center px-3 py-1 text-xs font-medium rounded-full ${statusColors[status]}`}>
+            {statusLabels[status]}
+          </span>
+          <span class="text-sm text-neutral-500">
+            {formatDate(publishDate)}
+          </span>
+        </div>
+        
+        <!-- Título -->
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 animate-fade-in-up">
+          {title}
+        </h1>
+        
+        <!-- Descripción -->
+        <p class="text-xl text-neutral-600 dark:text-neutral-400 mb-8 animate-fade-in-up" style="--stagger: 1">
+          {description}
+        </p>
+        
+        <!-- CTAs -->
+        <div class="flex flex-wrap gap-4 animate-fade-in-up" style="--stagger: 2">
+          {links.live && (
+            <Button href={links.live} variant="primary" external>
+              <Icon name="external-link" size={18} />
+              Ver proyecto
+            </Button>
+          )}
+          {links.github && (
+            <Button href={links.github} variant="secondary" external>
+              <Icon name="github" size={18} />
+              Ver código
+            </Button>
+          )}
+        </div>
+      </div>
+    </header>
+    
+    <!-- Imagen principal -->
+    {thumbnail && (
+      <figure class="container-main mb-16 animate-scale-in" style="--stagger: 3">
+        <img
+          src={thumbnail}
+          alt={`Captura de ${title}`}
+          class="w-full aspect-project object-cover rounded-2xl shadow-soft-lg"
+          loading="eager"
+          transition:name={`project-image-${slug}`}
+        />
+      </figure>
+    )}
+    
+    <!-- Contenido principal -->
+    <div class="container-main">
+      <div class="grid lg:grid-cols-[1fr_300px] gap-12 lg:gap-16">
+        <!-- Descripción detallada -->
+        <div class="prose-custom animate-fade-in-up" style="--stagger: 4">
+          <slot />
+        </div>
+        
+        <!-- Sidebar con info del proyecto -->
+        <aside class="space-y-8">
+          <!-- Tecnologías -->
+          <div class="card p-6">
+            <h3 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-4">
+              Tecnologías
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              {technologies.map((tech) => (
+                <Badge>{tech}</Badge>
+              ))}
+            </div>
+          </div>
+          
+          <!-- Tags -->
+          {tags.length > 0 && (
+            <div class="card p-6">
+              <h3 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-4">
+                Categorías
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <a
+                    href={`/proyectos?tag=${tag.toLowerCase()}`}
+                    class="badge hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                  >
+                    {tag}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <!-- Links del proyecto -->
+          <div class="card p-6">
+            <h3 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-4">
+              Enlaces
+            </h3>
+            <ul class="space-y-3">
+              {links.live && (
+                <li>
+                  <a
+                    href={links.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-3 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                  >
+                    <Icon name="external-link" size={18} />
+                    <span>Demo en vivo</span>
+                  </a>
+                </li>
+              )}
+              {links.github && (
+                <li>
+                  <a
+                    href={links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-3 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                  >
+                    <Icon name="github" size={18} />
+                    <span>Repositorio</span>
+                  </a>
+                </li>
+              )}
+              {links.case_study && (
+                <li>
+                  <a
+                    href={links.case_study}
+                    class="flex items-center gap-3 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                  >
+                    <Icon name="file-text" size={18} />
+                    <span>Caso de estudio</span>
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+    
+    <!-- Galería de imágenes -->
+    {images.length > 0 && (
+      <section class="container-main mt-16">
+        <h2 class="text-2xl font-semibold mb-8">Galería</h2>
+        <ProjectGallery images={images} projectName={title} />
+      </section>
+    )}
+    
+    <!-- Navegación entre proyectos -->
+    <nav class="container-main mt-16 pt-12 border-t border-neutral-200 dark:border-neutral-800">
+      <div class="flex justify-between">
+        <a
+          href="/proyectos"
+          class="btn-ghost"
+        >
+          <Icon name="arrow-left" size={18} />
+          Todos los proyectos
+        </a>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>

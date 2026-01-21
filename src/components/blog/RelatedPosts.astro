@@ -1,0 +1,40 @@
+---
+/**
+ * RelatedPosts.astro
+ * Muestra artículos relacionados por categoría
+ */
+
+// TODO: Implementar con getCollection de Astro
+export interface Props {
+  currentSlug?: string;
+  category: string;
+}
+
+const { currentSlug, category } = Astro.props;
+
+// Placeholder - en producción se usaría getCollection
+const relatedPosts: any[] = [];
+---
+
+{relatedPosts.length > 0 && (
+  <section>
+    <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-50 mb-6">
+      Artículos relacionados
+    </h2>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {relatedPosts.map((post) => (
+        <a
+          href={`/blog/${post.slug}`}
+          class="group p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
+        >
+          <h3 class="font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-1">
+            {post.title}
+          </h3>
+          <p class="text-sm text-neutral-500 line-clamp-2">
+            {post.excerpt}
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
+)}

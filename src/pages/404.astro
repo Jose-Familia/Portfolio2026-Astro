@@ -1,0 +1,30 @@
+---
+/**
+ * Página 404 - No encontrado
+ */
+
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Página no encontrada" noIndex={true}>
+  <section class="section flex items-center justify-center min-h-[60vh]">
+    <div class="text-center">
+      <p class="text-8xl font-bold text-primary-500 mb-4">404</p>
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">Página no encontrada</h1>
+      <p class="text-neutral-600 dark:text-neutral-400 mb-8 max-w-md mx-auto">
+        Lo siento, la página que buscas no existe o ha sido movida.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <Button href="/" variant="primary">
+          <Icon name="arrow-left" size={18} />
+          Volver al inicio
+        </Button>
+        <Button href="/contacto" variant="secondary">
+          Contactar
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

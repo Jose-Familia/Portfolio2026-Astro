@@ -1,0 +1,201 @@
+---
+/**
+ * Header.astro
+ * Navegación principal del sitio
+ * Incluye menú responsive y toggle de tema
+ */
+
+import ThemeToggle from '@/components/ui/ThemeToggle.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+const navigation = [
+  { name: 'Inicio', href: '/' },
+  { name: 'Sobre mí', href: '/sobre-mi' },
+  { name: 'Proyectos', href: '/proyectos' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contacto', href: '/contacto' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-header">
+  <div class="glass">
+    <nav class="container-main flex items-center justify-between h-16 md:h-20" aria-label="Main navigation">
+      <!-- Logo -->
+      <a
+        href="/"
+        class="group flex items-center gap-2 text-xl font-bold tracking-tight hover:text-primary-600 transition-colors"
+        aria-label="Ir al inicio"
+        transition:name="logo"
+      >
+        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-500 text-white text-sm font-bold group-hover:bg-primary-600 transition-colors">JF</span>
+        <span class="hidden sm:inline text-neutral-900 dark:text-neutral-50">José Familia</span>
+      </a>
+      
+      <!-- Navegación desktop -->
+      <ul class="hidden md:flex items-center gap-1" role="list">
+        {navigation.map((item) => {
+          const isActive = currentPath === item.href || 
+            (item.href !== '/' && currentPath.startsWith(item.href));
+          return (
+            <li>
+              <a
+                href={item.href}
+                class:list={[
+                  'relative px-4 py-2 text-sm font-medium rounded-lg transition-colors',
+                  isActive
+                    ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800',
+                ]}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {item.name}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      
+      <!-- Acciones -->
+      <div class="flex items-center gap-2">
+        <a 
+          href="https://github.com/Jose-Familia" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="hidden sm:flex p-2 rounded-lg text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          aria-label="GitHub"
+        >
+          <Icon name="github" size={20} />
+        </a>
+        <ThemeToggle />
+        
+        <!-- Botón menú móvil -->
+        <button
+          type="button"
+          class="md:hidden p-2 -mr-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          id="mobile-menu-button"
+        >
+          <Icon name="menu" size={24} />
+        </button>
+      </div>
+    </nav>
+  </div>
+  
+  <!-- Menú móvil -->
+  <div
+    id="mobile-menu"
+    class="md:hidden fixed inset-0 z-40 hidden"
+    aria-modal="true"
+    role="dialog"
+  >
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-menu-overlay"></div>
+    
+    <!-- Panel -->
+    <div class="absolute right-0 top-0 h-full w-64 bg-white dark:bg-neutral-900 shadow-xl transform translate-x-full transition-transform duration-300" id="mobile-menu-panel">
+      <div class="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800">
+        <span class="font-semibold">Menu</span>
+        <button
+          type="button"
+          class="p-2 -mr-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
+          aria-label="Close menu"
+          id="mobile-menu-close"
+        >
+          <Icon name="x" size={24} />
+        </button>
+      </div>
+      
+      <nav class="p-4">
+        <ul class="space-y-2" role="list">
+          {navigation.map((item) => {
+            const isActive = currentPath === item.href || 
+              (item.href !== '/' && currentPath.startsWith(item.href));
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={[
+                    'block px-4 py-3 rounded-lg font-medium transition-colors',
+                    isActive
+                      ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'
+                      : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800',
+                  ]}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {item.name}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- Spacer para compensar el header fijo -->
+<div class="h-16 md:h-20"></div>
+
+<script>
+  function initHeader() {
+    // Header scroll effect
+    const header = document.getElementById('main-header');
+    
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        header?.classList.add('shadow-soft');
+      } else {
+        header?.classList.remove('shadow-soft');
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Check initial state
+    
+    // Mobile menu
+    const menuButton = document.getElementById('mobile-menu-button');
+    const menuClose = document.getElementById('mobile-menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuPanel = document.getElementById('mobile-menu-panel');
+    const menuOverlay = document.getElementById('mobile-menu-overlay');
+    
+    const openMenu = () => {
+      mobileMenu?.classList.remove('hidden');
+      setTimeout(() => {
+        menuPanel?.classList.remove('translate-x-full');
+      }, 10);
+      menuButton?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    
+    const closeMenu = () => {
+      menuPanel?.classList.add('translate-x-full');
+      setTimeout(() => {
+        mobileMenu?.classList.add('hidden');
+      }, 300);
+      menuButton?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+    
+    menuButton?.addEventListener('click', openMenu);
+    menuClose?.addEventListener('click', closeMenu);
+    menuOverlay?.addEventListener('click', closeMenu);
+    
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !mobileMenu?.classList.contains('hidden')) {
+        closeMenu();
+      }
+    });
+  }
+  
+  // Initialize on first load
+  initHeader();
+  
+  // Re-initialize after view transitions
+  document.addEventListener('astro:after-swap', initHeader);
+</script>

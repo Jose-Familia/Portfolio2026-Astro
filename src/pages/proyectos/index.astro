@@ -1,0 +1,210 @@
+---
+/**
+ * Página de Proyectos
+ * Listado de todos los proyectos con filtrado
+ */
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectCard from '@/components/projects/ProjectCard.astro';
+import Button from '@/components/ui/Button.astro';
+import { getCollection } from 'astro:content';
+
+// Cargar proyectos desde Keystatic
+const allProjects = await getCollection('projects');
+const projects = allProjects
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .map(project => ({
+    title: project.data.title,
+    description: project.data.description,
+    slug: project.slug,
+    thumbnail: project.data.thumbnail,
+    technologies: project.data.technologies || [],
+    tags: project.data.tags || [],
+    featured: project.data.featured || false,
+    links: {
+      live: project.data.links?.live,
+      github: project.data.links?.github,
+    },
+  }));
+
+const hasProjects = projects.length > 0;
+
+// Obtener tags únicos para filtrado
+const allTags = hasProjects ? [...new Set(projects.flatMap((p) => p.tags))] : [];
+
+// Separar proyectos destacados
+const featuredProjects = projects.filter((p) => p.featured);
+const regularProjects = projects.filter((p) => !p.featured);
+---
+
+<BaseLayout
+  title="Proyectos"
+  description="Explora mi portfolio de proyectos de desarrollo web, desde aplicaciones fullstack hasta sistemas de diseño."
+>
+  <section class="section-sm">
+    <div class="container-main">
+      <!-- Header -->
+      <header class="max-w-3xl mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 animate-fade-in-up">
+          Proyectos
+        </h1>
+        <p class="text-xl text-neutral-600 dark:text-neutral-400 animate-fade-in-up" style="--stagger: 1">
+          Una selección de proyectos en los que he trabajado, desde aplicaciones web completas hasta contribuciones open source.
+        </p>
+      </header>
+      
+      {hasProjects ? (
+        <>
+          <!-- Filtros -->
+          <div class="flex flex-wrap gap-2 mb-12" role="group" aria-label="Filtrar proyectos">
+            <Button
+              variant="primary"
+              size="sm"
+              class="filter-btn active"
+              data-filter="all"
+            >
+              Todos
+            </Button>
+            {allTags.map((tag: string) => (
+              <Button
+                variant="ghost"
+                size="sm"
+                class="filter-btn"
+                data-filter={tag.toLowerCase()}
+              >
+                {tag}
+              </Button>
+            ))}
+          </div>
+          
+          <!-- Proyectos destacados -->
+          {featuredProjects.length > 0 && (
+            <div class="mb-12" id="featured-section">
+              <h2 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-6">
+                Destacados
+              </h2>
+              <div class="grid md:grid-cols-2 gap-6 lg:gap-8" id="featured-grid">
+                {featuredProjects.map((project, index) => (
+                  <ProjectCard {...project} index={index} />
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <!-- Todos los proyectos -->
+          {regularProjects.length > 0 && (
+            <div id="regular-section">
+              <h2 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-6">
+                Todos los proyectos
+              </h2>
+              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-grid">
+                {regularProjects.map((project, index) => (
+                  <ProjectCard
+                    {...project}
+                    index={index + featuredProjects.length}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <!-- Estado vacío -->
+        <div class="py-16 text-center">
+          <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+            <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+          </div>
+          <h2 class="text-xl font-semibold mb-2">Proyectos en camino</h2>
+          <p class="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
+            Estoy trabajando en documentar mis proyectos. Pronto encontrarás aquí una selección de mi trabajo.
+          </p>
+          <Button href="/contacto" variant="primary">
+            Contáctame
+          </Button>
+        </div>
+      )}
+      
+      <!-- CTA -->
+      <div class="mt-16 text-center">
+        <p class="text-neutral-600 dark:text-neutral-400 mb-4">
+          ¿Interesado en trabajar juntos?
+        </p>
+        <Button href="/contacto" variant="primary">
+          Hablemos de tu proyecto
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  function initProjectFilters() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const featuredSection = document.getElementById('featured-section');
+    const regularSection = document.getElementById('regular-section');
+    const featuredCards = document.querySelectorAll('#featured-grid article');
+    const regularCards = document.querySelectorAll('#projects-grid article');
+    const allCards = [...featuredCards, ...regularCards];
+    
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+        
+        // Actualizar estado de botones
+        filterButtons.forEach((b) => {
+          b.classList.remove('active');
+          const classList = b.className;
+          if (classList.includes('btn-primary')) {
+            b.classList.replace('btn-primary', 'btn-ghost');
+          }
+        });
+        btn.classList.add('active');
+        if (btn.classList.contains('btn-ghost')) {
+          btn.classList.replace('btn-ghost', 'btn-primary');
+        }
+        
+        // Filtrar todos los proyectos
+        let featuredVisible = 0;
+        let regularVisible = 0;
+        
+        allCards.forEach((card) => {
+          const tags = card.getAttribute('data-tags')?.toLowerCase() || '';
+          const shouldShow = filter === 'all' || tags.includes(filter || '');
+          const isFeatured = card.closest('#featured-grid');
+          
+          if (shouldShow) {
+            card.classList.remove('hidden');
+            card.classList.add('animate-fade-in');
+            if (isFeatured) featuredVisible++;
+            else regularVisible++;
+          } else {
+            card.classList.add('hidden');
+            card.classList.remove('animate-fade-in');
+          }
+        });
+        
+        // Ocultar secciones vacías
+        if (featuredSection) {
+          featuredSection.classList.toggle('hidden', featuredVisible === 0);
+        }
+        if (regularSection) {
+          regularSection.classList.toggle('hidden', regularVisible === 0);
+        }
+      });
+    });
+  }
+  
+  // Initialize on load
+  initProjectFilters();
+  
+  // Re-initialize after view transitions
+  document.addEventListener('astro:after-swap', initProjectFilters);
+</script>
+
+<style>
+  .filter-btn.active {
+    @apply bg-neutral-900 text-neutral-50 dark:bg-neutral-50 dark:text-neutral-900;
+  }
+</style>

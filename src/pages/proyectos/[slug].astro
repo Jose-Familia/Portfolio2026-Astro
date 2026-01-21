@@ -1,0 +1,40 @@
+---
+/**
+ * Página individual de proyecto
+ * Ruta dinámica: /proyectos/[slug]
+ */
+
+import ProjectLayout from '@/layouts/ProjectLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<ProjectLayout
+  title={project.data.title}
+  description={project.data.description}
+  slug={project.slug}
+  thumbnail={project.data.thumbnail}
+  images={project.data.images || []}
+  technologies={project.data.technologies || []}
+  tags={project.data.tags || []}
+  publishDate={project.data.publishDate}
+  status={project.data.status}
+  links={project.data.links || {}}
+>
+  <Content />
+</ProjectLayout>

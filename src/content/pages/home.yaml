@@ -1,0 +1,14 @@
+hero:
+  title: "Construyendo mi camino\nen el desarrollo web"
+  subtitle: "Estudiante de Ingeniería en Sistemas formándome de manera autodidacta en desarrollo web."
+  cta:
+    primaryText: "Ver proyectos"
+    primaryLink: "/proyectos"
+    secondaryText: "Contactar"
+    secondaryLink: "/contacto"
+intro:
+  title: "Sobre mí"
+  description: "Estudiante sin experiencia laboral formal, pero con proyectos personales y ganas de aprender. Mi enfoque combina el aprendizaje constante con la práctica."
+featuredProjects:
+  title: "Proyectos destacados"
+  count: 3

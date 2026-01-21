@@ -1,0 +1,43 @@
+---
+/**
+ * Página individual de blog post
+ * Ruta dinámica: /blog/[slug]
+ */
+
+import BlogPostLayout from '@/layouts/BlogPostLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+
+// Calcular tiempo de lectura aproximado (250 palabras por minuto)
+const wordCount = post.body?.split(/\s+/).length || 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / 250));
+---
+
+<BlogPostLayout
+  title={post.data.title}
+  slug={post.slug}
+  excerpt={post.data.excerpt}
+  publishDate={post.data.publishDate}
+  coverImage={post.data.coverImage}
+  category={post.data.category}
+  tags={post.data.tags || []}
+  readingTime={readingTime}
+  headings={headings}
+>
+  <Content />
+</BlogPostLayout>

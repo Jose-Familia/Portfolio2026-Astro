@@ -1,0 +1,165 @@
+---
+/**
+ * BlogPostLayout.astro
+ * Layout específico para artículos del blog
+ * Optimizado para SEO y legibilidad
+ */
+
+import AuthorCard from '@/components/blog/AuthorCard.astro';
+import RelatedPosts from '@/components/blog/RelatedPosts.astro';
+import ShareButtons from '@/components/blog/ShareButtons.astro';
+import TableOfContents from '@/components/blog/TableOfContents.astro';
+import { formatDate } from '@/utils/formatDate';
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+  title: string;
+  slug: string;
+  excerpt: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  coverImage?: string;
+  category: string;
+  tags: string[];
+  readingTime: number;
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const {
+  title,
+  slug,
+  excerpt,
+  publishDate,
+  updatedDate,
+  coverImage,
+  category,
+  tags,
+  readingTime,
+  headings,
+} = Astro.props;
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": excerpt,
+  "image": coverImage,
+  "datePublished": publishDate.toISOString(),
+  "dateModified": (updatedDate || publishDate).toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": "Tu Nombre"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Tu Nombre"
+  }
+};
+---
+
+<BaseLayout
+  title={title}
+  description={excerpt}
+  image={coverImage}
+  type="article"
+  publishedTime={publishDate.toISOString()}
+  modifiedTime={updatedDate?.toISOString()}
+>
+  <article class="section-sm">
+    <!-- Header del artículo -->
+    <header class="container-narrow mb-12">
+      <div class="mb-6 flex flex-wrap items-center gap-3 text-sm text-neutral-500">
+        <a
+          href={`/blog/category/${category}`}
+          class="badge-primary hover:opacity-80 transition-opacity"
+        >
+          {category}
+        </a>
+        <span>·</span>
+        <time datetime={publishDate.toISOString()}>
+          {formatDate(publishDate)}
+        </time>
+        <span>·</span>
+        <span>{readingTime} min de lectura</span>
+      </div>
+      
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 animate-fade-in-up">
+        {title}
+      </h1>
+      
+      <p class="text-xl text-neutral-600 dark:text-neutral-400 animate-fade-in-up" style="--stagger: 1">
+        {excerpt}
+      </p>
+    </header>
+    
+    <!-- Imagen de portada -->
+    {coverImage && (
+      <figure class="container-main mb-12 animate-fade-in" style="--stagger: 2">
+        <img
+          src={coverImage}
+          alt={title}
+          class="w-full aspect-blog object-cover rounded-2xl"
+          loading="eager"
+          transition:name={`blog-image-${slug}`}
+        />
+      </figure>
+    )}
+    
+    <!-- Contenido principal con sidebar -->
+    <div class="container-main">
+      <div class="grid lg:grid-cols-[1fr_250px] gap-12">
+        <!-- Contenido del artículo -->
+        <div class="prose-custom animate-fade-in-up" style="--stagger: 3">
+          <slot />
+          
+          <!-- Tags al final del artículo -->
+          {tags.length > 0 && (
+            <div class="not-prose mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+              <h3 class="text-sm font-medium text-neutral-500 mb-3">Etiquetas</h3>
+              <div class="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <a
+                    href={`/blog/tag/${tag.toLowerCase()}`}
+                    class="badge hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <!-- Sidebar -->
+        <aside class="hidden lg:block">
+          <div class="sticky top-24 space-y-8">
+            <!-- Tabla de contenidos -->
+            {headings.length > 0 && (
+              <TableOfContents headings={headings} />
+            )}
+            
+            <!-- Botones para compartir -->
+            <ShareButtons title={title} url={Astro.url.href} />
+          </div>
+        </aside>
+      </div>
+    </div>
+    
+    <!-- Autor y relacionados -->
+    <footer class="container-narrow mt-16 space-y-12">
+      <AuthorCard />
+      <RelatedPosts currentSlug={Astro.params.slug} category={category} />
+    </footer>
+  </article>
+  
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+</BaseLayout>
+
+<style>
+  /* Animación suave para el contenido */
+  .prose-custom :global(h2),
+  .prose-custom :global(h3) {
+    scroll-margin-top: 6rem;
+  }
+</style>

@@ -1,0 +1,122 @@
+---
+/**
+ * Hero.astro
+ * Sección hero principal para la página de inicio
+ * Diseño minimalista con animaciones sutiles
+ */
+
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+export interface Props {
+  title: string;
+  subtitle?: string;
+  primaryCTA?: {
+    text: string;
+    link: string;
+  };
+  secondaryCTA?: {
+    text: string;
+    link: string;
+  };
+}
+
+const { title, subtitle, primaryCTA, secondaryCTA } = Astro.props;
+---
+
+<section class="relative min-h-[85vh] flex items-center overflow-hidden">
+  <!-- Fondo con gradiente sutil -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-gradient-to-br from-neutral-50 via-white to-neutral-100/50 dark:from-neutral-950 dark:via-black dark:to-neutral-900/50"></div>
+    <!-- Patrón de puntos decorativo -->
+    <div class="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]" style="background-image: radial-gradient(circle, currentColor 1px, transparent 1px); background-size: 32px 32px;"></div>
+    <!-- Efecto de gradiente animado -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-neutral-200/50 dark:bg-neutral-800/30 rounded-full blur-3xl animate-pulse-soft"></div>
+    <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-neutral-200/30 dark:bg-neutral-700/20 rounded-full blur-3xl animate-pulse-soft" style="animation-delay: 1s"></div>
+  </div>
+  
+  <div class="container-main py-20 md:py-32">
+    <div class="max-w-4xl">
+      <!-- Badge de disponibilidad -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-green-100/80 dark:bg-green-900/30 border border-green-200 dark:border-green-800 animate-blur-in">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+        </span>
+        <span class="text-sm font-medium text-green-800 dark:text-green-300">
+          Disponible para proyectos
+        </span>
+      </div>
+      
+      <!-- Título principal -->
+      <h1 class="hero-title text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-black dark:text-white">
+        <Fragment set:html={title.replace(/\n/g, '<br />')} />
+      </h1>
+      
+      <!-- Subtítulo -->
+      {subtitle && (
+        <p class="text-xl md:text-2xl text-neutral-600 dark:text-neutral-400 max-w-2xl mb-10 animate-fade-in-up" style="--stagger: 2">
+          {subtitle}
+        </p>
+      )}
+      
+      <!-- CTAs -->
+      <div class="flex flex-wrap gap-4 animate-fade-in-up" style="--stagger: 3">
+        {primaryCTA && (
+          <Button href={primaryCTA.link} variant="primary" size="lg">
+            {primaryCTA.text}
+            <Icon name="arrow-right" size={18} />
+          </Button>
+        )}
+        {secondaryCTA && (
+          <Button href={secondaryCTA.link} variant="secondary" size="lg">
+            {secondaryCTA.text}
+          </Button>
+        )}
+      </div>
+      
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in" style="animation-delay: 1.2s">
+        <a
+          href="#intro"
+          class="flex flex-col items-center gap-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+          aria-label="Desplazarse hacia abajo"
+        >
+          <span class="text-xs uppercase tracking-widest">Scroll</span>
+          <Icon name="chevron-down" size={20} class="animate-bounce" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Animación del título con efecto elegante */
+  @keyframes heroSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+      filter: blur(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+  
+  .hero-title {
+    opacity: 0;
+    animation: heroSlideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: 0.2s;
+  }
+  
+  /* Efecto hover en scroll indicator */
+  .scroll-indicator {
+    transition: transform 0.3s ease;
+  }
+  
+  .scroll-indicator:hover {
+    transform: translateY(4px);
+  }
+</style>

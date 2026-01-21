@@ -1,0 +1,37 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      # Vercel deployment is handled automatically via Vercel GitHub integration
+      # This workflow ensures tests pass before Vercel deploys
+      #
+      # To set up:
+      # 1. Connect your repo to Vercel at https://vercel.com/new
+      # 2. Vercel will auto-deploy on push to main
+      # 3. This workflow acts as a gate - if tests fail, the commit is marked as failing

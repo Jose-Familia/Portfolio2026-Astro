@@ -1,0 +1,41 @@
+---
+/**
+ * Badge.astro
+ * Etiquetas y badges reutilizables
+ */
+
+export interface Props {
+  variant?: 'default' | 'primary' | 'success' | 'warning';
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const {
+  variant = 'default',
+  size = 'md',
+  class: className = '',
+} = Astro.props;
+
+const variantStyles = {
+  default: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300',
+  primary: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+  success: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+};
+
+const sizeStyles = {
+  sm: 'px-2 py-0.5 text-2xs',
+  md: 'px-3 py-1 text-xs',
+};
+
+const classes = [
+  'inline-flex items-center font-medium rounded-full',
+  variantStyles[variant],
+  sizeStyles[size],
+  className,
+].join(' ');
+---
+
+<span class={classes}>
+  <slot />
+</span>

@@ -1,0 +1,10 @@
+siteName: "José Familia | Portfolio"
+siteDescription: "Desarrollador de Software enfocado en crear aplicaciones web modernas, accesibles y de alto rendimiento."
+author:
+  name: "José Familia"
+  email: "josefamilia.dev@gmail.com"
+seo:
+  defaultTitle: "José Familia | Desarrollador de Software"
+  titleTemplate: "%s | José Familia"
+analytics:
+  googleAnalyticsId: ""

@@ -1,0 +1,107 @@
+---
+/**
+ * Footer.astro
+ * Site footer with navigation, social links and copyright
+ */
+
+import Icon from '@/components/ui/Icon.astro';
+
+const currentYear = new Date().getFullYear();
+
+const socialLinks = [
+  { name: 'GitHub', href: 'https://github.com/Jose-Familia', icon: 'github' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/jrfamilia/', icon: 'linkedin' },
+];
+
+const footerLinks = [
+  {
+    title: 'Navegación',
+    links: [
+      { name: 'Inicio', href: '/' },
+      { name: 'Sobre mí', href: '/sobre-mi' },
+      { name: 'Proyectos', href: '/proyectos' },
+      { name: 'Blog', href: '/blog' },
+    ],
+  },
+  {
+    title: 'Contacto',
+    links: [
+      { name: 'Formulario', href: '/contacto' },
+      { name: 'Email', href: 'mailto:familiajoserene@gmail.com' },
+    ],
+  },
+];
+---
+
+<footer class="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
+  <div class="container-main py-12 md:py-16">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      <!-- Branding and description -->
+      <div class="lg:col-span-2">
+        <a href="/" class="text-xl font-bold tracking-tight">
+          José Familia
+        </a>
+        <p class="mt-4 text-neutral-600 dark:text-neutral-400 max-w-md">
+          Desarrollador de Software enfocado en construir aplicaciones web 
+          modernas, accesibles y de alto rendimiento.
+        </p>
+        
+        <!-- Social links -->
+        <div class="flex gap-4 mt-6">
+          {socialLinks.map((social) => (
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-lg text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              aria-label={`Follow me on ${social.name}`}
+            >
+              <Icon name={social.icon} size={20} />
+            </a>
+          ))}
+        </div>
+      </div>
+      
+      <!-- Navigation links -->
+      {footerLinks.map((group) => (
+        <div>
+          <h3 class="font-semibold text-neutral-900 dark:text-neutral-50 mb-4">
+            {group.title}
+          </h3>
+          <ul class="space-y-3" role="list">
+            {group.links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors"
+                >
+                  {link.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    
+    <!-- Divider -->
+    <div class="divider my-8"></div>
+    
+    <!-- Copyright -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-500">
+      <p>
+        © {currentYear} José Familia. Todos los derechos reservados.
+      </p>
+      <p class="flex items-center gap-2">
+        Hecho con
+        <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        y
+        <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-medium text-primary-600 dark:text-primary-400 hover:underline">
+          Astro
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>

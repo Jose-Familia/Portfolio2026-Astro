@@ -1,0 +1,123 @@
+---
+/**
+ * HeroMinimal.astro
+ * Hero minimalista con animaciones sutiles y Astro Islands
+ */
+
+import FadeIn from '@/components/ui/FadeIn';
+import Magnetic from '@/components/ui/Magnetic';
+import TextReveal from '@/components/ui/TextReveal';
+
+export interface Props {
+  title: string;
+  subtitle?: string;
+  primaryCTA?: {
+    text: string;
+    link: string;
+  };
+  secondaryCTA?: {
+    text: string;
+    link: string;
+  };
+}
+
+const { title, subtitle, primaryCTA, secondaryCTA } = Astro.props;
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Fondo minimalista -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-white dark:bg-neutral-950"></div>
+    <!-- Gradiente sutil -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-neutral-50/50 dark:to-neutral-900/50"></div>
+    <!-- Líneas decorativas sutiles -->
+    <div class="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]">
+      <div class="absolute top-1/4 left-0 right-0 h-px bg-neutral-900 dark:bg-white"></div>
+      <div class="absolute top-1/2 left-0 right-0 h-px bg-neutral-900 dark:bg-white"></div>
+      <div class="absolute top-3/4 left-0 right-0 h-px bg-neutral-900 dark:bg-white"></div>
+    </div>
+  </div>
+  
+  <div class="container-main py-20 md:py-32">
+    <div class="max-w-5xl mx-auto text-center">
+      <!-- Status badge -->
+      <FadeIn client:visible delay={0} className="mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          </span>
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+            Disponible para nuevos proyectos
+          </span>
+        </div>
+      </FadeIn>
+      
+      <!-- Título principal con animación -->
+      <FadeIn client:visible delay={100} className="mb-6">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.1]">
+          <TextReveal 
+            client:visible 
+            text="Construyo experiencias"
+            delay={200}
+            staggerDelay={0.04}
+          />
+          <br />
+          <span class="text-primary-600 dark:text-primary-400">
+            <TextReveal 
+              client:visible 
+              text="digitales únicas"
+              delay={400}
+              staggerDelay={0.04}
+            />
+          </span>
+        </h1>
+      </FadeIn>
+      
+      <!-- Subtítulo -->
+      <FadeIn client:visible delay={600} className="mb-12">
+        <p class="text-lg md:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+          {subtitle}
+        </p>
+      </FadeIn>
+      
+      <!-- CTAs con efecto magnético -->
+      <FadeIn client:visible delay={800} className="flex flex-wrap justify-center gap-4">
+        {primaryCTA && (
+          <Magnetic client:visible strength={0.15}>
+            <a 
+              href={primaryCTA.link}
+              class="inline-flex items-center gap-2 px-8 py-4 text-base font-medium rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
+            >
+              {primaryCTA.text}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </Magnetic>
+        )}
+        {secondaryCTA && (
+          <Magnetic client:visible strength={0.15}>
+            <a 
+              href={secondaryCTA.link}
+              class="inline-flex items-center gap-2 px-8 py-4 text-base font-medium rounded-full border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              {secondaryCTA.text}
+            </a>
+          </Magnetic>
+        )}
+      </FadeIn>
+    </div>
+  </div>
+  
+  <!-- Scroll indicator minimalista -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
+    <a
+      href="#about"
+      class="flex flex-col items-center gap-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors group"
+      aria-label="Scroll"
+    >
+      <div class="w-px h-12 bg-gradient-to-b from-transparent via-neutral-300 dark:via-neutral-600 to-neutral-400 dark:to-neutral-500 group-hover:h-16 transition-all"></div>
+    </a>
+  </div>
+</section>

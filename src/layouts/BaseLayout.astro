@@ -1,0 +1,169 @@
+---
+/**
+ * BaseLayout.astro
+ * Layout principal del sitio
+ * 
+ * Incluye:
+ * - SEO y meta tags
+ * - Estructura HTML base
+ * - Header y Footer
+ * - Scripts globales
+ */
+
+import { ViewTransitions } from 'astro:transitions';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import '@/styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonicalUrl?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  noIndex?: boolean;
+  lang?: 'es' | 'en';
+}
+
+const {
+  title,
+  description = 'Portfolio profesional de desarrollo web - Frontend y Fullstack',
+  image = '/og-default.jpg',
+  canonicalUrl = Astro.url.href,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  author = 'José Familia',
+  noIndex = false,
+  lang = 'es',
+} = Astro.props;
+
+const siteName = 'José Familia | Portfolio';
+const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Preconnect para recursos externos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Fuentes -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- SEO básico -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={author} />
+    <link rel="canonical" href={canonicalUrl} />
+    
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_ES'} />
+    
+    {type === 'article' && publishedTime && (
+      <meta property="article:published_time" content={publishedTime} />
+    )}
+    {type === 'article' && modifiedTime && (
+      <meta property="article:modified_time" content={modifiedTime} />
+    )}
+    {type === 'article' && author && (
+      <meta property="article:author" content={author} />
+    )}
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, Astro.site)} />
+    
+    <!-- Theme color para navegadores móviles -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": author,
+      "url": Astro.site,
+      "sameAs": [
+        "https://github.com/Jose-Familia",
+        "https://www.linkedin.com/in/jrfamilia/"
+      ],
+      "jobTitle": "Software Developer",
+      "description": "Desarrollador de Software enfocado en crear aplicaciones web modernas, accesibles y de alto rendimiento.",
+      "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Astro", "Tailwind CSS"]
+    })} />
+    
+    <!-- View Transitions para navegación suave -->
+    <ViewTransitions />
+  </head>
+  
+  <body class="flex flex-col min-h-screen antialiased">
+    <!-- Skip link para accesibilidad -->
+    <a href="#main-content" class="skip-link">
+      Skip to main content
+    </a>
+    
+    <Header />
+    
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+    
+    <Footer />
+    
+    <!-- Script para modo oscuro -->
+    <script is:inline>
+      // Detectar preferencia del sistema y aplicar tema
+      function getThemePreference() {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      
+      function applyTheme() {
+        const theme = getThemePreference();
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      }
+      
+      // Aplicar tema inmediatamente
+      applyTheme();
+      
+      // Re-aplicar tema después de view transitions
+      document.addEventListener('astro:after-swap', applyTheme);
+      document.addEventListener('astro:page-load', applyTheme);
+      
+      // Actualizar cuando cambie la preferencia del sistema
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          document.documentElement.classList.toggle('dark', e.matches);
+        }
+      });
+    </script>
+  </body>
+</html>

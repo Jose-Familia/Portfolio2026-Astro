@@ -70,9 +70,15 @@
   }
 
   body {
-    @apply bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50;
+    @apply bg-neutral-50/95 text-neutral-900 dark:bg-neutral-950/95 dark:text-neutral-50;
     @apply font-sans leading-relaxed;
     @apply min-h-screen;
+    @apply transition-colors duration-300;
+  }
+
+  /* Mejorar selección de texto */
+  ::selection {
+    @apply bg-primary-500/30 text-primary-900 dark:text-primary-100;
   }
 
   /* Tipografía base */
@@ -150,12 +156,16 @@
   .btn-primary {
     @apply btn bg-neutral-900 text-neutral-50 dark:bg-neutral-50 dark:text-neutral-900;
     @apply hover:bg-neutral-800 dark:hover:bg-neutral-200;
+    @apply rounded-full shadow-md dark:shadow-none;
+    @apply border border-neutral-900 dark:border-neutral-50;
+    @apply transition-all duration-200;
   }
 
   .btn-secondary {
     @apply btn bg-transparent text-neutral-900 dark:text-neutral-50;
     @apply border border-neutral-300 dark:border-neutral-700;
     @apply hover:bg-neutral-100 dark:hover:bg-neutral-800;
+    @apply rounded-full;
   }
 
   .btn-ghost {
@@ -178,41 +188,46 @@
     @apply w-full;
   }
 
-  /* Card base */
+  /* Card base mejorada */
   .card {
-    @apply bg-white dark:bg-neutral-900;
+    @apply bg-white/90 dark:bg-neutral-900/90;
     @apply border border-neutral-200 dark:border-neutral-800;
-    @apply rounded-2xl overflow-hidden;
+    @apply rounded-3xl shadow-soft-lg dark:shadow-none overflow-hidden;
     @apply transition-all duration-300;
+    @apply backdrop-blur-sm;
   }
 
   .card-hover {
     @apply card hover:border-neutral-300 dark:hover:border-neutral-700;
-    @apply hover:shadow-soft-lg;
+    @apply hover:shadow-xl dark:hover:shadow-soft-lg;
   }
 
-  /* Badge / Tag */
+  /* Badge / Tag mejorado */
   .badge {
     @apply inline-flex items-center px-3 py-1;
     @apply text-xs font-medium rounded-full;
     @apply bg-neutral-100 text-neutral-700;
     @apply dark:bg-neutral-800 dark:text-neutral-300;
+    @apply border border-neutral-200 dark:border-neutral-700;
+    @apply shadow-sm;
   }
 
   .badge-primary {
     @apply badge bg-primary-100 text-primary-800;
     @apply dark:bg-primary-900/30 dark:text-primary-300;
+    @apply border border-primary-200 dark:border-primary-800;
   }
 
-  /* Input base */
+  /* Input base más moderno */
   .input {
-    @apply w-full px-4 py-3 rounded-lg;
-    @apply bg-white dark:bg-neutral-900;
+    @apply w-full px-4 py-3 rounded-xl;
+    @apply bg-white/80 dark:bg-neutral-900/80;
     @apply border border-neutral-300 dark:border-neutral-700;
     @apply text-neutral-900 dark:text-neutral-50;
     @apply placeholder:text-neutral-400 dark:placeholder:text-neutral-600;
     @apply transition-colors duration-200;
     @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply shadow-inner;
   }
 
   .textarea {

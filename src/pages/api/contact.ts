@@ -6,8 +6,6 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
 // Email de destino
 const TO_EMAIL = "familiajoserene@gmail.com";
 
@@ -30,6 +28,9 @@ const subjectMap: Record<string, Record<string, string>> = {
 };
 
 export const POST: APIRoute = async ({ request }) => {
+  // Instanciar Resend dentro del handler para evitar errores en build time
+  const resend = new Resend(import.meta.env.RESEND_API_KEY);
+
   try {
     const formData = await request.formData();
 

@@ -5,6 +5,7 @@
 
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
+import { contactMessageSchema } from "../../utils/zodSchemas";
 
 // Email de destino
 const TO_EMAIL = "familiajoserene@gmail.com";
@@ -42,30 +43,18 @@ export const POST: APIRoute = async ({ request }) => {
     const message = formData.get("message")?.toString() || "";
     const lang = formData.get("lang")?.toString() || "es";
 
-    // Validación básica
-    if (!name || !email || !message) {
+    // Validación con Zod
+    const validation = contactMessageSchema.safeParse({ name, email, message });
+    if (!validation.success) {
+      const errorMsg =
+        lang === "es"
+          ? "Por favor completa todos los campos requeridos y usa un email válido."
+          : "Please fill in all required fields and use a valid email.";
       return new Response(
         JSON.stringify({
           success: false,
-          error:
-            lang === "es"
-              ? "Por favor completa todos los campos requeridos"
-              : "Please fill in all required fields",
-        }),
-        { status: 400, headers: { "Content-Type": "application/json" } },
-      );
-    }
-
-    // Validar email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          error:
-            lang === "es"
-              ? "Por favor ingresa un email válido"
-              : "Please enter a valid email",
+          error: errorMsg,
+          issues: validation.error.issues,
         }),
         { status: 400, headers: { "Content-Type": "application/json" } },
       );

@@ -1,0 +1,10 @@
+{
+  "framework": "astro",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "functions": {
+    "**/*.func/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}

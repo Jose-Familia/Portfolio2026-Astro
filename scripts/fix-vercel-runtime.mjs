@@ -1,13 +1,29 @@
 // Script para corregir el runtime de las funciones Vercel
 // @astrojs/vercel@7.8.2 genera nodejs18.x que ya no es soportado
 
-import { readdirSync, readFileSync, statSync, writeFileSync } from "fs";
-import { join } from "path";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "fs";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const VERCEL_OUTPUT = ".vercel/output/functions";
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const projectRoot = join(__dirname, "..");
+
+// Try multiple possible paths
+const possiblePaths = [
+  join(projectRoot, ".vercel/output/functions"),
+  "/vercel/path0/.vercel/output/functions",
+  ".vercel/output/functions",
+];
 
 function findVcConfigFiles(dir, files = []) {
   try {
+    if (!existsSync(dir)) return files;
     const items = readdirSync(dir);
     for (const item of items) {
       const fullPath = join(dir, item);
@@ -25,10 +41,18 @@ function findVcConfigFiles(dir, files = []) {
 }
 
 function fixRuntime() {
-  const configFiles = findVcConfigFiles(VERCEL_OUTPUT);
+  let configFiles = [];
+
+  for (const basePath of possiblePaths) {
+    configFiles = findVcConfigFiles(basePath);
+    if (configFiles.length > 0) {
+      console.log(`Found functions in: ${basePath}`);
+      break;
+    }
+  }
 
   if (configFiles.length === 0) {
-    console.log("No .vc-config.json files found");
+    console.log("No .vc-config.json files found in any path");
     return;
   }
 

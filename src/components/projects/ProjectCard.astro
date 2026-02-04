@@ -40,7 +40,7 @@ const projectUrl = `/proyectos/${slug}`;
 
 <article
   class:list={[
-    'group card-hover relative flex flex-col',
+    'group card-hover relative flex flex-col animate-fade-in-up',
     featured ? 'md:col-span-2 md:flex-row' : '',
   ]}
   style={`--stagger: ${index}`}
@@ -151,24 +151,6 @@ const projectUrl = `/proyectos/${slug}`;
 </article>
 
 <style>
-  /* Animación de entrada escalonada */
-  article {
-    opacity: 0;
-    animation: fadeInUp 0.6s ease-out forwards;
-    animation-delay: calc(var(--stagger, 0) * 100ms);
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
   /* Respetar preferencia de movimiento reducido */
   @media (prefers-reduced-motion: reduce) {
     article {

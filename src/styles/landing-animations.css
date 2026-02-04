@@ -1,0 +1,76 @@
+/* Animaciones para landing llamativa */
+.animate-hero-fade-slide {
+  animation: hero-fade-slide 1.1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.animate-section-fade-slide {
+  animation: section-fade-slide 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.animate-card-fade-slide {
+  animation: card-fade-slide 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes hero-fade-slide {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes section-fade-slide {
+  0% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes card-fade-slide {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 6s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+@keyframes pulse-slow {
+  0% {
+    opacity: 0.7;
+    filter: blur(32px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+@keyframes card-fade-slide {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 6s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+@keyframes pulse-slow {
+  0% {
+    opacity: 0.7;
+    filter: blur(32px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}

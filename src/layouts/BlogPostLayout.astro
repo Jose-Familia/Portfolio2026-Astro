@@ -109,7 +109,7 @@ const articleSchema = {
     <div class="container-main">
       <div class="grid lg:grid-cols-[1fr_250px] gap-12">
         <!-- Contenido del artículo -->
-        <div class="prose-custom animate-fade-in-up" style="--stagger: 3">
+        <div class="prose-custom min-w-0 animate-fade-in-up" style="--stagger: 3">
           <slot />
           
           <!-- Tags al final del artículo -->
@@ -131,7 +131,7 @@ const articleSchema = {
         </div>
         
         <!-- Sidebar -->
-        <aside class="hidden lg:block">
+        <aside class="hidden lg:block min-w-0">
           <div class="sticky top-24 space-y-8">
             <!-- Tabla de contenidos -->
             {headings.length > 0 && (

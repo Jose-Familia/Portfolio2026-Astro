@@ -127,12 +127,12 @@ const statusColors = {
     <div class="container-main">
       <div class="grid lg:grid-cols-[1fr_300px] gap-12 lg:gap-16">
         <!-- Descripción detallada -->
-        <div class="prose-custom animate-fade-in-up" style="--stagger: 4">
+        <div class="prose-custom min-w-0 animate-fade-in-up" style="--stagger: 4">
           <slot />
         </div>
         
         <!-- Sidebar con info del proyecto -->
-        <aside class="space-y-8">
+        <aside class="space-y-8 min-w-0">
           <!-- Tecnologías -->
           <div class="card p-6">
             <h3 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-4">

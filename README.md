@@ -13,6 +13,10 @@ Portfolio profesional minimalista construido con Astro, Keystatic y TailwindCSS.
 - **Modo oscuro** - Soporte completo para tema claro/oscuro
 - **Accesible** - Siguiendo las mejores prácticas de a11y
 
+### 🤖✅ Optimizacion
+
+![1770171194601](image/README/1770171194601.png)
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -133,4 +137,5 @@ MIT License - Siéntete libre de usar este proyecto como base para tu portfolio.
 ---
 
 Hecho con ❤️ usando [Astro](https://astro.build)
+
 # Portfolio2026-Astro

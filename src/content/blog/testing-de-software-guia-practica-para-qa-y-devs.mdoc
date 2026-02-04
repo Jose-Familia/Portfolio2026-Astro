@@ -1,0 +1,204 @@
+---
+title: 'Testing de Software: Guía Práctica para QA y Devs'
+excerpt: >
+  Como QA Engineer y desarrollador, esta guía te introduce al testing de
+  software con enfoque práctico.
+publishDate: 2026-02-03
+updatedDate: 2026-02-03
+draft: false
+featured: false
+category: tutorials
+tags:
+  - QA
+  - Testing
+seo: {}
+---
+# Testing de Software: Guía Práctica para QA y Devs (Junior/Intermedio)
+
+Como QA Engineer y desarrollador, esta guía te introduce al testing de software con enfoque práctico. Veremos conceptos clave, tipos de pruebas, automatización y ejemplos usando Cypress, Selenium y Cucumber (BDD), aplicados a la PokeAPI.
+
+## 1. Introducción
+
+- Testing de software: proceso sistemático para verificar que un producto cumple requisitos funcionales y no funcionales (calidad, seguridad, estabilidad, rendimiento). Reduce defectos y costos de mantenimiento.
+- Pruebas manuales vs automatizadas:
+  - Manuales: ejecutadas por personas siguiendo casos de prueba; útiles en exploración, UX, validaciones ad-hoc.
+  - Automatizadas: scripts que validan comportamientos repetibles; ideales para regresión, E2E, integración continua.
+- Rol del QA en equipos ágiles: colabora con Product y Devs, define criterios de aceptación, escribe/ejecuta pruebas, automatiza regresiones y mejora procesos.
+
+## 2. Test Cases
+
+Un test case define qué validar y cómo hacerlo.
+
+- Estructura básica:
+  - ID
+  - Descripción
+  - Precondiciones
+  - Pasos
+  - Datos de entrada
+  - Resultado esperado
+
+Ejemplo (tabla):
+
+{% table %}
+- Campo
+- Contenido
+---
+- ID
+- TC-API-001
+---
+- Descripción
+- Validar que la API retorna datos correctos de `pikachu`
+---
+- Precondiciones
+- API disponible
+---
+- Pasos
+- 1. GET /pokemon/pikachu
+---
+- Datos de entrada
+- `pikachu`
+---
+- Resultado esperado
+- 200 OK y JSON con `id`, `name`, `abilities`, `types`
+{% /table %}
+
+## 3. Tipos de pruebas según el enfoque
+
+### Pruebas de caja negra
+
+- Qué son: validan entradas y salidas sin conocer la implementación interna.
+- Cuándo se usan: validaciones funcionales, APIs, formularios, reglas de negocio.
+- Ejemplo: llamar `GET /pokemon/pikachu` y verificar `status=200` y `name='pikachu'`.
+
+### Pruebas de caja gris
+
+- Qué son: combinan información externa con cierto conocimiento interno (contratos, esquemas, estados).
+- Diferencias: más profundas que caja negra, menos intrusivas que caja blanca.
+- Casos comunes: validar estructura de respuesta (`id`, `name`, `abilities`, `types`), estados intermedios, headers.
+
+## 4. Tests Automatizados
+
+- Qué son: scripts que validan comportamientos de forma repetible y rápida.
+- Cuándo automatizar: regresión frecuente, flujos críticos (login, checkout), APIs estables, CI/CD.
+- Cuándo no: cambios muy volátiles, pruebas exploratorias, validaciones exclusivamente visuales/UX.
+- Ventajas: rapidez, repetibilidad, cobertura, integración CI.
+- Desventajas: mantenimiento, flakiness si no se diseña bien, inversión inicial.
+- Tipos:
+  - Unitarios: validan funciones/métodos aislados.
+  - Integración: validan módulos y sus interacciones.
+  - End-to-End (E2E): validan flujos completos desde la UI/servicios.
+
+## 5. Pruebas de estrés y regresión
+
+### Estrés
+
+- Qué son: ejercen el sistema bajo carga para observar comportamiento y límites.
+- Qué validar: tiempos de respuesta, errores de timeout, degradación/recuperación.
+- Ejemplos: múltiples GET concurrentes a `/pokemon/pikachu`; incrementar el volumen por lotes.
+
+### Regresión
+
+- Qué son: aseguran que cambios no rompen funcionalidades ya existentes.
+- Por qué son críticas: cambios frecuentes en proyectos reales; ayudan a detectar roturas temprano.
+- Relación con automatización: suites de regresión automatizadas son clave en CI/CD.
+
+## 6. Cypress
+
+- Qué es: framework de testing E2E para web, integrado con JavaScript; rápido y con excelente DX.
+- Ventajas: ejecución rápida, API sencilla (`cy.*`), snapshots/capturas, buen ecosistema.
+- Limitaciones: ejecución en mismo proceso que la app (algunas restricciones de red), menos adecuado para flujos multi-navegador complejos.
+- Ejemplo E2E sencillo (login):
+
+```js
+// cypress/e2e/login.cy.js
+describe("Login", () => {
+  it("permite iniciar sesión", () => {
+    cy.visit("https://app.ejemplo.com/login");
+    cy.get('input[name="username"]').type("testuser");
+    cy.get('input[name="password"]').type("Test1234");
+    cy.get('button[type="submit"]').click();
+    cy.url().should("include", "/dashboard");
+  });
+});
+```
+
+## 7. Selenium
+
+- Qué es: herramienta para automatizar navegadores con WebDriver.
+- Diferencias con Cypress: Selenium controla navegadores reales y múltiples lenguajes; Cypress está más orientado a JS y pruebas rápidas con runner propio.
+- Ventajas: soporte multi-navegador, ecosistema amplio, lenguajes variados.
+- Limitaciones: mayor complejidad, flakiness si no se diseñan bien esperas/locators.
+- Ejemplo básico:
+
+```js
+// selenium-login.js
+const { Builder, By, until } = require("selenium-webdriver");
+
+(async function loginTest() {
+  const driver = await new Builder().forBrowser("chrome").build();
+  try {
+    await driver.get("https://app.ejemplo.com/login");
+    await driver.findElement(By.name("username")).sendKeys("testuser");
+    await driver.findElement(By.name("password")).sendKeys("Test1234");
+    await driver.findElement(By.css('button[type="submit"]')).click();
+    await driver.wait(until.urlContains("/dashboard"), 5000);
+  } finally {
+    await driver.quit();
+  }
+})();
+```
+
+## 8. Cucumber y BDD
+
+- Cucumber: framework para especificar pruebas en lenguaje natural (Gherkin).
+- BDD: enfoque donde especificaciones de comportamiento (Given/When/Then) guían el desarrollo.
+- Gherkin:
+
+```gherkin
+Feature: Login
+  Scenario: Usuario inicia sesión con credenciales válidas
+    Given el usuario está en la página de login
+    When ingresa usuario "testuser" y contraseña "Test1234"
+    And pulsa el botón "Iniciar sesión"
+    Then accede al dashboard
+```
+
+- Integración: los pasos se implementan en código (JavaScript, Ruby, etc.) y pueden conectarse con Selenium o Cypress.
+
+## 9. Comparativa de herramientas
+
+{% table %}
+- Herramienta
+- Tipo de pruebas
+- Lenguaje
+- Facilidad de uso
+- Casos ideales
+---
+- Cypress
+- E2E/UI, API
+- JS/TS
+- Alta
+- Flujos web, CI rápido, DX excelente
+---
+- Selenium
+- E2E/UI multi-navegador
+- Varios (JS, Java, Python)
+- Media
+- Compatibilidad real de navegadores, escenarios complejos
+---
+- Cucumber
+- BDD/Especificación
+- Varios
+- Alta (para negocio)
+- Alinear negocio/dev con escenarios Given/When/Then
+{% /table %}
+
+## 10. Conclusión
+
+- ¿Qué aprender primero? Empieza por caja negra y casos de prueba; luego automatiza E2E simples con Cypress.
+- ¿Cuándo usar cada tipo?
+  - Manuales: exploración, UX, validaciones no repetibles.
+  - Automatizados: regresión, flujos críticos y estables.
+  - Estrés: antes de releases importantes o cambios de arquitectura.
+  - Regresión: siempre que haya cambios en funcionalidades clave.
+- Recomendaciones prácticas: define buenos test cases, prioriza la automatización de alto valor, integra en CI/CD, mide resultados y ajusta.

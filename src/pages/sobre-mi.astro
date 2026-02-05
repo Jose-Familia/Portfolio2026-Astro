@@ -7,6 +7,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/ui/Icon.astro';
 import Badge from '@/components/ui/Badge.astro';
+import TechTag from '@/components/ui/TechTag.astro';
 import Button from '@/components/ui/Button.astro';
 import { t, type Lang } from '@/i18n';
 import { aboutContent } from '@/i18n/about';
@@ -68,9 +69,7 @@ function formatYear(date: Date): string {
                   </h3>
                   <div class="flex flex-wrap gap-2">
                     {category.items.map((skill) => (
-                      <span class="px-4 py-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-sm font-medium text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700">
-                        {skill.name}
-                      </span>
+                      <TechTag name={skill.name} icon={skill.name} size="md" />
                     ))}
                   </div>
                 </div>
@@ -220,14 +219,7 @@ function formatYear(date: Date): string {
             </h3>
             <div class="flex flex-wrap gap-2">
               {content.stack.map((tech) => (
-                <a
-                  href={tech.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="px-3 py-1.5 text-sm rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
-                >
-                  {tech.name}
-                </a>
+                <TechTag name={tech.name} icon={tech.icon} url={tech.url} size="md" />
               ))}
             </div>
           </div>

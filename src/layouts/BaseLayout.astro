@@ -152,18 +152,37 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
       }
       
       // Aplicar tema inmediatamente
-      applyTheme();
+        applyTheme();
+
+        // Update tech logos according to applied theme
+        function updateTechIcons(){
+          try{
+            const theme = getThemePreference();
+            const imgs = document.querySelectorAll('img[data-light][data-dark]');
+            imgs.forEach(img => {
+              const light = img.getAttribute('data-light');
+              const dark = img.getAttribute('data-dark');
+              if(!light || !dark) return;
+              img.src = theme === 'dark' ? light : dark;
+            });
+          }catch(e){/* ignore */}
+        }
+        updateTechIcons();
       
-      // Re-aplicar tema después de view transitions
-      document.addEventListener('astro:after-swap', applyTheme);
-      document.addEventListener('astro:page-load', applyTheme);
-      
+      // Re-aplicar tema after view transitions and update icons
+      document.addEventListener('astro:after-swap', () => { applyTheme(); updateTechIcons(); });
+      document.addEventListener('astro:page-load', () => { applyTheme(); updateTechIcons(); });
+
       // Actualizar cuando cambie la preferencia del sistema
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
         if (!localStorage.getItem('theme')) {
           document.documentElement.classList.toggle('dark', e.matches);
+          updateTechIcons();
         }
       });
+
+      // Update icons when theme is changed in other tabs
+      window.addEventListener('storage', (e) => { if(e.key === 'theme'){ applyTheme(); updateTechIcons(); } });
     </script>
   </body>
 </html>

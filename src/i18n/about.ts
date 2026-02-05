@@ -40,7 +40,8 @@ export const aboutContent = {
       {
         category: "Frontend",
         items: [
-          { name: "HTML / CSS" },
+          { name: "HTML" },
+          { name: "CSS" },
           { name: "JavaScript" },
           { name: "TypeScript" },
           { name: "React" },
@@ -50,16 +51,13 @@ export const aboutContent = {
       },
       {
         category: "Backend",
-        items: [
-          { name: "Node.js" },
-          { name: "Express" },
-          { name: "SQL / PostgreSQL" },
-        ],
+        items: [{ name: "Node.js" }, { name: "SQL" }, { name: "PostgreSQL" }],
       },
       {
         category: "Herramientas",
         items: [
-          { name: "Git / GitHub" },
+          { name: "Git" },
+          { name: "GitHub" },
           { name: "Docker" },
           { name: "Linux" },
           { name: "VS Code" },
@@ -173,7 +171,8 @@ export const aboutContent = {
       {
         category: "Frontend",
         items: [
-          { name: "HTML / CSS" },
+          { name: "HTML" },
+          { name: "CSS" },
           { name: "JavaScript" },
           { name: "TypeScript" },
           { name: "React" },
@@ -183,16 +182,13 @@ export const aboutContent = {
       },
       {
         category: "Backend",
-        items: [
-          { name: "Node.js" },
-          { name: "Express" },
-          { name: "SQL / PostgreSQL" },
-        ],
+        items: [{ name: "Node.js" }, { name: "SQL" }, { name: "PostgreSQL" }],
       },
       {
         category: "Tools",
         items: [
-          { name: "Git / GitHub" },
+          { name: "Git" },
+          { name: "GitHub" },
           { name: "Docker" },
           { name: "Linux" },
           { name: "VS Code" },

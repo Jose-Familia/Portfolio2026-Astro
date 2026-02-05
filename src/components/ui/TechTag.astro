@@ -1,0 +1,108 @@
+---
+/**
+ * TechTag.astro
+ * Tag chip showing tech logo (light/dark) and name
+ */
+
+import type { LogoVariant } from '@/utils/techLogos';
+import { getTechLogo } from '@/utils/techLogos';
+
+export interface Props {
+  name: string;
+  icon: string;
+  url?: string;
+  size?: 'sm' | 'md';
+  class?: string;
+  style?: string | Record<string, string | number>;
+}
+
+const { name, icon, url, size = 'md', class: className = '', style = null } = Astro.props;
+const logo: LogoVariant | undefined = getTechLogo(icon);
+const hasBoth = !!(logo?.light && logo?.dark);
+const singleSrc = logo?.single || logo?.light || logo?.dark;
+
+const sizeClasses = {
+  sm: {
+    container: 'px-3 py-1 text-xs',
+    img: 'w-4 h-4',
+    gap: 'gap-2',
+  },
+  md: {
+    container: 'px-4 py-2 text-sm',
+    img: 'w-5 h-5',
+    gap: 'gap-2.5',
+  },
+}[size];
+
+const containerClasses = [
+  'inline-flex items-center rounded-full border transition-colors',
+  'bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800',
+  'hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700',
+  'text-neutral-700 dark:text-neutral-300',
+  sizeClasses.container,
+  sizeClasses.gap,
+  className,
+].join(' ');
+
+// normalize style prop: accept string or object and produce inline style
+let styleAttr: string | undefined;
+if (!style) styleAttr = undefined;
+else if (typeof style === 'string') styleAttr = style as string;
+else if (typeof style === 'object') {
+  styleAttr = Object.entries(style as Record<string, string | number>)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join('; ');
+}
+
+---
+
+{url ? (
+  <a href={url} target="_blank" rel="noopener noreferrer" class={containerClasses} style={styleAttr} aria-label={name}>
+    {hasBoth ? (
+      <span class="inline-flex items-center">
+        <span class={sizeClasses.img + ' tech-logo variant-container flex-shrink-0'} aria-hidden="true">
+          <img
+            src={logo.dark}
+            alt={name}
+            class="w-full h-full object-contain tech-logo-img"
+            data-light={logo.light}
+            data-dark={logo.dark}
+          />
+        </span>
+      </span>
+    ) : singleSrc ? (
+      <span class={sizeClasses.img + ' tech-logo flex-shrink-0'} aria-hidden="true">
+        <img src={singleSrc} alt={name} class="w-full h-full object-contain" />
+      </span>
+    ) : null}
+    <span class="font-medium">{name}</span>
+  </a>
+  ) : (
+    <span class={containerClasses} style={styleAttr}>
+      {hasBoth ? (
+        <span class="inline-flex items-center">
+          <picture class={sizeClasses.img + ' tech-logo flex-shrink-0'} aria-hidden="true">
+            <source media="(prefers-color-scheme: dark)" srcset={logo.light} />
+            <img
+              class="w-full h-full object-contain tech-logo-img"
+              src={logo.dark}
+              data-light={logo.light}
+              data-dark={logo.dark}
+              alt={name}
+            />
+          </picture>
+        </span>
+      ) : singleSrc ? (
+        <span class={sizeClasses.img + ' tech-logo flex-shrink-0'} aria-hidden="true">
+          <img src={singleSrc} alt={name} class="w-full h-full object-contain" />
+        </span>
+      ) : null}
+      <span class="font-medium">{name}</span>
+    </span>
+  )}
+
+<style>
+  .tech-logo { display: inline-block; }
+  .tech-logo img { width: 100%; height: 100%; display: block; object-fit: contain; }
+  /* No CSS toggling — JS will set the correct src for dual-variant images */
+</style>

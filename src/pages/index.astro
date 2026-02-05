@@ -6,6 +6,7 @@
 
 import Hero from '@/components/home/Hero.astro';
 import Magnetic from '@/components/ui/Magnetic';
+import TechTag from '@/components/ui/TechTag.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
@@ -35,8 +36,19 @@ const recentPosts = allPosts
 const hasProjects = featuredProjects.length > 0;
 const hasPosts = recentPosts.length > 0;
 
-// Tech stack - solo nombres
-const technologies = ['React','Next.js','JavaScript', 'TypeScript', 'Node.js', 'Nest.js', 'Astro', 'Tailwind', 'PostgreSQL', 'Docker'];
+// Tech stack with icon keys for logo rendering
+const technologies = [
+  { name: 'JavaScript', icon: 'javascript' },
+  { name: 'TypeScript', icon: 'typescript' },
+  { name: 'React', icon: 'react' },
+  { name: 'Next.js', icon: 'nextjs' },
+  { name: 'Astro', icon: 'astro' },
+  { name: 'Node.js', icon: 'nodejs' },
+  { name: 'NestJS', icon: 'nestjs' },
+  { name: 'PostgreSQL', icon: 'postgresql' },
+  { name: 'Docker', icon: 'docker' },
+  { name: 'Tailwind CSS', icon: 'tailwindcss' },
+];
 ---
 
 <BaseLayout title="Inicio">
@@ -78,12 +90,13 @@ const technologies = ['React','Next.js','JavaScript', 'TypeScript', 'Node.js', '
           <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-5 uppercase tracking-wide font-medium">Stack Tecnológico</p>
           <div class="flex flex-wrap gap-2">
             {technologies.map((tech, index) => (
-              <span 
-                class="px-4 py-2 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white transition-all duration-300 cursor-default animate-fade-in-up"
-                style={`--stagger: ${4 + index * 0.3}`}
-              >
-                {tech}
-              </span>
+              <TechTag
+                name={tech.name}
+                icon={tech.icon}
+                size="md"
+                class="animate-fade-in-up"
+                style={{ '--stagger': 4 + index * 0.3 }}
+              />
             ))}
           </div>
         </div>

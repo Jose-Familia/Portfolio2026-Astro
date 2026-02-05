@@ -168,6 +168,40 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
           }catch(e){/* ignore */}
         }
         updateTechIcons();
+
+        // Scroll reveal: observe elements with .scroll-reveal and add .revealed when visible
+        function setupScrollReveal(){
+          if(typeof window === 'undefined') return;
+          try{
+            const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if(prefersReduced) {
+              // immediately reveal all
+              document.querySelectorAll('.scroll-reveal').forEach(el => el.classList.add('revealed'));
+              return;
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+              entries.forEach(entry => {
+                if(!entry.isIntersecting) return;
+                const el = entry.target;
+                // read --stagger (number) and multiply by 120ms
+                const cs = getComputedStyle(el);
+                const raw = cs.getPropertyValue('--stagger').trim();
+                const staggerNum = raw ? Number(raw) : 0;
+                const delay = Number.isFinite(staggerNum) ? (staggerNum * 120) : 0;
+                setTimeout(() => el.classList.add('revealed'), delay);
+                obs.unobserve(el);
+              });
+            }, { threshold: 0.12 });
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+              // ensure starting state
+              el.classList.remove('revealed');
+              observer.observe(el);
+            });
+          }catch(e){/* ignore errors */}
+        }
+        setupScrollReveal();
       
       // Re-aplicar tema after view transitions and update icons
       document.addEventListener('astro:after-swap', () => { applyTheme(); updateTechIcons(); });

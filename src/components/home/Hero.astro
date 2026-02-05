@@ -78,28 +78,7 @@ const { title, subtitle, primaryCTA, secondaryCTA } = Astro.props;
         )}
       </div>
       
-      <!-- Scroll indicator -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in" style="animation-delay: 1.2s">
-        <a
-          href="#intro"
-          class="flex flex-col items-center gap-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
-          aria-label="Desplazarse hacia abajo"
-        >
-          <span class="text-xs uppercase tracking-widest">Scroll</span>
-          <Icon name="chevron-down" size={20} class="animate-bounce" />
-        </a>
-      </div>
     </div>
   </div>
 </section>
-
-<style>
-  /* Efecto hover en scroll indicator */
-  .scroll-indicator {
-    transition: transform 0.3s ease;
-  }
-  
-  .scroll-indicator:hover {
-    transform: translateY(4px);
-  }
-</style>
+ 

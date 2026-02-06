@@ -8,7 +8,6 @@ import { collection, config, fields, singleton } from "@keystatic/core";
  */
 
 export default config({
-  assetBasePath: "/images",
   storage:
     process.env.NODE_ENV === "production"
       ? {

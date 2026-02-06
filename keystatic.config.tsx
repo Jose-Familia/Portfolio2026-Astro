@@ -8,6 +8,7 @@ import { collection, config, fields, singleton } from "@keystatic/core";
  */
 
 export default config({
+  assetBasePath: "/images",
   storage:
     process.env.NODE_ENV === "production"
       ? {
@@ -169,8 +170,8 @@ export default config({
           email: fields.text({ label: "Email" }),
           avatar: fields.image({
             label: "Avatar",
-            directory: "src/assets/images",
-            publicPath: "/src/assets/images",
+            directory: "public/images/site",
+            publicPath: "/images/site",
           }),
         }),
         seo: fields.object({
@@ -182,8 +183,8 @@ export default config({
           }),
           ogImage: fields.image({
             label: "Imagen Open Graph",
-            directory: "src/assets/images/og",
-            publicPath: "/src/assets/images/og",
+            directory: "public/images/site/og",
+            publicPath: "/images/site/og",
           }),
         }),
         analytics: fields.object({
@@ -275,14 +276,14 @@ export default config({
         }),
         thumbnail: fields.image({
           label: "Imagen Principal",
-          directory: "src/assets/images/projects",
-          publicPath: "/src/assets/images/projects",
+          directory: "public/images/projects",
+          publicPath: "/images/projects",
         }),
         images: fields.array(
           fields.image({
             label: "Imagen",
-            directory: "src/assets/images/projects",
-            publicPath: "/src/assets/images/projects",
+            directory: "public/images/projects",
+            publicPath: "/images/projects",
           }),
           { label: "Galería de Imágenes" },
         ),
@@ -350,8 +351,8 @@ export default config({
         }),
         coverImage: fields.image({
           label: "Imagen de Portada",
-          directory: "src/assets/images/blog",
-          publicPath: "/src/assets/images/blog",
+          directory: "public/images/blog",
+          publicPath: "/images/blog",
         }),
         category: fields.select({
           label: "Categoría",

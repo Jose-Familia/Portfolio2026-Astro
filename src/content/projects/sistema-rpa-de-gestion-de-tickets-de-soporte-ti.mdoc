@@ -1,0 +1,269 @@
+---
+title: '# Sistema RPA de Gestión de Tickets de Soporte TI'
+description: >
+  Sistema automatizado de gestión de tickets de soporte técnico utilizando
+  Python.
+featured: false
+status: completed
+publishDate: 2026-02-08
+thumbnail: /images/projects/sistema-rpa-de-gestion-de-tickets-de-soporte-ti/thumbnail.png
+images:
+  - >-
+    /images/projects/sistema-rpa-de-gestion-de-tickets-de-soporte-ti/images/0.png
+  - >-
+    /images/projects/sistema-rpa-de-gestion-de-tickets-de-soporte-ti/images/1.png
+  - >-
+    /images/projects/sistema-rpa-de-gestion-de-tickets-de-soporte-ti/images/2.png
+technologies:
+  - Python
+  - PyAutoGUI
+tags:
+  - RPA
+links:
+  github: >-
+    https://github.com/Jose-Familia/TI_Tickets-administration/blob/main/README.md?plain=1
+seo: {}
+---
+# Sistema RPA de Gestión de Tickets de Soporte TI
+
+## 1. Resumen Ejecutivo
+
+Desarrollé un sistema automatizado de gestión de tickets de soporte técnico utilizando Python, con enfoque en automatización de procesos (RPA), persistencia de datos y gestión operativa básica.
+
+El sistema permite:
+
+- Capturar solicitudes de soporte
+- Asignar automáticamente responsables
+- Registrar tickets con trazabilidad
+- Gestionar estados desde una interfaz gráfica
+- Mantener persistencia estructurada en archivos Excel
+
+Este proyecto demuestra competencias en automatización, manejo de datos estructurados, diseño de flujos de trabajo, interfaz de usuario y arquitectura básica de aplicaciones.
+
+---
+
+## 2. Problema que Resuelve
+
+En muchos entornos organizacionales pequeños o medianos, la gestión de tickets se realiza:
+
+- Por correo electrónico
+- En hojas de cálculo manuales
+- Mediante comunicación informal
+
+Esto genera:
+
+- Asignaciones desorganizadas
+- Falta de trazabilidad
+- Duplicación de esfuerzos
+- Ausencia de métricas
+- Riesgo de pérdida de información
+
+El sistema propuesto automatiza el flujo mínimo viable de gestión de tickets, reduciendo fricción operativa y mejorando la organización interna.
+
+---
+
+## 3. Solución Implementada
+
+El sistema implementa un flujo automatizado compuesto por:
+
+1. Captura estructurada de datos
+1. Asignación automática de asistente disponible
+1. Registro persistente con timestamp
+1. Gestión visual del estado del ticket
+1. Actualización y almacenamiento continuo
+
+Se diseñó como una solución ligera, portable y de bajo costo de implementación.
+
+---
+
+## 4. Arquitectura y Componentes Técnicos
+
+### Lenguaje y entorno
+
+- Python 3.7+
+- Aplicación de escritorio
+
+### Librerías principales
+
+- `openpyxl` → Manipulación estructurada de archivos Excel
+- `tkinter` → Interfaz gráfica nativa
+- `pyautogui` → Captura interactiva de datos
+- `random` → Asignación automática
+
+### Arquitectura lógica
+
+El sistema está dividido conceptualmente en:
+
+- Capa de Captura de Datos
+- Capa de Lógica de Negocio
+- Capa de Persistencia
+- Capa de Presentación (GUI)
+
+Aunque no se implementó formalmente un patrón MVC, el diseño separa claramente:
+
+- Funciones de negocio
+- Gestión de almacenamiento
+- Interfaz de usuario
+
+Esto facilita futuras refactorizaciones hacia una arquitectura más escalable.
+
+---
+
+## 5. Flujo de Operación
+
+1. El usuario ingresa:
+   - Nombre
+   - Motivo
+   - Departamento
+1. El sistema:
+   - Lee el archivo de asistentes
+   - Selecciona uno aleatoriamente
+   - Genera timestamp automático
+   - Registra el ticket con estado inicial “Abierto”
+1. La interfaz gráfica:
+   - Carga todos los tickets
+   - Permite cambiar estado a “Abierto” o “Cerrado”
+   - Actualiza la persistencia en tiempo real
+
+---
+
+## 6. Modelo de Datos
+
+### Archivo asistentes.xlsx
+
+{% table %}
+- Asistente
+---
+- Nombre 1
+---
+- Nombre 2
+{% /table %}
+
+### Archivo consultas_agendadas.xlsx
+
+{% table %}
+- Nombre
+- Motivo
+- Departamento
+- Asistente
+- Fecha y Hora
+- Estado
+{% /table %}
+
+Campos clave:
+
+- Timestamp automático
+- Estado controlado (Abierto / Cerrado)
+- Asignación automática
+
+---
+
+## 7. Decisiones Técnicas Relevantes
+
+### 1. Uso de Excel como base de datos ligera
+
+Elegido por:
+
+- Accesibilidad
+- Bajo costo
+- Facilidad de auditoría
+- Entornos corporativos no técnicos
+
+Alternativa futura: migración a SQLite o PostgreSQL.
+
+---
+
+### 2. Asignación aleatoria
+
+Se implementó asignación simple con `random.choice()` como primera versión funcional.
+
+Escalabilidad futura:
+
+- Asignación por carga de trabajo
+- Sistema de prioridades
+- Round-robin
+
+---
+
+### 3. Interfaz en pantalla completa
+
+Diseñada para:
+
+- Uso en estaciones internas
+- Visualización clara en entornos operativos
+- Minimizar distracciones
+
+---
+
+## 8. Competencias Demostradas
+
+Este proyecto demuestra:
+
+- Automatización de procesos (RPA básico)
+- Manipulación programática de datos estructurados
+- Diseño de flujos operativos
+- Validación de entradas
+- Persistencia de información
+- Manejo de estado
+- Interfaz gráfica básica
+- Pensamiento orientado a producto
+- Identificación de mejoras futuras
+- Diseño orientado a escalabilidad
+
+También refleja comprensión de:
+
+- Ciclo de vida de tickets
+- Procesos internos de TI
+- Organización operativa
+
+---
+
+## 9. Posibles Extensiones Profesionales
+
+El proyecto puede evolucionar hacia:
+
+- API REST (FastAPI o Flask)
+- Base de datos relacional
+- Dashboard analítico
+- Sistema multiusuario
+- Autenticación y roles
+- Registro de auditoría
+- Integración con correo electrónico
+- Métricas de SLA
+
+Esto permitiría convertirlo en un sistema de gestión de tickets empresarial ligero.
+
+---
+
+## 10. Valor para un Reclutador
+
+Este proyecto no es solo un script; es:
+
+- Una solución funcional a un problema organizacional real
+- Una muestra de pensamiento estructurado
+- Evidencia de comprensión de automatización
+- Base para sistemas más complejos
+- Demostración de capacidad de transformar procesos manuales en digitales
+
+Muestra capacidad para:
+
+- Identificar ineficiencias
+- Diseñar soluciones prácticas
+- Implementar persistencia de datos
+- Construir herramientas internas
+
+---
+
+## 11. Contexto Profesional
+
+Proyecto orientado a:
+
+- Automatización interna en departamentos TI
+- Entornos educativos o pequeñas empresas
+- Digitalización de procesos manuales
+
+Puede ser utilizado como base para:
+
+- Sistemas ITSM básicos
+- Herramientas internas de soporte
+- MVP de plataforma de tickets

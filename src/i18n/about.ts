@@ -84,7 +84,16 @@ export const aboutContent = {
     ],
 
     // Experiencia laboral (aún como estudiante)
-    experience: [] as Experience[],
+    experience: [
+      {
+        company: "Banco Popular Dominicano",
+        position: "Analista I de redes",
+        startDate: new Date("2026-06-22"),
+        current: true,
+        description:
+          "Rol enfocado en el soporte y análisis de la infraestructura de redes.",
+      },
+    ] as Experience[],
 
     // Educación
     education: [
@@ -111,6 +120,12 @@ export const aboutContent = {
 
     // Certificaciones
     certifications: [
+      {
+        name: "SQL Associate",
+        issuer: "DataCamp",
+        date: new Date("2026-02-19"),
+        skills: ["SQL", "Bases de datos", "Análisis de datos"],
+      },
       {
         name: "Oracle Next Education: Frontend",
         issuer: "Oracle | Alura Latam",
@@ -215,7 +230,16 @@ export const aboutContent = {
     ],
 
     // Work experience (still a student)
-    experience: [] as Experience[],
+    experience: [
+      {
+        company: "Banco Popular Dominicano",
+        position: "Network Analyst I",
+        startDate: new Date("2026-06-22"),
+        current: true,
+        description:
+          "Role focused on support and analysis of network infrastructure.",
+      },
+    ] as Experience[],
 
     // Education
     education: [
@@ -242,6 +266,12 @@ export const aboutContent = {
 
     // Certifications
     certifications: [
+      {
+        name: "SQL Associate",
+        issuer: "DataCamp",
+        date: new Date("2026-02-19"),
+        skills: ["SQL", "Databases", "Data Analysis"],
+      },
       {
         name: "Oracle Next Education: Frontend",
         issuer: "Oracle | Alura Latam",

@@ -23,6 +23,9 @@ export interface Props {
   tags: string[];
   readingTime: number;
   headings: { depth: number; slug: string; text: string }[];
+  metaTitle?: string;
+  metaDescription?: string;
+  canonicalUrl?: string;
 }
 
 const {
@@ -36,6 +39,9 @@ const {
   tags,
   readingTime,
   headings,
+  metaTitle,
+  metaDescription,
+  canonicalUrl,
 } = Astro.props;
 
 const articleSchema = {
@@ -58,8 +64,9 @@ const articleSchema = {
 ---
 
 <BaseLayout
-  title={title}
-  description={excerpt}
+  title={metaTitle || title}
+  description={metaDescription || excerpt}
+  canonicalUrl={canonicalUrl}
   image={coverImage}
   type="article"
   publishedTime={publishDate.toISOString()}

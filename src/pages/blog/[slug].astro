@@ -28,14 +28,6 @@ const wordCount = post.body?.split(/\s+/).length || 0;
 const readingTime = Math.max(1, Math.ceil(wordCount / 250));
 ---
 
->
-<head>
-  <meta property="og:title" content={post.data.title} />
-  <meta property="og:description" content={post.data.excerpt} />
-  <meta property="og:image" content={post.data.coverImage} />
-  <meta property="og:url" content={Astro.site ? Astro.site + '/blog/' + post.slug : post.slug} />
-  <meta name="instagram:card" content="summary_large_image" />
-</head>
 <BlogPostLayout
   title={post.data.title}
   slug={post.slug}
@@ -46,6 +38,9 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 250));
   tags={post.data.tags || []}
   readingTime={readingTime}
   headings={headings}
+  metaTitle={post.data.seo?.metaTitle}
+  metaDescription={post.data.seo?.metaDescription}
+  canonicalUrl={post.data.seo?.canonicalUrl}
 >
   <Content />
 </BlogPostLayout>

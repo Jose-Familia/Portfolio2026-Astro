@@ -157,11 +157,14 @@ function formatYear(date: Date): string {
             <div class="grid sm:grid-cols-2 gap-4">
               {content.certifications.map((cert) => (
                 <div class="group p-5 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all">
+                  <div class="mb-4 flex h-24 items-end rounded-lg bg-gradient-to-br from-primary-600 to-primary-900 p-4 text-white">
+                    <span class="text-xs font-semibold uppercase tracking-widest">{cert.issuer}</span>
+                  </div>
                   <div class="flex items-start justify-between gap-3 mb-3">
                     <div>
                       <h3 class="font-semibold text-neutral-900 dark:text-white mb-1">{cert.name}</h3>
                       <p class="text-sm text-neutral-600 dark:text-neutral-400">
-                        {cert.issuer}
+                        {cert.type} · {cert.issuer}
                       </p>
                     </div>
                     <span class="text-xs text-neutral-500 whitespace-nowrap">

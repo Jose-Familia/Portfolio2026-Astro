@@ -26,6 +26,9 @@ export interface Props {
     github?: string;
     case_study?: string;
   };
+  metaTitle?: string;
+  metaDescription?: string;
+  canonicalUrl?: string;
 }
 
 const {
@@ -39,6 +42,9 @@ const {
   publishDate,
   status,
   links,
+  metaTitle,
+  metaDescription,
+  canonicalUrl,
 } = Astro.props;
 
 const statusLabels = {
@@ -55,8 +61,9 @@ const statusColors = {
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
+  title={metaTitle || title}
+  description={metaDescription || description}
+  canonicalUrl={canonicalUrl}
   image={thumbnail}
 >
   <article class="section-sm">

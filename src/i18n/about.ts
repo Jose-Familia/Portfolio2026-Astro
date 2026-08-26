@@ -123,12 +123,14 @@ export const aboutContent = {
       {
         name: "SQL Associate",
         issuer: "DataCamp",
+        type: "Certificación profesional",
         date: new Date("2026-02-19"),
         skills: ["SQL", "Bases de datos", "Análisis de datos"],
       },
       {
         name: "Oracle Next Education: Frontend",
         issuer: "Oracle | Alura Latam",
+        type: "Programa formativo",
         date: new Date("2023-10-03"),
         credentialId: "F2 T5 Front-end",
         skills: ["Desarrollo Web", "Programación", "Frontend"],
@@ -136,18 +138,21 @@ export const aboutContent = {
       {
         name: "Introducción a la Inteligencia Artificial",
         issuer: "Coursera | UNAM",
+        type: "Curso",
         date: new Date("2024-07-30"),
         skills: ["Inteligencia Artificial", "AI/ML"],
       },
       {
         name: "Diseño Web Responsivo",
         issuer: "freeCodeCamp",
+        type: "Certificación",
         date: new Date("2023-03-30"),
         skills: ["Desarrollo Web", "Diseño"],
       },
       {
         name: "Introducción al Desarrollo Web (2/2)",
         issuer: "Google",
+        type: "Curso",
         date: new Date("2023-02-17"),
         credentialId: "180245423",
         skills: ["Desarrollo Web", "Programación", "Redes"],
@@ -155,6 +160,7 @@ export const aboutContent = {
       {
         name: "Introducción al Desarrollo Web (1/2)",
         issuer: "Google",
+        type: "Curso",
         date: new Date("2023-02-06"),
         credentialId: "180991538",
         skills: ["Desarrollo Web", "Programación", "Redes"],
@@ -269,12 +275,14 @@ export const aboutContent = {
       {
         name: "SQL Associate",
         issuer: "DataCamp",
+        type: "Professional certification",
         date: new Date("2026-02-19"),
         skills: ["SQL", "Databases", "Data Analysis"],
       },
       {
         name: "Oracle Next Education: Frontend",
         issuer: "Oracle | Alura Latam",
+        type: "Training program",
         date: new Date("2023-10-03"),
         credentialId: "F2 T5 Front-end",
         skills: ["Web Development", "Programming", "Frontend"],
@@ -282,18 +290,21 @@ export const aboutContent = {
       {
         name: "Introduction to Artificial Intelligence",
         issuer: "Coursera | UNAM",
+        type: "Course",
         date: new Date("2024-07-30"),
         skills: ["Artificial Intelligence", "AI/ML"],
       },
       {
         name: "Responsive Web Design",
         issuer: "freeCodeCamp",
+        type: "Certification",
         date: new Date("2023-03-30"),
         skills: ["Web Development", "Design"],
       },
       {
         name: "Introduction to Web Development (2/2)",
         issuer: "Google",
+        type: "Course",
         date: new Date("2023-02-17"),
         credentialId: "180245423",
         skills: ["Web Development", "Programming", "Networking"],
@@ -301,6 +312,7 @@ export const aboutContent = {
       {
         name: "Introduction to Web Development (1/2)",
         issuer: "Google",
+        type: "Course",
         date: new Date("2023-02-06"),
         credentialId: "180991538",
         skills: ["Web Development", "Programming", "Networking"],

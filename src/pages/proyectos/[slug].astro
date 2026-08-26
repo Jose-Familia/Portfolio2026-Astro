@@ -35,6 +35,8 @@ const { Content } = await project.render();
   publishDate={project.data.publishDate}
   status={project.data.status}
   links={project.data.links || {}}
+  metaTitle={project.data.seo?.metaTitle}
+  metaDescription={project.data.seo?.metaDescription}
 >
   <Content />
 </ProjectLayout>

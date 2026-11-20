@@ -5,6 +5,7 @@
  */
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { estimateReadingTime } from '@/utils/readingTime';
 import BlogPostCard from '@/components/blog/BlogPostCard.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
@@ -23,7 +24,7 @@ const posts = allPosts
     coverImage: post.data.coverImage,
     category: post.data.category,
     tags: post.data.tags,
-    readingTime: post.data.readingTime || 5,
+    readingTime: post.data.readingTime || estimateReadingTime(post.body),
     featured: post.data.featured || false,
   }));
 
@@ -54,7 +55,7 @@ const regularPosts = posts.filter((p) => !p.featured);
           Blog
         </h1>
         <p class="text-xl text-neutral-600 dark:text-neutral-400 animate-fade-in-up" style="--stagger: 1">
-          Reflexiones, tutoriales y aprendizajes sobre desarrollo web y diseño de interfaces.
+          Apuntes de ingeniería: desarrollo de aplicaciones, bases de datos, arquitectura cloud y tecnologías de la información.
         </p>
       </header>
       

@@ -1,6 +1,6 @@
 hero:
   title: "Diseño y desarrollo\naplicaciones"
-  subtitle: "Soy José Familia. Estudio Ingeniería en Sistemas en UNAPEC, trabajo en Operaciones TI y construyo aplicaciones web y de escritorio."
+  subtitle: "Soy José Familia, estudiante de Ingeniería en Sistemas Computacionales. Desarrollo aplicaciones y exploro cómo conectarlas con cloud, datos e infraestructura de TI."
   cta:
     primaryText: "Ver proyectos"
     primaryLink: "/proyectos"
@@ -8,7 +8,7 @@ hero:
     secondaryLink: "/contacto"
 intro:
   title: "Sobre mí"
-  description: "Combino el desarrollo de aplicaciones con experiencia en producción y monitoreo. Continúo mi formación en backend, AWS y arquitectura de sistemas."
+  description: "Mi formación une fundamentos de ingeniería, desarrollo de aplicaciones y práctica en backend, AWS y arquitectura de sistemas."
 featuredProjects:
   title: "Proyectos destacados"
   count: 2

@@ -1,0 +1,86 @@
+---
+title: "Docker para una API Node: separar compilación y ejecución"
+excerpt: "Un Dockerfile de práctica para TypeScript, con dependencias de producción, usuario sin privilegios y una comprobación reproducible de la imagen."
+publishDate: "2026-09-14"
+draft: false
+featured: false
+coverImage: "/images/blog/docker-imagen-node-multietapa.svg"
+category: "tutorials"
+tags: ["Docker", "Node.js", "TypeScript", "DevOps"]
+readingTime: 3
+seo: {}
+---
+## Dos entornos dentro de una misma entrega
+
+Una API escrita en TypeScript necesita herramientas para compilar, pero su proceso de ejecución normalmente consume JavaScript ya generado. Llevar todo el entorno de desarrollo a la imagen final dificulta saber qué archivos requiere realmente la aplicación.
+
+Para una API pequeña, propondría revisar tres entradas: el archivo de bloqueo de dependencias, el comando de compilación y la ruta de inicio. El ejemplo siguiente supone que `npm run build` genera `dist/main.js`. Si el proyecto produce otra estructura, debe modificarse esa ruta antes de copiar el Dockerfile.
+
+## Una imagen con etapas separadas
+
+Docker permite declarar varias etapas con `FROM` y copiar artefactos entre ellas. Esto hace posible instalar herramientas y compilar en una etapa, sin conservarlas todas en la imagen de ejecución.
+
+```dockerfile
+FROM node:22-bookworm-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:22-bookworm-slim AS production-deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+FROM node:22-bookworm-slim AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=production-deps /app/node_modules ./node_modules
+COPY --from=build --chown=node:node /app/dist ./dist
+COPY --chown=node:node package*.json ./
+USER node
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
+```
+
+La etiqueta ilustra una base compatible con el ejercicio. Un proyecto real debe elegir una versión soportada y mantenerla actualizada; fijar un digest puede formar parte de una política de reproducción de builds. Este archivo tampoco copia plantillas, migraciones o archivos estáticos adicionales: hay que agregarlos si la aplicación los usa.
+
+## Limitar el contexto
+
+Un `.dockerignore` evita enviar al constructor carpetas que no forman parte de la entrega. Para este laboratorio excluiría los artefactos locales y los archivos de configuración que contienen secretos:
+
+```text
+node_modules
+dist
+.git
+.env
+.env.*
+!.env.example
+coverage
+```
+
+Excluir `.env` del contexto no sustituye la gestión de secretos del entorno de ejecución. La conexión a la base debería configurarse al iniciar el contenedor. Tampoco conviene introducir credenciales en instrucciones del Dockerfile esperando ocultarlas al eliminar un archivo después.
+
+## Qué comprobar al ejecutar
+
+```bash
+docker build -t api-practica:local .
+docker run --rm -p 3000:3000 \
+  -e PORT=3000 api-practica:local
+```
+
+La API debe escuchar en `0.0.0.0` dentro del contenedor para admitir conexiones publicadas desde el host. Probaría un endpoint que no dependa de servicios externos antes de investigar problemas de base de datos.
+
+Después revisaría el usuario efectivo y los permisos de escritura que necesita la aplicación. Si una carpeta requiere archivos temporales, la habilitaría de forma específica. Ejecutar como usuario no privilegiado pierde parte de su utilidad si se resuelve cualquier error concediendo permisos indiscriminados.
+
+## Un entregable que otra persona pueda verificar
+
+El README del laboratorio debería contener el comando de build, el comando de ejecución, las variables requeridas y un ejemplo de respuesta. Añadiría una prueba que inicie la imagen y consulte la API. Que el Dockerfile compile no demuestra que el proceso final encuentre todos sus archivos.
+
+El objetivo de la separación es hacer explícita la entrega: qué se construye, qué se copia y qué necesita el proceso al arrancar.
+
+## Referencias
+
+- [Compilaciones multietapa de Docker](https://docs.docker.com/build/building/multi-stage/).
+- [Buenas prácticas para imágenes](https://docs.docker.com/build/building/best-practices/).

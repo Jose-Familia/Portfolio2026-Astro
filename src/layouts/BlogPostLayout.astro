@@ -44,6 +44,8 @@ const {
   canonicalUrl,
 } = Astro.props;
 
+const categoryLabels: Record<string, string> = { development: "Desarrollo", design: "Diseño", tutorials: "Tutoriales", opinion: "Opinión", career: "Carrera" };
+
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -54,11 +56,11 @@ const articleSchema = {
   "dateModified": (updatedDate || publishDate).toISOString(),
   "author": {
     "@type": "Person",
-    "name": "Tu Nombre"
+    "name": "José Familia"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Tu Nombre"
+    "name": "José Familia"
   }
 };
 ---
@@ -80,7 +82,7 @@ const articleSchema = {
           href={`/blog?category=${encodeURIComponent(category)}`}
           class="badge-primary hover:opacity-80 transition-opacity"
         >
-          {category}
+          {categoryLabels[category] || category}
         </a>
         <span>·</span>
         <time datetime={publishDate.toISOString()}>

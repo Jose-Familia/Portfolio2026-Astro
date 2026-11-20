@@ -1,0 +1,61 @@
+---
+title: "NestJS: organizar una API alrededor de sus reglas de negocio"
+excerpt: "Un ejemplo de pedidos e inventario para decidir qué expone un módulo, cómo separar responsabilidades y qué probar más allá de los controladores."
+publishDate: "2026-06-18"
+draft: false
+featured: false
+coverImage: "/images/blog/nestjs-modulos-limites-de-dominio.svg"
+category: "development"
+tags: ["NestJS", "TypeScript", "Backend", "Arquitectura"]
+readingTime: 3
+seo: {}
+---
+## Empezar con un caso de uso
+
+Una API de pedidos suele comenzar con rutas para crear, consultar y editar registros. El diseño se vuelve más interesante cuando aparece una regla como esta: un pedido solo puede confirmarse si tiene una reserva de inventario válida. Esa regla cruza varias operaciones y no se resuelve eligiendo nombres de carpetas.
+
+Para un proyecto de aprendizaje, plantearía un flujo concreto: seleccionar artículos, reservar unidades y confirmar el pedido. Después identificaría quién conoce las existencias, quién conserva el pedido y quién decide si la operación completa es válida. Este ejercicio aporta más información que empezar con una estructura de carpetas extensa.
+
+## Qué representa un módulo
+
+En NestJS, un módulo declara sus controladores y proveedores y puede importar otros módulos. Los proveedores que exporta forman la parte que otros módulos pueden utilizar. Esta visibilidad permite diseñar una interfaz pequeña alrededor de una responsabilidad.
+
+```ts
+@Module({
+  providers: [InventoryService, InventoryRepository],
+  exports: [InventoryService],
+})
+export class InventoryModule {}
+
+@Module({
+  imports: [InventoryModule],
+  controllers: [OrdersController],
+  providers: [CreateOrder],
+})
+export class OrdersModule {}
+```
+
+El fragmento ilustra el registro de dependencias; las clases y sus importaciones pertenecen a la aplicación. El repositorio de inventario permanece dentro de su módulo. El caso de uso consume una operación del servicio en lugar de consultar directamente sus tablas.
+
+## Separar transporte y decisiones
+
+El controlador puede transformar una solicitud HTTP en una llamada al caso de uso. Los proveedores permiten delegar el trabajo a servicios inyectables. Para este ejemplo propondría que `CreateOrder` reciba datos ya validados y devuelva un resultado que el controlador pueda convertir en una respuesta.
+
+La pregunta útil es dónde cambiaría el código si mañana la creación del pedido se iniciara desde una tarea de consola. Si la regla vive dentro del controlador y depende de objetos HTTP, reutilizarla exige extraerla. Si vive en un caso de uso, el nuevo punto de entrada tiene menos decisiones que repetir.
+
+## Diseñar los errores antes del camino feliz
+
+El contrato debería distinguir un producto inexistente de una reserva vencida. También conviene decidir qué pasa si la reserva se confirma y la persistencia del pedido falla. La separación en módulos no crea automáticamente una transacción entre ambas operaciones.
+
+En un monolito con una base de datos compartida, una opción es coordinar los cambios dentro de una transacción. Si más adelante hay servicios desplegados por separado, la estrategia necesitará otra evaluación. Por eso documentaría esta suposición desde el primer diseño, sin presentar el ejemplo como un sistema distribuido completo.
+
+## Pruebas que explican el diseño
+
+Una prueba útil verificaría que un pedido no se confirma cuando la reserva está vencida. Otra introduciría un fallo de persistencia para comprobar el resultado acordado. Las pruebas del controlador cubrirían el mapeo HTTP; las del caso de uso, la regla del negocio.
+
+Como ejercicio, cambiaría la política de expiración sin modificar el controlador. Si ese cambio obliga a tocar todas las capas, revisaría qué conocimiento está viajando entre ellas. La calidad del límite se aprecia cuando el requisito cambia.
+
+## Referencias
+
+- [Módulos y exportación de proveedores en NestJS](https://docs.nestjs.com/modules).
+- [Proveedores e inyección de dependencias](https://docs.nestjs.com/providers).

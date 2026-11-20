@@ -29,7 +29,7 @@ const sizeClasses = {
   },
   md: {
     container: 'px-4 py-2 text-sm',
-    img: 'w-5 h-5',
+    img: 'w-6 h-6',
     gap: 'gap-2.5',
   },
 }[size];
@@ -60,10 +60,10 @@ else if (typeof style === 'object') {
   <a href={url} target="_blank" rel="noopener noreferrer" class={containerClasses} style={styleAttr} aria-label={name}>
     {hasBoth ? (
       <span class="inline-flex items-center">
-        <span class={sizeClasses.img + ' tech-logo variant-container flex-shrink-0'} aria-hidden="true">
+        <span class={sizeClasses.img + ' tech-logo variant-container flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
           <img
             src={logo.dark}
-            alt={name}
+            alt=""
             class="w-full h-full object-contain tech-logo-img"
             data-light={logo.light}
             data-dark={logo.dark}
@@ -71,8 +71,8 @@ else if (typeof style === 'object') {
         </span>
       </span>
     ) : singleSrc ? (
-      <span class={sizeClasses.img + ' tech-logo flex-shrink-0'} aria-hidden="true">
-        <img src={singleSrc} alt={name} class="w-full h-full object-contain" />
+      <span class={sizeClasses.img + ' tech-logo flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
+        <img src={singleSrc} alt="" class="w-full h-full object-contain" width="24" height="24" loading="lazy" decoding="async" />
       </span>
     ) : null}
     <span class="font-medium">{name}</span>
@@ -81,20 +81,20 @@ else if (typeof style === 'object') {
     <span class={containerClasses} style={styleAttr}>
       {hasBoth ? (
         <span class="inline-flex items-center">
-          <picture class={sizeClasses.img + ' tech-logo flex-shrink-0'} aria-hidden="true">
+          <picture class={sizeClasses.img + ' tech-logo flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
             <source media="(prefers-color-scheme: dark)" srcset={logo.light} />
             <img
               class="w-full h-full object-contain tech-logo-img"
               src={logo.dark}
               data-light={logo.light}
               data-dark={logo.dark}
-              alt={name}
+              alt=""
             />
           </picture>
         </span>
       ) : singleSrc ? (
-        <span class={sizeClasses.img + ' tech-logo flex-shrink-0'} aria-hidden="true">
-          <img src={singleSrc} alt={name} class="w-full h-full object-contain" />
+        <span class={sizeClasses.img + ' tech-logo flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
+          <img src={singleSrc} alt="" class="w-full h-full object-contain" width="24" height="24" loading="lazy" decoding="async" />
         </span>
       ) : null}
       <span class="font-medium">{name}</span>

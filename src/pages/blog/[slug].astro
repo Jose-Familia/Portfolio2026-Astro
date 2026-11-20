@@ -5,6 +5,7 @@
  */
 
 import BlogPostLayout from '@/layouts/BlogPostLayout.astro';
+import { estimateReadingTime } from '@/utils/readingTime';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -23,9 +24,7 @@ interface Props {
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
 
-// Calcular tiempo de lectura aproximado (250 palabras por minuto)
-const wordCount = post.body?.split(/\s+/).length || 0;
-const readingTime = Math.max(1, Math.ceil(wordCount / 250));
+const readingTime = post.data.readingTime || estimateReadingTime(post.body);
 ---
 
 <BlogPostLayout
@@ -33,6 +32,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 250));
   slug={post.slug}
   excerpt={post.data.excerpt}
   publishDate={post.data.publishDate}
+  updatedDate={post.data.updatedDate}
   coverImage={post.data.coverImage}
   category={post.data.category}
   tags={post.data.tags || []}

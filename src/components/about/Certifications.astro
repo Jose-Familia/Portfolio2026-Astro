@@ -1,0 +1,81 @@
+---
+interface Certificate { name: string; issuer: string; type: string; date: Date; skills: string[]; credentialId?: string; }
+interface Props { certifications: Certificate[]; lang?: 'es' | 'en'; }
+const { certifications, lang = 'es' } = Astro.props;
+const en = lang === 'en';
+const groupOf = (type: string) => /curso|course/i.test(type) ? 'course' : /programa|program/i.test(type) ? 'program' : 'certification';
+const filters = [
+  { key: 'all', label: en ? 'All' : 'Todas' },
+  { key: 'certification', label: en ? 'Certifications' : 'Certificaciones' },
+  { key: 'program', label: en ? 'Programs' : 'Programas' },
+  { key: 'course', label: en ? 'Courses' : 'Cursos' },
+];
+const issuerMark = (issuer: string) => issuer.startsWith('DataCamp') ? 'DC' : issuer.startsWith('Oracle') ? 'ONE' : issuer.startsWith('Coursera') ? 'UNAM' : issuer.startsWith('freeCodeCamp') ? 'fCC' : 'G';
+const issuerTone = (issuer: string) => issuer.startsWith('DataCamp') ? 'green' : issuer.startsWith('Oracle') ? 'red' : issuer.startsWith('freeCodeCamp') ? 'neutral' : 'blue';
+const sorted = [...certifications].sort((a,b) => b.date.getTime() - a.date.getTime());
+---
+<section id="certificaciones" class="scroll-mt-28 mt-20 pt-14 border-t border-neutral-200 dark:border-neutral-800" aria-labelledby="certificates-title">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8">
+    <div class="max-w-2xl">
+      <p class="text-sm uppercase tracking-widest text-neutral-500 mb-3">{en ? 'Continuous learning' : 'Aprendizaje continuo'}</p>
+      <h2 id="certificates-title" class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">{en ? 'Certifications & education' : 'Certificaciones y formación'}</h2>
+      <p class="text-neutral-600 dark:text-neutral-400">{en ? 'Complementary education in development, data and technology. Each credential keeps its original issuer and type.' : 'Formación complementaria en desarrollo, datos y tecnología. Cada credencial conserva su institución y tipo de formación.'}</p>
+    </div>
+    <a href={en ? '/en/contact' : '/contacto'} class="text-sm font-medium underline underline-offset-4">{en ? 'Let’s connect' : 'Conversemos'}</a>
+  </div>
+  <certificate-gallery class="block" data-lang={lang}>
+    <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label={en ? 'Filter credentials' : 'Filtrar formación'}>
+      {filters.map(filter => <button class="certificate-filter" type="button" data-credential-filter={filter.key} aria-pressed={filter.key === 'all' ? 'true' : 'false'} aria-controls="credential-results">{filter.label}<span aria-hidden="true" class="ml-2 opacity-60">{filter.key === 'all' ? sorted.length : sorted.filter(cert => groupOf(cert.type) === filter.key).length}</span></button>)}
+    </div>
+    <p class="text-sm text-neutral-500 mb-6" data-credential-count role="status" aria-live="polite">{sorted.length} {en ? 'credentials' : 'credenciales'}</p>
+    <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5" id="credential-results">
+      {sorted.map(cert => (
+        <article class="credential-card" data-credential-type={groupOf(cert.type)} data-tone={issuerTone(cert.issuer)}>
+          <div class="flex items-start justify-between gap-4 mb-7">
+            <span class="issuer-mark" aria-hidden="true">{issuerMark(cert.issuer)}</span>
+            <span class="text-sm text-neutral-500 text-right">{cert.type}</span>
+          </div>
+          <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-2">{cert.issuer}</p>
+          <h3 class="text-xl font-semibold tracking-tight leading-snug mb-5">{cert.name}</h3>
+          <ul class="flex flex-wrap gap-2 mb-7" role="list">
+            {cert.skills.map(skill => <li class="text-sm px-2.5 py-1 rounded-md bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-300">{skill}</li>)}
+          </ul>
+          <div class="mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500 space-y-1">
+            <p><span class="sr-only">{en ? 'Issued: ' : 'Emisión: '}</span><time datetime={cert.date.toISOString().slice(0,10)}>{cert.date.toLocaleDateString(en ? 'en-US' : 'es-ES', {timeZone:'UTC',month:'long',year:'numeric'})}</time></p>
+            {cert.credentialId && <p class="break-all">ID: {cert.credentialId}</p>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </certificate-gallery>
+</section>
+<style>
+  .certificate-filter { @apply px-4 py-2.5 rounded-full border border-neutral-200 dark:border-neutral-700 text-sm font-medium transition-colors; }
+  .certificate-filter[aria-pressed="true"] { @apply bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-black dark:border-white; }
+  .certificate-filter:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .credential-card { @apply flex flex-col p-6 sm:p-7 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950; transition: border-color 180ms ease, transform 180ms ease; }
+  @media (hover:hover) and (prefers-reduced-motion:no-preference) { .credential-card:hover { transform: translateY(-3px); } }
+  .issuer-mark { @apply grid place-items-center min-w-14 h-14 px-3 rounded-xl border text-base font-bold tracking-tight; }
+  [data-tone="green"] .issuer-mark { @apply bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-900; }
+  [data-tone="red"] .issuer-mark { @apply bg-red-50 text-red-800 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-900; }
+  [data-tone="blue"] .issuer-mark { @apply bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-900; }
+  [data-tone="neutral"] .issuer-mark { @apply bg-neutral-100 text-neutral-900 border-neutral-200 dark:bg-neutral-800 dark:text-white dark:border-neutral-700; }
+</style>
+<script>
+  class CertificateGallery extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.initialized) return;
+      this.dataset.initialized = 'true';
+      const buttons = this.querySelectorAll<HTMLButtonElement>('[data-credential-filter]');
+      const cards = this.querySelectorAll<HTMLElement>('[data-credential-type]');
+      buttons.forEach(button => button.addEventListener('click', () => {
+        const selected = button.dataset.credentialFilter;
+        let count = 0;
+        cards.forEach(card => { card.hidden = selected !== 'all' && selected !== card.dataset.credentialType; if (!card.hidden) count++; });
+        buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+        this.querySelector('[data-credential-count]')!.textContent = this.dataset.lang === 'en' ? `${count} of ${cards.length} credentials` : `${count} de ${cards.length} credenciales`;
+      }));
+    }
+  }
+  if (!customElements.get('certificate-gallery')) customElements.define('certificate-gallery', CertificateGallery);
+</script>

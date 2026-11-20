@@ -1,3 +1,5 @@
+import { skillsContent } from '@/data/skills';
+
 /**
  * Contenido de la página About Me
  * Información personal de José Familia
@@ -18,7 +20,7 @@ interface Experience {
 export const aboutContent = {
   es: {
     name: "José Familia",
-    title: "Desarrollo de aplicaciones · Operaciones TI · Cloud",
+    title: "Ingeniería en Sistemas · Desarrollo · Cloud",
     location: "Santo Domingo, República Dominicana",
 
     // Filosofía personal
@@ -31,40 +33,11 @@ export const aboutContent = {
     // Biografía
     bio: [
       "Soy José Familia, estudiante de Ingeniería en Sistemas Computacionales en UNAPEC. Mi interés principal es el diseño y desarrollo de aplicaciones: desde la interfaz y las API hasta los datos y el despliegue.",
-      "Trabajo como Analista I de redes en Banco Popular Dominicano, en Producción y Monitoreo. Doy seguimiento a alertas e incidentes de aplicaciones y servicios, utilizando herramientas como Dynatrace y Splunk en entornos Windows y Linux.",
+      "Mi formación combina programación, estructuras de datos, bases de datos, redes y sistemas operativos. Me interesa convertir esos fundamentos en aplicaciones claras, mantenibles y útiles, con decisiones técnicas que pueda explicar y validar.",
       "Desarrollo proyectos personales con JavaScript, TypeScript y Python. Profundizo en Astro, React, Next.js y NestJS, y continúo mi formación en AWS, contenedores y arquitectura de sistemas. Documento lo que construyo y las decisiones detrás de cada solución.",
     ],
 
-    // Habilidades
-    skills: [
-      {
-        category: "Frontend",
-        items: [
-          { name: "HTML" },
-          { name: "CSS" },
-          { name: "JavaScript" },
-          { name: "TypeScript" },
-          { name: "React / Next.js" },
-          { name: "Astro" },
-          { name: "Tailwind CSS" },
-        ],
-      },
-      {
-        category: "Backend",
-        items: [{ name: "Node.js / NestJS" }, { name: "Python" }, { name: "SQL" }, { name: "PostgreSQL / SQLite" }],
-      },
-      {
-        category: "Herramientas",
-        items: [
-          { name: "Git" },
-          { name: "GitHub" },
-          { name: "Docker" },
-          { name: "Linux" },
-          { name: "AWS (en formación)" },
-          { name: "Dynatrace / Splunk" },
-        ],
-      },
-    ],
+    skills: skillsContent.es,
 
     // Stack tecnológico
     stack: [
@@ -92,7 +65,7 @@ export const aboutContent = {
         startDate: new Date("2026-06-22"),
         current: true,
         description:
-          "Producción y monitoreo de aplicaciones: seguimiento de alertas e incidentes, escalamiento y soporte de servicios en Windows y Linux con Dynatrace y Splunk.",
+          "Experiencia complementaria en operaciones y monitoreo de aplicaciones y servicios de TI.",
       },
     ] as Experience[],
 
@@ -171,7 +144,7 @@ export const aboutContent = {
 
   en: {
     name: "José Familia",
-    title: "Application Development · IT Operations · Cloud",
+    title: "Systems Engineering · Development · Cloud",
     location: "Santo Domingo, Dominican Republic",
 
     // Personal philosophy
@@ -184,40 +157,11 @@ export const aboutContent = {
     // Bio
     bio: [
       "I'm José Familia, a Computer Systems Engineering student at UNAPEC. My main interest is application design and development, from interfaces and APIs to data and deployment.",
-      "I work as a Network Analyst I at Banco Popular Dominicano in Production and Monitoring. I follow application and service alerts and incidents using tools such as Dynatrace and Splunk across Windows and Linux environments.",
+      "My education brings together programming, data structures, databases, networking and operating systems. I want to turn those foundations into useful, maintainable applications, with technical decisions I can explain and validate.",
       "I build personal projects with JavaScript, TypeScript and Python. I am expanding my work with Astro, React, Next.js and NestJS while studying AWS, containers and system architecture. I document both what I build and the decisions behind each solution.",
     ],
 
-    // Skills
-    skills: [
-      {
-        category: "Frontend",
-        items: [
-          { name: "HTML" },
-          { name: "CSS" },
-          { name: "JavaScript" },
-          { name: "TypeScript" },
-          { name: "React / Next.js" },
-          { name: "Astro" },
-          { name: "Tailwind CSS" },
-        ],
-      },
-      {
-        category: "Backend",
-        items: [{ name: "Node.js / NestJS" }, { name: "Python" }, { name: "SQL" }, { name: "PostgreSQL / SQLite" }],
-      },
-      {
-        category: "Tools",
-        items: [
-          { name: "Git" },
-          { name: "GitHub" },
-          { name: "Docker" },
-          { name: "Linux" },
-          { name: "AWS (in training)" },
-          { name: "Dynatrace / Splunk" },
-        ],
-      },
-    ],
+    skills: skillsContent.en,
 
     // Tech stack
     stack: [
@@ -245,7 +189,7 @@ export const aboutContent = {
         startDate: new Date("2026-06-22"),
         current: true,
         description:
-          "Application production and monitoring: alert and incident follow-up, escalation and service support on Windows and Linux using Dynatrace and Splunk.",
+          "Complementary experience in IT operations and monitoring of applications and services.",
       },
     ] as Experience[],
 

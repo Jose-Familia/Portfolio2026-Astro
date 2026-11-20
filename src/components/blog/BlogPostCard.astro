@@ -81,7 +81,7 @@ const categoryLabels: Record<string, string> = {
   <!-- Contenido -->
   <div class:list={[
     'flex flex-col flex-1 p-6',
-    featured ? 'md:w-3/5 md:p-8 md:justify-center' : '',
+    featured && coverImage ? 'md:w-3/5 md:p-8 md:justify-center' : '',
   ]}>
     <!-- Meta info -->
     <div class="flex flex-wrap items-center gap-3 text-sm text-neutral-500 mb-3">
@@ -107,7 +107,7 @@ const categoryLabels: Record<string, string> = {
       'font-semibold tracking-tight mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors',
       featured ? 'text-2xl' : 'text-xl',
     ]}>
-      <a href={postUrl} class="after:absolute after:inset-0 relative">
+      <a href={postUrl} class="hover:underline underline-offset-4">
         {title}
       </a>
     </h3>
@@ -122,10 +122,9 @@ const categoryLabels: Record<string, string> = {
     
     <!-- Link de lectura -->
     <div class="mt-4">
-      <span class="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:gap-2.5 transition-all">
+      <a href={postUrl} aria-label={`Leer: ${title}`} class="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 dark:text-primary-400 transition-colors">
         Leer artículo
-        <Icon name="arrow-right" size={16} />
-      </span>
+      </a>
     </div>
   </div>
 </article>

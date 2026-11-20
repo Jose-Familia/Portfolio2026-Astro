@@ -61,7 +61,15 @@ export const logos: Record<string, LogoVariant> = {
   linux: { single: Linux },
   postman: { single: Postman },
   vscode: { single: VSCode },
-  // express removed
+  python: { single: '/icons/tech/python.svg' },
+  mongodb: { single: '/icons/tech/mongodb.svg' },
+  redis: { single: '/icons/tech/redis.svg' },
+  sqlite: { single: '/icons/tech/sqlite.svg' },
+  aws: { single: '/icons/tech/aws.svg' },
+  kubernetes: { single: '/icons/tech/kubernetes.svg' },
+  terraform: { single: '/icons/tech/terraform.svg' },
+  dynatrace: { single: '/icons/tech/dynatrace.svg' },
+  splunk: { single: '/icons/tech/splunk.svg' },
 };
 
 export function getTechLogo(key: string): LogoVariant | undefined {

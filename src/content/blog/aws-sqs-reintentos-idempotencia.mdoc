@@ -1,0 +1,62 @@
+---
+title: "AWS SQS: pensar en reintentos antes de añadir una cola"
+excerpt: "Un diseño de práctica para generar reportes con consumidores idempotentes, visibilidad de mensajes y una estrategia de recuperación de errores."
+publishDate: "2026-10-14"
+draft: false
+featured: true
+coverImage: "/images/blog/aws-sqs-reintentos-idempotencia.svg"
+category: "development"
+tags: ["AWS", "SQS", "Cloud", "Arquitectura", "Idempotencia"]
+readingTime: 3
+seo: {}
+---
+## El caso de un reporte que tarda
+
+Imagina una aplicación que genera reportes de inventario. El usuario solicita un documento y el procesamiento puede tardar más de lo que conviene mantener abierta una conexión HTTP. Una propuesta es crear una solicitud de reporte, enviarla a una cola y permitir que el usuario consulte su estado.
+
+El diseño necesita explicar qué significa cada estado. `Pendiente` puede indicar que se registró la solicitud; `En proceso`, que un consumidor comenzó; `Disponible`, que el archivo quedó accesible. La cola transporta trabajo, pero esos estados pertenecen al producto.
+
+## Asumir que un mensaje puede repetirse
+
+Las colas estándar de Amazon SQS ofrecen entrega al menos una vez y pueden entregar mensajes repetidos o fuera de orden. Por eso el consumidor del ejemplo no debería crear un reporte nuevo cada vez que recibe el mismo identificador.
+
+Un mensaje de práctica podría contener una referencia estable:
+
+```json
+{
+  "eventId": "evt-reporte-00042",
+  "reportId": "rep-00042",
+  "kind": "inventory-report",
+  "version": 1
+}
+```
+
+El consumidor consultaría una operación duradera asociada con `reportId`. El contrato del ejercicio diría que repetir la solicitud del mismo reporte no crea otro documento lógico. Para conseguirlo hay que coordinar el estado persistido, la escritura del archivo y la confirmación del mensaje. Una variable en memoria desaparece al reiniciar el proceso y no protege entre varios consumidores.
+
+## Un escenario de fallo que vale la pena dibujar
+
+Considera este orden: el trabajador genera el archivo, registra su ubicación y se detiene antes de confirmar el mensaje. El siguiente consumidor puede recibir de nuevo el trabajo. Si encuentra un reporte disponible, debería poder reconocerlo y completar la confirmación sin duplicar el resultado.
+
+Otro orden es más difícil: se escribe el archivo, pero falla el cambio de estado en la base. Para este laboratorio propondría una ruta de archivo determinista por reporte y una política explícita para reconstruir o verificar ese resultado. No existe una transacción automática entre todos los sistemas usados en este recorrido.
+
+## Visibilidad y tiempo de procesamiento
+
+Al recibir un mensaje, el consumidor dispone de un período de visibilidad durante el cual normalmente no se entrega a otros consumidores. Si no lo elimina y termina ese período, puede volver a estar disponible. Esto no elimina la necesidad de idempotencia.
+
+Para una tarea larga revisaría su duración real y la posibilidad de ampliar la visibilidad mientras progresa. La ampliación tampoco demuestra que el trabajo vaya a finalizar: el proceso podría fallar después. El estado de negocio y el mecanismo de entrega deben seguir siendo recuperables.
+
+## Qué hacer con los errores persistentes
+
+Una dead-letter queue permite aislar mensajes que no se han procesado correctamente según la política de reintentos. En el ejemplo, el mensaje podría contener una versión de formato que el consumidor todavía no entiende. Reintentarlo indefinidamente no resolvería esa incompatibilidad.
+
+El laboratorio debería incluir una forma de inspeccionar el error, corregir su causa y decidir si corresponde reprocesar. También mediría la antigüedad de las solicitudes pendientes: una cola con pocos mensajes puede esconder un reporte bloqueado durante demasiado tiempo.
+
+## Una prueba más útil que el camino feliz
+
+Repetiría el mismo mensaje, detendría el consumidor entre la escritura y la confirmación y enviaría un mensaje inválido. Para cada caso dejaría por escrito el número esperado de resultados y el estado que verá el usuario. Esa tabla conecta la infraestructura con una experiencia verificable.
+
+## Referencias
+
+- [Entrega y orden en colas estándar de SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html).
+- [Visibility timeout](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html).
+- [Dead-letter queues](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).

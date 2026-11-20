@@ -1,0 +1,26 @@
+---
+import TechTag from '@/components/ui/TechTag.astro';
+import type { SkillGroup } from '@/data/skills';
+interface Props { groups: SkillGroup[]; lang?: 'es' | 'en'; }
+const { groups, lang = 'es' } = Astro.props;
+---
+<section class="scroll-mt-28" id="habilidades" aria-labelledby="skills-title">
+  <div class="mb-7">
+    <p class="text-sm uppercase tracking-widest text-neutral-500 mb-2">{lang === 'es' ? 'Conocimientos y herramientas' : 'Knowledge and tools'}</p>
+    <h2 id="skills-title" class="text-3xl font-semibold tracking-tight">{lang === 'es' ? 'Habilidades técnicas' : 'Technical skills'}</h2>
+  </div>
+  <div class="space-y-4">
+    {groups.map(group => (
+      <article class="p-5 sm:p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+        <div class="flex flex-wrap items-center gap-3 mb-2">
+          <h3 class="text-lg font-semibold">{group.category}</h3>
+          {group.practice && <span class="text-sm px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 dark:bg-sky-950 dark:text-sky-300">{group.practice}</span>}
+        </div>
+        <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-5">{group.description}</p>
+        <ul class="flex flex-wrap gap-2" role="list">
+          {group.items.map(skill => <li><TechTag name={skill.name} icon={skill.icon} size="md" /></li>)}
+        </ul>
+      </article>
+    ))}
+  </div>
+</section>

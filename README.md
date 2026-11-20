@@ -156,3 +156,12 @@ El perfil traducido se mantiene en `src/i18n/about.ts`; la portada en `src/pages
 npm test
 npm run build
 ```
+
+## Formación, habilidades y artículos
+
+El perfil prioriza Ingeniería en Sistemas, desarrollo de aplicaciones e interés en cloud y TI. La experiencia laboral se conserva como contexto complementario en un desplegable. La versión española y la inglesa comparten los componentes `SkillsSection.astro` y `Certifications.astro`.
+
+- `src/data/skills.ts` organiza los badges por área con claves de icono explícitas; `src/utils/techLogos.ts` resuelve sus insignias. Los SVG adicionales de Devicon se sirven localmente con su atribución y licencia MIT en `public/icons/tech/`.
+- Las credenciales existentes se muestran por fecha, con su institución, tipo, habilidades e identificador cuando está disponible. Los filtros separan certificaciones, programas y cursos.
+- Se añadieron seis artículos con ejemplos de estudio, referencias oficiales y portadas SVG. Sus fechas anteriores y variadas se eligieron a petición del autor; no representan fechas de implementación ni experiencias de trabajo. Los temas son Astro/React, NestJS, PostgreSQL, Docker, Kubernetes y AWS SQS.
+- Los artículos relacionados se seleccionan por categoría, etiquetas y fecha. El tiempo de lectura se mantiene consistente entre listados y fichas mediante `src/utils/readingTime.ts`, respetando los valores editoriales definidos en el contenido.

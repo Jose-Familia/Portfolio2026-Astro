@@ -1,0 +1,74 @@
+---
+title: "Kubernetes: diseñar startup, readiness y liveness con intención"
+excerpt: "Tres preguntas distintas sobre la salud de una aplicación y una práctica para comprobar qué sucede cuando tarda en iniciar o pierde una dependencia."
+publishDate: "2026-09-30"
+draft: false
+featured: false
+coverImage: "/images/blog/kubernetes-probes-diseno-de-aplicaciones.svg"
+category: "tutorials"
+tags: ["Kubernetes", "Cloud", "Contenedores", "Disponibilidad"]
+readingTime: 3
+seo: {}
+---
+## Una respuesta HTTP no explica toda la salud
+
+Una API puede tener su proceso activo y, aun así, estar preparando una caché necesaria para responder. También puede haber terminado de iniciar y perder temporalmente una dependencia. Reiniciar el contenedor en ambos casos introduce una decisión que quizá no corresponde al problema.
+
+Para un laboratorio de Kubernetes plantearía una API con tres endpoints de salud y un arranque con demora configurable. El ejercicio consiste en observar el comportamiento del despliegue, no en encontrar tres nombres distintos para devolver siempre el mismo resultado.
+
+## Tres decisiones de control
+
+La startup probe permite esperar a que la aplicación termine su inicialización. Mientras no tenga éxito, Kubernetes no ejecuta las sondas de readiness y liveness. La readiness probe indica si debe recibir tráfico mediante los mecanismos que usan la condición Ready. Su fallo no equivale a un reinicio. La liveness probe puede provocar el reinicio del contenedor al superar el umbral de fallos y según la política aplicable.
+
+Estos comportamientos hacen necesario definir qué representa cada endpoint antes de escribir el manifiesto.
+
+## Un fragmento para experimentar
+
+El siguiente bloque pertenece a la especificación de un contenedor. Supone que la aplicación expone los tres endpoints en el puerto 3000 y que cada uno responde de acuerdo con el estado descrito:
+
+```yaml
+ports:
+  - name: http
+    containerPort: 3000
+startupProbe:
+  httpGet:
+    path: /health/startup
+    port: http
+  periodSeconds: 5
+  failureThreshold: 24
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  periodSeconds: 5
+  failureThreshold: 2
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  periodSeconds: 10
+  failureThreshold: 3
+```
+
+Los números son parámetros iniciales del laboratorio. No representan una recomendación universal. El endpoint de startup debería indicar que terminó la preparación; el de readiness, que el proceso puede atender el tráfico acordado; el de liveness, que sigue progresando y no está atascado de una forma que justifique reiniciarlo.
+
+## Una dependencia caída no siempre justifica reiniciar
+
+En el ejemplo, la API necesita una base de datos para crear pedidos. Si la base deja de responder, cambiar el estado de disponibilidad puede ser razonable. Reiniciar todas las réplicas no repara la base y puede añadir trabajo durante la recuperación.
+
+Diseñaría la liveness de forma que no confunda esa caída externa con un bloqueo interno del proceso. La decisión concreta depende de los endpoints que ofrece el servicio: una API que conserva funciones útiles durante una degradación puede necesitar una política distinta de otra que no puede atender ninguna solicitud.
+
+## Cómo observar el resultado
+
+Primero introduciría una demora de arranque compatible con los umbrales. Comprobaría cuándo cambia la condición Ready y si aumenta el contador de reinicios. Después simularía la pérdida de la dependencia y revisaría los mismos datos junto con las respuestas que recibe un cliente.
+
+Finalmente provocaría un estado interno de fallo controlado en la aplicación de práctica. El objetivo sería comprobar que la política de liveness produce la recuperación esperada. Separar estos experimentos permite atribuir cada cambio a una causa concreta.
+
+## Qué aporta al desarrollo
+
+La salud de una aplicación forma parte de su contrato operativo. Diseñar estos endpoints obliga a explicar qué necesita el programa para empezar, qué significa estar disponible y qué fallos puede recuperar. Esa explicación debería existir también en la documentación del repositorio.
+
+## Referencias
+
+- [Sondas de startup, readiness y liveness](https://kubernetes.io/docs/concepts/workloads/pods/probes/).
+- [Configuración de sondas de contenedores](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).

@@ -1,38 +1,23 @@
 ---
-/**
- * RelatedPosts.astro
- * Muestra artículos relacionados por categoría
- */
-
-// TODO: Implementar con getCollection de Astro
-export interface Props {
-  currentSlug?: string;
-  category?: string;
-}
-
-// Placeholder - en producción se usaría getCollection
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { currentSlug: _currentSlug, category: _category } = Astro.props;
-const relatedPosts: any[] = [];
+import { getCollection } from 'astro:content';
+interface Props { currentSlug?: string; category?: string; }
+const { currentSlug, category } = Astro.props;
+const posts = await getCollection('blog', ({data}) => !data.draft);
+const current = posts.find(post => post.slug === currentSlug);
+const score = (post: typeof posts[number]) => Number(post.data.category === category) * 2 + post.data.tags.filter(tag => current?.data.tags.includes(tag)).length;
+const related = posts.filter(post => post.slug !== currentSlug)
+  .sort((a,b) => score(b) - score(a) || b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0,3);
 ---
-
-{relatedPosts.length > 0 && (
-  <section>
-    <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-50 mb-6">
-      Artículos relacionados
-    </h2>
-    <div class="grid gap-6 sm:grid-cols-2">
-      {relatedPosts.map((post) => (
-        <a
-          href={`/blog/${post.slug}`}
-          class="group p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
-        >
-          <h3 class="font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-1">
-            {post.title}
-          </h3>
-          <p class="text-sm text-neutral-500 line-clamp-2">
-            {post.excerpt}
-          </p>
+{related.length > 0 && (
+  <section aria-labelledby="related-posts-title">
+    <h2 id="related-posts-title" class="text-2xl font-semibold mb-6">Para seguir explorando</h2>
+    <div class="grid gap-5 md:grid-cols-3">
+      {related.map(post => (
+        <a href={`/blog/${post.slug}`} class="group block p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors">
+          <p class="text-sm text-neutral-500 mb-3">{post.data.tags.slice(0,2).join(' · ') || 'Ingeniería y tecnología'}</p>
+          <h3 class="font-semibold leading-snug mb-3">{post.data.title}</h3>
+          <p class="text-sm text-neutral-500 line-clamp-3">{post.data.excerpt}</p>
         </a>
       ))}
     </div>

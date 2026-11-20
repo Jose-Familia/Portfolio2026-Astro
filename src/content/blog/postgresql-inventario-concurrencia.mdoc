@@ -1,0 +1,69 @@
+---
+title: "PostgreSQL: evitar vender la última unidad dos veces"
+excerpt: "Una práctica de concurrencia con actualizaciones condicionales, transacciones y resultados observables para mantener coherente un inventario."
+publishDate: "2026-07-29"
+draft: false
+featured: true
+coverImage: "/images/blog/postgresql-inventario-concurrencia.svg"
+category: "tutorials"
+tags: ["PostgreSQL", "SQL", "Concurrencia", "Backend"]
+readingTime: 3
+seo: {}
+---
+## Un ejemplo con una sola unidad
+
+Supongamos que una tienda tiene una unidad de un teclado. Dos solicitudes leen ese valor antes de que alguna lo modifique. Ambas deciden que pueden vender y continúan. El problema es que la lectura y la decisión ocurren en momentos distintos de la escritura.
+
+En este laboratorio la regla es sencilla: una reserva válida reduce una unidad y las existencias nunca deben quedar negativas. No se incluyen pagos, cancelaciones ni expiración de reservas. Acotar el caso permite observar el comportamiento sin confundirlo con otras partes de una tienda.
+
+## Preparar la tabla
+
+```sql
+CREATE TABLE inventory (
+  sku text PRIMARY KEY,
+  stock integer NOT NULL CHECK (stock >= 0)
+);
+
+INSERT INTO inventory (sku, stock)
+VALUES ('TECLADO-01', 1);
+```
+
+La restricción expresa una propiedad de los datos que debe cumplirse aunque otro cliente escriba directamente en la tabla. La API todavía debe traducir los resultados a una respuesta comprensible para el usuario. Validar en la aplicación y proteger la base son responsabilidades complementarias.
+
+## Actualizar con la condición de negocio
+
+```sql
+BEGIN;
+
+UPDATE inventory
+SET stock = stock - 1
+WHERE sku = 'TECLADO-01'
+  AND stock >= 1
+RETURNING sku, stock;
+
+COMMIT;
+```
+
+`RETURNING` muestra las filas que realmente fueron actualizadas. Si no hay una fila, la aplicación necesita distinguir entre un artículo inexistente y existencias insuficientes según el contrato elegido. La lectura previa no debe ser la autorización definitiva para descontar.
+
+En PostgreSQL, dos escrituras sobre la misma fila pueden esperar por el bloqueo de la otra transacción. En el nivel habitual Read Committed, una actualización que encuentra una versión modificada vuelve a evaluar su condición sobre esa versión. Para explorar otro nivel de aislamiento habría que revisar también sus errores y política de reintento.
+
+## Reproducir la carrera con dos sesiones
+
+Abre dos terminales conectadas a una base de práctica. En la sesión A ejecuta `BEGIN` y el `UPDATE`, pero deja pendiente el `COMMIT`. En la sesión B ejecuta la misma transacción. Observa que la segunda actualización espera.
+
+Confirma A y revisa la salida de B: para este artículo con una unidad y este descuento, B no debería devolver una reserva válida. Después consulta las existencias desde una tercera sesión. El resultado esperado es cero unidades, no dos ventas aceptadas.
+
+Repite el experimento haciendo `ROLLBACK` en A. El resultado cambia porque A no conserva su descuento. Anota qué devuelve cada sesión; mirar solo el valor final puede ocultar que una API respondió incorrectamente a un cliente.
+
+## Convertir el ejercicio en una prueba de aplicación
+
+La prueba debería lanzar solicitudes concurrentes contra una base real de pruebas y contar los resultados aceptados. Con una unidad inicial, exactamente una solicitud puede reservarla. Todas las demás deben recibir el resultado previsto por el contrato, y la base debe terminar en cero.
+
+Una implementación de pedidos también necesita que el descuento y el registro del pedido se confirmen juntos, o que exista un mecanismo explícito de compensación. Este ejercicio demuestra el descuento protegido, no toda la consistencia de una compra.
+
+## Referencias
+
+- [UPDATE y RETURNING en PostgreSQL 18](https://www.postgresql.org/docs/18/sql-update.html).
+- [Bloqueos de filas y transacciones](https://www.postgresql.org/docs/18/explicit-locking.html).
+- [Aislamiento de transacciones](https://www.postgresql.org/docs/18/transaction-iso.html).

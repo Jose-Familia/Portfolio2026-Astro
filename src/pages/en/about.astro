@@ -5,6 +5,8 @@
  */
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import SkillsSection from '@/components/about/SkillsSection.astro';
+import Certifications from '@/components/about/Certifications.astro';
 import Icon from '@/components/ui/Icon.astro';
 import Badge from '@/components/ui/Badge.astro';
 import TechTag from '@/components/ui/TechTag.astro';
@@ -43,6 +45,11 @@ function formatYear(date: Date): string {
             {content.philosophy.description}
           </p>
         </blockquote>
+        <nav class="flex flex-wrap gap-3 mt-7" aria-label="Profile sections">
+          <a class="text-sm px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700" href="#formacion">Education</a>
+          <a class="text-sm px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700" href="#habilidades">Skills</a>
+          <a class="text-sm px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700" href="#certificaciones">Credentials</a>
+        </nav>
       </header>
       
       <div class="grid lg:grid-cols-[2fr_1fr] gap-12 lg:gap-16">
@@ -58,69 +65,8 @@ function formatYear(date: Date): string {
             </div>
           </section>
           
-          <!-- Skills -->
-          <section>
-            <h2 class="text-2xl font-semibold mb-6">{t(lang, 'about.skills')}</h2>
-            <div class="space-y-8">
-              {content.skills.map((category) => (
-                <div>
-                  <h3 class="text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-4">
-                    {category.category}
-                  </h3>
-                  <div class="flex flex-wrap gap-2">
-                    {category.items.map((skill) => (
-                      <TechTag name={skill.name} icon={skill.name} size="md" />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-          
-          <!-- Experience (only show if data exists) -->
-          {content.experience.length > 0 && (
-            <section>
-              <h2 class="text-2xl font-semibold mb-6">{t(lang, 'about.experience')}</h2>
-              <div class="space-y-8">
-                {content.experience.map((exp) => (
-                  <div class="relative pl-8 pb-8 border-l-2 border-neutral-200 dark:border-neutral-800 last:pb-0">
-                    <div class="absolute left-0 top-0 w-4 h-4 -translate-x-1/2 rounded-full bg-primary-500"></div>
-                    
-                    <div class="flex flex-wrap items-center gap-2 mb-2">
-                      <h3 class="text-lg font-semibold">{exp.position}</h3>
-                      {exp.current && (
-                        <Badge variant="success" size="sm">{t(lang, 'about.current')}</Badge>
-                      )}
-                    </div>
-                    
-                    <p class="text-primary-600 dark:text-primary-400 font-medium mb-1">
-                      {exp.company}
-                    </p>
-                    
-                    <p class="text-sm text-neutral-500 mb-3">
-                      {formatDate(exp.startDate)} — {exp.current ? t(lang, 'about.present') : formatDate((exp as any).endDate)}
-                      {exp.location && ` · ${exp.location}`}
-                    </p>
-                    
-                    <p class="text-neutral-600 dark:text-neutral-400 mb-3">
-                      {exp.description}
-                    </p>
-                    
-                    {exp.highlights && exp.highlights.length > 0 && (
-                      <ul class="list-disc list-inside text-sm text-neutral-600 dark:text-neutral-400 space-y-1">
-                        {exp.highlights.map((highlight: string) => (
-                          <li>{highlight}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-          
           <!-- Education -->
-          <section>
+          <section id="formacion" class="scroll-mt-28">
             <h2 class="text-2xl font-semibold mb-6">{t(lang, 'about.education')}</h2>
             <div class="space-y-8">
               {content.education.map((edu) => (
@@ -151,37 +97,19 @@ function formatYear(date: Date): string {
             </div>
           </section>
           
-          <!-- Certifications -->
-          <section>
-            <h2 class="text-2xl font-semibold mb-6">{t(lang, 'about.certifications')}</h2>
-            <div class="grid sm:grid-cols-2 gap-4">
-              {content.certifications.map((cert) => (
-                <div class="group p-5 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all">
-                  <div class="mb-4 flex h-24 items-end rounded-lg bg-gradient-to-br from-primary-600 to-primary-900 p-4 text-white">
-                    <span class="text-xs font-semibold uppercase tracking-widest">{cert.issuer}</span>
-                  </div>
-                  <div class="flex items-start justify-between gap-3 mb-3">
-                    <div>
-                      <h3 class="font-semibold text-neutral-900 dark:text-white mb-1">{cert.name}</h3>
-                      <p class="text-sm text-neutral-600 dark:text-neutral-400">
-                        {cert.type} · {cert.issuer}
-                      </p>
-                    </div>
-                    <span class="text-xs text-neutral-500 whitespace-nowrap">
-                      {formatDate(cert.date)}
-                    </span>
-                  </div>
-                  <div class="flex flex-wrap gap-1.5">
-                    {cert.skills.map((skill) => (
-                      <span class="text-xs px-2 py-1 rounded bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          <SkillsSection groups={content.skills} lang={lang} />
+
+          <details class="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800">
+            <summary class="font-semibold cursor-pointer">Experience in IT</summary>
+            <p class="mt-4 text-sm text-neutral-500">My professional experience complements my studies and application projects.</p>
+            {content.experience.map(exp => (
+              <div class="mt-4 text-sm">
+                <p class="font-medium">{exp.position} · {exp.company}</p>
+                <p class="text-neutral-500 mt-1">{formatDate(exp.startDate)} — {t(lang, 'about.present')}</p>
+                <p class="text-neutral-600 dark:text-neutral-400 mt-2">{exp.description}</p>
+              </div>
+            ))}
+          </details>
         </div>
         
         <!-- Sidebar -->
@@ -249,6 +177,7 @@ function formatYear(date: Date): string {
           </div>
         </aside>
       </div>
+      <Certifications certifications={content.certifications} lang={lang} />
     </div>
   </section>
 </BaseLayout>

@@ -1,5 +1,5 @@
 title: Sobre mí
-intro: Desarrollo aplicaciones web y de escritorio y estudio Ingeniería en Sistemas Computacionales en UNAPEC.
+intro: Estudiante de Ingeniería en Sistemas Computacionales en UNAPEC, enfocado en desarrollo de aplicaciones, bases de datos, cloud y tecnologías de la información.
 skills:
   - category: Desarrollo
     items:
@@ -27,4 +27,4 @@ experience:
     position: Analista I de redes
     startDate: '2026-06-22'
     current: true
-    description: Producción y monitoreo de aplicaciones y servicios con Dynatrace y Splunk.
+    description: Experiencia complementaria en operaciones y monitoreo de aplicaciones y servicios de TI.

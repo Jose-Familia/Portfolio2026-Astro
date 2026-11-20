@@ -1,0 +1,59 @@
+---
+title: "Astro y React: elegir qué parte de una página necesita JavaScript"
+excerpt: "Una forma práctica de separar contenido e interacción, elegir directivas client y comprobar que una página sigue siendo útil antes de hidratarse."
+publishDate: "2026-05-11"
+draft: false
+featured: false
+coverImage: "/images/blog/astro-react-hidratacion-selectiva.svg"
+category: "development"
+tags: ["Astro", "React", "Frontend", "Rendimiento"]
+readingTime: 3
+seo: {}
+---
+## El problema de una página que hace demasiado
+
+Imagina un catálogo de cursos con una descripción, una lista de temarios y un comparador de precios. La mayor parte del recorrido consiste en leer y seguir enlaces. El comparador, en cambio, necesita guardar una selección y recalcular un resultado. Tratar ambas partes igual complica la decisión sobre cuánto código necesita recibir el navegador.
+
+Una propuesta de diseño para este ejemplo es resolver el contenido con componentes Astro y reservar React para el comparador. La elección se apoya en una diferencia de responsabilidad: presentar información y gestionar estado interactivo. Esto también permite revisar cada parte de manera independiente.
+
+## Qué cambia al hidratar un componente
+
+Un componente de React utilizado en Astro puede generar HTML en el servidor sin enviar su comportamiento al navegador. Las directivas `client:*` indican cuándo cargar su JavaScript e hidratarlo. Añadir React al proyecto, por sí solo, no convierte cada componente en una interfaz interactiva.
+
+```astro
+---
+import Comparador from '../components/Comparador';
+---
+<h1>Encuentra el curso que necesitas</h1>
+<p>Consulta los contenidos antes de comparar las opciones.</p>
+<Comparador client:visible />
+```
+
+En este ejemplo el comparador se hidrata cuando entra en el área visible. Si el visitante necesita usarlo inmediatamente, `client:load` es una elección más coherente. Para una interacción secundaria puede servir `client:idle`. Estas decisiones dependen del recorrido del usuario; no son una competición por retrasar todo el código.
+
+## Un criterio para elegir el límite
+
+Antes de crear una isla, escribiría tres preguntas sobre el catálogo:
+
+- ¿Qué información debe poder leerse aunque la interacción todavía no esté preparada?
+- ¿Qué estado necesita compartir el comparador con otras partes de la página?
+- ¿Qué acción espera ejecutar el visitante en cuanto aparece el control?
+
+Si dos widgets necesitan intercambiar cambios constantemente, separarlos en islas diminutas puede añadir coordinación innecesaria. Una isla que contenga el formulario completo puede ser más fácil de entender y probar. El tamaño del componente debe reflejar la responsabilidad que comparte su estado.
+
+## Un experimento pequeño
+
+Para comparar dos implementaciones del catálogo, mantendría el mismo contenido y los mismos estilos. En una versión hidrataría el comparador al cargar; en la otra lo haría al entrar en pantalla. Revisaría los recursos descargados, cuándo se vuelve utilizable el control y qué ocurre al desplazarse rápidamente hasta él.
+
+También probaría la página con JavaScript desactivado. El visitante debería seguir viendo la descripción y los enlaces básicos. Si comparar precios es la función principal del producto, tendría que diseñar una alternativa utilizable o explicar el estado de carga con claridad. Que el HTML aparezca no significa que toda la experiencia esté resuelta.
+
+## Qué documentar en el proyecto
+
+Una decisión de arquitectura resulta más útil cuando deja evidencia: por qué se eligió React para ese componente, cuándo se hidrata y cómo se validó. Una captura aislada no explica esos detalles. Un párrafo en el README junto con un recorrido reproducible permite que otra persona evalúe el resultado.
+
+Para practicar, ampliaría el catálogo con selección por teclado, estados vacíos y una comparación que se pueda restablecer. Son requisitos pequeños que obligan a pensar en el estado real del producto.
+
+## Referencias
+
+- [Componentes de frameworks en Astro](https://docs.astro.build/en/guides/framework-components/).
+- [Directivas de cliente de Astro](https://docs.astro.build/en/reference/directives-reference/).

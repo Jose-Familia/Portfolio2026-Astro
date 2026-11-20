@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+import { estimateReadingTime } from '@/utils/readingTime';
+import { formatDateShort } from '@/utils/formatDate';
 interface Props { currentSlug?: string; category?: string; }
 const { currentSlug, category } = Astro.props;
 const posts = await getCollection('blog', ({data}) => !data.draft);
@@ -8,18 +10,54 @@ const score = (post: typeof posts[number]) => Number(post.data.category === cate
 const related = posts.filter(post => post.slug !== currentSlug)
   .sort((a,b) => score(b) - score(a) || b.data.publishDate.getTime() - a.data.publishDate.getTime())
   .slice(0,3);
+const categoryLabels: Record<string, string> = {
+  development: 'Desarrollo', design: 'Diseño', tutorials: 'Tutoriales', opinion: 'Opinión', career: 'Carrera',
+};
 ---
 {related.length > 0 && (
-  <section aria-labelledby="related-posts-title">
-    <h2 id="related-posts-title" class="text-2xl font-semibold mb-6">Para seguir explorando</h2>
-    <div class="grid gap-5 md:grid-cols-3">
+  <section aria-labelledby="related-posts-title" class="pt-12 border-t border-neutral-200 dark:border-neutral-800">
+    <div class="flex flex-wrap items-end justify-between gap-5 mb-8">
+      <div>
+        <p class="text-sm uppercase tracking-widest text-neutral-500 mb-3">Más ideas para construir</p>
+        <h2 id="related-posts-title" class="text-3xl md:text-4xl font-semibold tracking-tight">Para seguir explorando</h2>
+      </div>
+      <a href="/blog" class="text-sm font-medium underline underline-offset-4 hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Ver todos los artículos</a>
+    </div>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {related.map(post => (
-        <a href={`/blog/${post.slug}`} class="group block p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors">
-          <p class="text-sm text-neutral-500 mb-3">{post.data.tags.slice(0,2).join(' · ') || 'Ingeniería y tecnología'}</p>
-          <h3 class="font-semibold leading-snug mb-3">{post.data.title}</h3>
-          <p class="text-sm text-neutral-500 line-clamp-3">{post.data.excerpt}</p>
+        <a href={`/blog/${post.slug}`} class="related-card group" data-related-post aria-labelledby={`related-${post.slug}`}>
+          <div class="aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+            {post.data.coverImage ? (
+              <img src={post.data.coverImage} alt="" width="1440" height="900" loading="lazy" decoding="async" class="related-cover w-full h-full object-cover" transition:name={`blog-image-${post.slug}`} />
+            ) : (
+              <div class="h-full flex items-center justify-center text-neutral-500 p-6 text-center font-medium" aria-hidden="true">Apuntes de ingeniería</div>
+            )}
+          </div>
+          <div class="flex flex-col flex-1 p-6">
+            <div class="flex flex-wrap items-center gap-3 text-sm mb-4">
+              <span class="px-2.5 py-1 rounded-md bg-primary-50 text-primary-800 dark:bg-primary-950 dark:text-primary-300">{categoryLabels[post.data.category] || post.data.category}</span>
+              <span class="text-neutral-500">{post.data.readingTime || estimateReadingTime(post.body)} min de lectura</span>
+            </div>
+            <h3 id={`related-${post.slug}`} class="text-xl font-semibold tracking-tight leading-snug mb-3 group-hover:text-primary-700 dark:group-hover:text-primary-300 transition-colors">{post.data.title}</h3>
+            <p class="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 line-clamp-3 mb-6">{post.data.excerpt}</p>
+            <div class="mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center justify-between gap-3 text-sm">
+              <time datetime={post.data.publishDate.toISOString().slice(0,10)} class="text-neutral-500">{formatDateShort(post.data.publishDate)}</time>
+              <span class="font-medium text-neutral-900 dark:text-white">Leer artículo</span>
+            </div>
+          </div>
         </a>
       ))}
     </div>
   </section>
 )}
+<style>
+  .related-card { @apply flex flex-col min-w-0 overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950; transition: border-color 180ms ease, box-shadow 180ms ease; }
+  .related-card:hover { @apply border-neutral-400 dark:border-neutral-600 shadow-lg; }
+  .related-card:focus-visible { outline: 3px solid #0ea5e9; outline-offset: 4px; }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .related-card { transition: transform 220ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+    .related-card:hover { transform: translateY(-4px); }
+    .related-cover { transition: transform 300ms ease; }
+    .related-card:hover .related-cover { transform: scale(1.025); }
+  }
+</style>

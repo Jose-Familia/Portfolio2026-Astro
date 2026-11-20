@@ -188,7 +188,7 @@ const contactInfo = [
             </p>
           </div>
           
-          <div id="form-error" role="alert" aria-live="assertive" class="hidden mt-6 p-4 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+          <div id="form-error" role="alert" role="alert" aria-live="assertive" class="hidden mt-6 p-4 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
             <p class="text-sm text-red-700 dark:text-red-400">
               There was an error sending your message. Please try again or contact me directly via email.
             </p>
@@ -200,67 +200,5 @@ const contactInfo = [
 </BaseLayout>
 
 <script>
-  function initContactForm() {
-    const form = document.getElementById('contact-form') as HTMLFormElement;
-    const successMessage = document.getElementById('form-success');
-    const errorMessage = document.getElementById('form-error');
-    
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const formData = new FormData(form);
-      formData.append('lang', 'en');
-      
-      const submitButton = form.querySelector('button[type="submit"]');
-      
-      // Hide previous messages
-      successMessage?.classList.add('hidden');
-      errorMessage?.classList.add('hidden');
-      
-      if (submitButton) {
-        submitButton.setAttribute('disabled', 'true');
-        submitButton.innerHTML = `
-          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-          </svg>
-          Sending...
-        `;
-      }
-      
-      try {
-        const response = await fetch('/api/contact', {
-          method: 'POST',
-          body: formData,
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok && result.success) {
-          window.location.href = '/en/thanks';
-        } else {
-          throw new Error(result.error || 'Error sending message');
-        }
-      } catch (error) {
-        errorMessage?.classList.remove('hidden');
-        console.error('Error:', error);
-      } finally {
-        if (submitButton) {
-          submitButton.removeAttribute('disabled');
-          submitButton.innerHTML = `
-            Send message
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-            </svg>
-          `;
-        }
-      }
-    });
-  }
-  
-  // Initialize
-  initContactForm();
-  
-  // Re-initialize with View Transitions
-  document.addEventListener('astro:after-swap', initContactForm);
+  import '@/scripts/contact';
 </script>

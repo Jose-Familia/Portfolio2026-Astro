@@ -63,3 +63,8 @@ describe("formatDateISO Utility", () => {
     expect(result).not.toContain(":");
   });
 });
+
+// Content dates represent calendar dates, not the visitor's local instant.
+it("keeps the publication day stable", () => {
+  expect(formatDate(new Date("2026-11-06"), "es-ES")).toBe("6 de noviembre de 2026");
+});

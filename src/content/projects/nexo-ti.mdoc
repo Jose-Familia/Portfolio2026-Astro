@@ -1,0 +1,47 @@
+---
+title: Nexo TI
+description: Mesa de soporte de escritorio para gestionar incidentes y requerimientos, documentar soluciones y automatizar reportes con Python y SQLite.
+featured: true
+status: completed
+publishDate: 2026-11-06
+thumbnail: /images/projects/nexo-ti/resumen.png
+images:
+  - /images/projects/nexo-ti/ticket.png
+  - /images/projects/nexo-ti/documentacion.png
+technologies:
+  - Python
+  - Tkinter
+  - SQLite
+tags:
+  - Escritorio
+  - Automatización
+links:
+  github: https://github.com/Jose-Familia/Nexo_TI
+  case_study: https://github.com/Jose-Familia/Nexo_TI/blob/main/docs/ARQUITECTURA.md
+seo: {}
+---
+## Del incidente a una solución documentada
+
+Nexo TI reúne el registro de incidentes y requerimientos, su seguimiento y una base de conocimiento en una aplicación local. El objetivo es conservar el contexto de cada caso y facilitar el trabajo de un operador de soporte.
+
+## Funcionalidades
+
+- Numeración independiente por tipo y año: INC y REQ.
+- Búsqueda por número, asunto, solicitante, responsable o activo; filtros por estado, tipo y prioridad.
+- Bitácora de cambios, notas y solución obligatoria para resolver un ticket.
+- Adjuntos con copia local y verificación SHA-256.
+- Artículos de documentación vinculados a los casos.
+- Resumen de casos activos, críticos y vencidos.
+- Exportación CSV y Markdown, reportes y copias de seguridad ZIP.
+
+## Decisiones de implementación
+
+Python, Tkinter y SQLite permiten ejecutar la aplicación sin paquetes externos. La base de datos conserva los registros entre sesiones y asigna los números de ticket de forma atómica. El espacio de demostración y el espacio de trabajo utilizan carpetas independientes.
+
+Las automatizaciones también se pueden ejecutar desde la terminal: revisión de objetivos de resolución, reportes diarios, respaldo y sugerencias de categorías con revisión humana.
+
+## Validación y alcance
+
+El repositorio incluye pruebas de numeración, cambios de estado, conflictos de edición, adjuntos, exportaciones y restauración. Las capturas muestran la aplicación real con datos de demostración.
+
+Esta versión está diseñada para un operador local. El perfil del operador identifica sus notas; no implementa autenticación ni colaboración empresarial. Los objetivos de resolución son reglas de la aplicación y no representan acuerdos de una organización.

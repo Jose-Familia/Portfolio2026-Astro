@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "Portfolio profesional minimalista con Astro, Keystatic y TailwindCSS",
-  "author": "Tu Nombre",
+  "author": "José Familia",
   "license": "MIT",
   "engines": {
     "node": ">=20.0.0"

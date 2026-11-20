@@ -1,6 +1,6 @@
 hero:
-  title: "Construyendo mi camino\nen el desarrollo web"
-  subtitle: "Estudiante de Ingeniería en Sistemas formándome de manera autodidacta en desarrollo web."
+  title: "Diseño y desarrollo\naplicaciones"
+  subtitle: "Soy José Familia. Estudio Ingeniería en Sistemas en UNAPEC, trabajo en Operaciones TI y construyo aplicaciones web y de escritorio."
   cta:
     primaryText: "Ver proyectos"
     primaryLink: "/proyectos"
@@ -8,7 +8,7 @@ hero:
     secondaryLink: "/contacto"
 intro:
   title: "Sobre mí"
-  description: "Estudiante sin experiencia laboral formal, pero con proyectos personales y ganas de aprender. Mi enfoque combina el aprendizaje constante con la práctica."
+  description: "Combino el desarrollo de aplicaciones con experiencia en producción y monitoreo. Continúo mi formación en backend, AWS y arquitectura de sistemas."
 featuredProjects:
   title: "Proyectos destacados"
-  count: 3
+  count: 2

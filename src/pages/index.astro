@@ -12,8 +12,8 @@ import { getCollection } from 'astro:content';
 
 const homeData = {
   hero: {
-    title: 'Construyo experiencias digitales únicas',
-    subtitle: 'Estudiante de Ingeniería en Sistemas formándome de manera autodidacta en desarrollo web.',
+    title: 'Diseño y desarrollo aplicaciones',
+    subtitle: 'Soy José Familia. Estudio Ingeniería en Sistemas en UNAPEC, trabajo en Operaciones TI y construyo aplicaciones web y de escritorio.',
     primaryCTA: { text: 'Ver Proyectos', link: '/proyectos' },
     secondaryCTA: { text: 'Contacto', link: '/contacto' },
   },
@@ -54,7 +54,7 @@ const technologies = [
 <BaseLayout title="Inicio">
   <!-- Hero -->
   <Hero
-    title="Construyo experiencias digitales únicas"
+    title="Diseño y desarrollo aplicaciones"
     subtitle={homeData.hero.subtitle}
     primaryCTA={homeData.hero.primaryCTA}
     secondaryCTA={homeData.hero.secondaryCTA}
@@ -77,11 +77,11 @@ const technologies = [
         <!-- Texto -->
         <div class="space-y-6 mb-10">
           <p class="text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed animate-fade-in-up" style="--stagger: 2">
-            Soy José, estudiante de Ingeniería en Sistemas en la Universidad APEC. Aunque aún no tengo experiencia laboral formal, llevo desde 2023 formándome de manera autodidacta en desarrollo web.
+            Soy José, estudiante de Ingeniería en Sistemas Computacionales en UNAPEC y Analista I de redes en Banco Popular Dominicano. Mi experiencia en producción y monitoreo complementa mi interés por diseñar y desarrollar aplicaciones.
           </p>
           
           <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed animate-fade-in-up" style="--stagger: 3">
-            Cada proyecto es un paso más en mi camino—errores incluidos, porque de ahí es donde más aprendo. Mi objetivo es prepararme para cuando llegue la oportunidad.
+            Construyo proyectos web y de escritorio, y profundizo en backend, bases de datos y arquitectura cloud. Me interesa entender el recorrido completo de una aplicación: cómo se usa, cómo se construye y cómo se mantiene.
           </p>
         </div>
         
@@ -264,7 +264,7 @@ const technologies = [
           ¿Quieres colaborar conmigo?
         </h2>
         <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-10 max-w-xl mx-auto">
-          Estoy abierto a proyectos colaborativos, prácticas profesionales y oportunidades de aprendizaje. ¡Conectemos!
+          Me interesan las colaboraciones y oportunidades en desarrollo de aplicaciones, backend y cloud. Conversemos sobre lo que estás construyendo.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <Magnetic client:visible strength={0.1}>

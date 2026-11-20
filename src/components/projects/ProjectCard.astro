@@ -41,17 +41,19 @@ const projectUrl = `/proyectos/${slug}`;
 <article
   class:list={[
     'group card-hover relative flex flex-col animate-fade-in-up',
-    featured ? 'md:col-span-2 md:flex-row' : '',
+
   ]}
   style={`--stagger: ${index}`}
-  data-tags={tags.join(',').toLowerCase()}
+  data-project
+  data-tags={JSON.stringify(tags)}
+  data-search={[title, description, ...technologies, ...tags].join(' ')}
 >
   <!-- Imagen -->
   <a
     href={projectUrl}
     class:list={[
       'block overflow-hidden',
-      featured ? 'md:w-1/2' : '',
+
     ]}
     tabindex="-1"
     aria-hidden="true"
@@ -64,6 +66,7 @@ const projectUrl = `/proyectos/${slug}`;
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
           transition:name={`project-image-${slug}`}
+          width="1440" height="900" decoding="async"
         />
       ) : (
         <div class="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900 flex items-center justify-center">
@@ -81,7 +84,7 @@ const projectUrl = `/proyectos/${slug}`;
   <!-- Contenido -->
   <div class:list={[
     'flex flex-col flex-1 p-6',
-    featured ? 'md:w-1/2 md:p-8' : '',
+
   ]}>
     <!-- Featured badge -->
     {featured && (

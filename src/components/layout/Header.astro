@@ -21,7 +21,7 @@ const currentPath = Astro.url.pathname;
 
 <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-header">
   <div class="glass">
-    <nav class="container-main flex items-center justify-between h-16 md:h-20" aria-label="Main navigation">
+    <nav class="container-main flex items-center justify-between h-16 md:h-20" aria-label="Navegación principal">
       <!-- Logo -->
       <a
         href="/"
@@ -74,7 +74,7 @@ const currentPath = Astro.url.pathname;
         <button
           type="button"
           class="md:hidden p-2 -mr-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
-          aria-label="Open menu"
+          aria-label="Abrir menú"
           aria-expanded="false"
           aria-controls="mobile-menu"
           id="mobile-menu-button"
@@ -90,6 +90,7 @@ const currentPath = Astro.url.pathname;
     id="mobile-menu"
     class="md:hidden fixed inset-0 z-40 hidden"
     aria-modal="true"
+    aria-label="Navegación móvil"
     role="dialog"
   >
     <!-- Overlay -->
@@ -98,11 +99,11 @@ const currentPath = Astro.url.pathname;
     <!-- Panel -->
     <div class="absolute right-0 top-0 h-full w-64 bg-white dark:bg-neutral-900 shadow-xl transform translate-x-full transition-transform duration-300" id="mobile-menu-panel">
       <div class="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800">
-        <span class="font-semibold">Menu</span>
+        <span class="font-semibold">Menú</span>
         <button
           type="button"
           class="p-2 -mr-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
-          aria-label="Close menu"
+          aria-label="Cerrar menú"
           id="mobile-menu-close"
         >
           <Icon name="x" size={24} />
@@ -141,61 +142,67 @@ const currentPath = Astro.url.pathname;
 <div class="h-16 md:h-20"></div>
 
 <script>
-  function initHeader() {
-    // Header scroll effect
+  let cleanup: (() => void) | undefined;
+  document.addEventListener('astro:page-load', () => {
+    cleanup?.();
+    const controller = new AbortController();
+    const { signal } = controller;
     const header = document.getElementById('main-header');
-    
-    const handleScroll = () => {
-      if (window.scrollY > 100) {
-        header?.classList.add('shadow-soft');
-      } else {
-        header?.classList.remove('shadow-soft');
-      }
+    const button = document.getElementById('mobile-menu-button');
+    const close = document.getElementById('mobile-menu-close');
+    const menu = document.getElementById('mobile-menu');
+    const panel = document.getElementById('mobile-menu-panel');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const main = document.getElementById('main-content');
+    const footer = document.querySelector('footer');
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let opened = false;
+    const originalOverflow = document.body.style.overflow;
+    const release = () => {
+      document.body.style.overflow = originalOverflow;
+      if (main) main.inert = false;
+      if (footer) footer.inert = false;
     };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Check initial state
-    
-    // Mobile menu
-    const menuButton = document.getElementById('mobile-menu-button');
-    const menuClose = document.getElementById('mobile-menu-close');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuPanel = document.getElementById('mobile-menu-panel');
-    const menuOverlay = document.getElementById('mobile-menu-overlay');
-    
-    const openMenu = () => {
-      mobileMenu?.classList.remove('hidden');
-      setTimeout(() => {
-        menuPanel?.classList.remove('translate-x-full');
-      }, 10);
-      menuButton?.setAttribute('aria-expanded', 'true');
+    const closeMenu = (restoreFocus = true) => {
+      if (!opened) return;
+      opened = false;
+      panel?.classList.add('translate-x-full');
+      button?.setAttribute('aria-expanded', 'false');
+      release();
+      if (restoreFocus) button?.focus();
+      timer = setTimeout(() => menu?.classList.add('hidden'), matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240);
+    };
+    button?.addEventListener('click', () => {
+      clearTimeout(timer);
+      opened = true;
+      menu?.classList.remove('hidden');
+      // Commit the initial panel position before beginning its transition.
+      panel?.getBoundingClientRect();
+      panel?.classList.remove('translate-x-full');
+      button.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
-    };
-    
-    const closeMenu = () => {
-      menuPanel?.classList.add('translate-x-full');
-      setTimeout(() => {
-        mobileMenu?.classList.add('hidden');
-      }, 300);
-      menuButton?.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    };
-    
-    menuButton?.addEventListener('click', openMenu);
-    menuClose?.addEventListener('click', closeMenu);
-    menuOverlay?.addEventListener('click', closeMenu);
-    
-    // Cerrar con Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !mobileMenu?.classList.contains('hidden')) {
-        closeMenu();
+      if (main) main.inert = true;
+      if (footer) footer.inert = true;
+      close?.focus();
+    }, { signal });
+    close?.addEventListener('click', () => closeMenu(), { signal });
+    overlay?.addEventListener('click', () => closeMenu(), { signal });
+    menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu(false), { signal }));
+    document.addEventListener('keydown', event => {
+      if (!opened) return;
+      if (event.key === 'Escape') { event.preventDefault(); closeMenu(); }
+      if (event.key === 'Tab') {
+        const elements = [...menu!.querySelectorAll<HTMLElement>('a[href], button')];
+        const first = elements[0], last = elements[elements.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
       }
-    });
-  }
-  
-  // Initialize on first load
-  initHeader();
-  
-  // Re-initialize after view transitions
-  document.addEventListener('astro:after-swap', initHeader);
+    }, { signal });
+    const onScroll = () => header?.classList.toggle('shadow-soft', scrollY > 80);
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
+    window.addEventListener('resize', () => { if (innerWidth >= 768) closeMenu(); }, { signal });
+    onScroll();
+    cleanup = () => { controller.abort(); clearTimeout(timer); release(); };
+  });
+  document.addEventListener('astro:before-swap', () => cleanup?.());
 </script>

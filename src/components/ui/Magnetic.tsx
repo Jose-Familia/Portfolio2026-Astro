@@ -21,7 +21,7 @@ export default function Magnetic({
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     const element = ref.current;
-    if (!element) return;
+    if (!element || !window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const rect = element.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -35,19 +35,9 @@ export default function Magnetic({
 
   const handleMouseLeave = () => {
     const element = ref.current;
-    if (!element) return;
+    if (!element || !window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    element.animate(
-      [
-        { transform: element.style.transform },
-        { transform: "translate(0, 0)" },
-      ],
-      {
-        duration: 500,
-        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-        fill: "forwards",
-      },
-    );
+    element.style.transform = "translate(0, 0)";
   };
 
   return (
@@ -57,7 +47,6 @@ export default function Magnetic({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
-        willChange: "transform",
         transition: "transform 0.15s ease-out",
       }}
     >

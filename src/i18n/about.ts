@@ -18,21 +18,21 @@ interface Experience {
 export const aboutContent = {
   es: {
     name: "José Familia",
-    title: "Estudiante de Ingeniería en Sistemas",
+    title: "Desarrollo de aplicaciones · Operaciones TI · Cloud",
     location: "Santo Domingo, República Dominicana",
 
     // Filosofía personal
     philosophy: {
-      title: "Soy un auto-constructor.",
+      title: "Diseñar, construir y entender.",
       description:
-        "Aprendo, fallo, me levanto y sigo adelante — porque todo lo valioso se gana con inteligencia, disciplina y corazón.",
+        "Me interesa el ciclo completo de una aplicación: resolver una necesidad, cuidar la experiencia de uso y entender cómo funciona en producción.",
     },
 
     // Biografía
     bio: [
-      "Soy José Familia, estudiante de Ingeniería en Sistemas Computacionales en la Universidad APEC. Aunque aún no cuento con experiencia laboral formal en el área, he dedicado los últimos años a formarme de manera autodidacta en desarrollo web.",
-      "Desde 2023 construyo proyectos personales que me permiten practicar y aprender nuevas tecnologías. Cada proyecto es un paso más en mi camino: errores incluidos, porque de ahí es donde más aprendo.",
-      "Mi objetivo es prepararme para cuando llegue la oportunidad de trabajar profesionalmente. Mientras tanto, sigo aprendiendo, documentando mi progreso y construyendo mi portafolio.",
+      "Soy José Familia, estudiante de Ingeniería en Sistemas Computacionales en UNAPEC. Mi interés principal es el diseño y desarrollo de aplicaciones: desde la interfaz y las API hasta los datos y el despliegue.",
+      "Trabajo como Analista I de redes en Banco Popular Dominicano, en Producción y Monitoreo. Doy seguimiento a alertas e incidentes de aplicaciones y servicios, utilizando herramientas como Dynatrace y Splunk en entornos Windows y Linux.",
+      "Desarrollo proyectos personales con JavaScript, TypeScript y Python. Profundizo en Astro, React, Next.js y NestJS, y continúo mi formación en AWS, contenedores y arquitectura de sistemas. Documento lo que construyo y las decisiones detrás de cada solución.",
     ],
 
     // Habilidades
@@ -44,14 +44,14 @@ export const aboutContent = {
           { name: "CSS" },
           { name: "JavaScript" },
           { name: "TypeScript" },
-          { name: "React" },
+          { name: "React / Next.js" },
           { name: "Astro" },
           { name: "Tailwind CSS" },
         ],
       },
       {
         category: "Backend",
-        items: [{ name: "Node.js" }, { name: "SQL" }, { name: "PostgreSQL" }],
+        items: [{ name: "Node.js / NestJS" }, { name: "Python" }, { name: "SQL" }, { name: "PostgreSQL / SQLite" }],
       },
       {
         category: "Herramientas",
@@ -60,7 +60,8 @@ export const aboutContent = {
           { name: "GitHub" },
           { name: "Docker" },
           { name: "Linux" },
-          { name: "VS Code" },
+          { name: "AWS (en formación)" },
+          { name: "Dynatrace / Splunk" },
         ],
       },
     ],
@@ -83,7 +84,7 @@ export const aboutContent = {
       { name: "PostgreSQL", icon: "postgresql", url: "https://postgresql.org" },
     ],
 
-    // Experiencia laboral (aún como estudiante)
+    // Experiencia laboral
     experience: [
       {
         company: "Banco Popular Dominicano",
@@ -91,7 +92,7 @@ export const aboutContent = {
         startDate: new Date("2026-06-22"),
         current: true,
         description:
-          "Rol enfocado en el soporte y análisis de la infraestructura de redes.",
+          "Producción y monitoreo de aplicaciones: seguimiento de alertas e incidentes, escalamiento y soporte de servicios en Windows y Linux con Dynatrace y Splunk.",
       },
     ] as Experience[],
 
@@ -170,21 +171,21 @@ export const aboutContent = {
 
   en: {
     name: "José Familia",
-    title: "Computer Systems Engineering Student",
+    title: "Application Development · IT Operations · Cloud",
     location: "Santo Domingo, Dominican Republic",
 
     // Personal philosophy
     philosophy: {
-      title: "I am a self-builder.",
+      title: "Design, build and understand.",
       description:
-        "I learn, I fail, I get back up, and I move forward — because everything worthwhile is earned with intelligence, discipline, and heart.",
+        "I care about the full application lifecycle: solving a need, shaping the user experience and understanding how it runs in production.",
     },
 
     // Bio
     bio: [
-      "I'm José Familia, a Computer Systems Engineering student at Universidad APEC. While I don't have formal work experience in the field yet, I've spent the last few years teaching myself web development.",
-      "Since 2023, I've been building personal projects that allow me to practice and learn new technologies. Each project is another step forward—mistakes included, because that's where I learn the most.",
-      "My goal is to prepare myself for when the opportunity to work professionally arrives. In the meantime, I keep learning, documenting my progress, and building my portfolio.",
+      "I'm José Familia, a Computer Systems Engineering student at UNAPEC. My main interest is application design and development, from interfaces and APIs to data and deployment.",
+      "I work as a Network Analyst I at Banco Popular Dominicano in Production and Monitoring. I follow application and service alerts and incidents using tools such as Dynatrace and Splunk across Windows and Linux environments.",
+      "I build personal projects with JavaScript, TypeScript and Python. I am expanding my work with Astro, React, Next.js and NestJS while studying AWS, containers and system architecture. I document both what I build and the decisions behind each solution.",
     ],
 
     // Skills
@@ -196,14 +197,14 @@ export const aboutContent = {
           { name: "CSS" },
           { name: "JavaScript" },
           { name: "TypeScript" },
-          { name: "React" },
+          { name: "React / Next.js" },
           { name: "Astro" },
           { name: "Tailwind CSS" },
         ],
       },
       {
         category: "Backend",
-        items: [{ name: "Node.js" }, { name: "SQL" }, { name: "PostgreSQL" }],
+        items: [{ name: "Node.js / NestJS" }, { name: "Python" }, { name: "SQL" }, { name: "PostgreSQL / SQLite" }],
       },
       {
         category: "Tools",
@@ -212,7 +213,8 @@ export const aboutContent = {
           { name: "GitHub" },
           { name: "Docker" },
           { name: "Linux" },
-          { name: "VS Code" },
+          { name: "AWS (in training)" },
+          { name: "Dynatrace / Splunk" },
         ],
       },
     ],
@@ -235,7 +237,7 @@ export const aboutContent = {
       { name: "PostgreSQL", icon: "postgresql", url: "https://postgresql.org" },
     ],
 
-    // Work experience (still a student)
+    // Work experience
     experience: [
       {
         company: "Banco Popular Dominicano",
@@ -243,7 +245,7 @@ export const aboutContent = {
         startDate: new Date("2026-06-22"),
         current: true,
         description:
-          "Role focused on support and analysis of network infrastructure.",
+          "Application production and monitoring: alert and incident follow-up, escalation and service support on Windows and Linux using Dynatrace and Splunk.",
       },
     ] as Experience[],
 

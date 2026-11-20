@@ -59,13 +59,13 @@ Portfolio profesional minimalista construido con Astro, Keystatic y TailwindCSS.
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/portfolio-2026.git
+git clone https://github.com/Jose-Familia/Portfolio2026-Astro.git
 
 # Entrar al directorio
-cd portfolio-2026
+cd Portfolio2026-Astro
 
 # Instalar dependencias
-npm install
+npm ci
 
 # Iniciar servidor de desarrollo
 npm run dev
@@ -107,7 +107,7 @@ Las fuentes se cargan desde Google Fonts en `BaseLayout.astro`. Puedes cambiar I
 
 ### Animaciones
 
-Las animaciones CSS están definidas en `tailwind.config.mjs` y los componentes de Motion en `src/components/motion/`.
+Las animaciones CSS están definidas en `tailwind.config.mjs` y los componentes de Motion en `src/scripts/site.ts`.
 
 ## 📦 Scripts
 
@@ -139,3 +139,20 @@ MIT License - Siéntete libre de usar este proyecto como base para tu portfolio.
 Hecho con ❤️ usando [Astro](https://astro.build)
 
 # Portfolio2026-Astro
+
+## Actualización del portafolio
+
+La colección `src/content/projects/` presenta **Nexo TI**, **DigitalWave** y este portafolio. El proyecto anterior de tickets y sus capturas se retiraron del sitio; su repositorio de GitHub permanece intacto. Las capturas de Nexo TI proceden de `Jose-Familia/Nexo_TI/docs/` y muestran datos de demostración.
+
+- Edita las fichas `.mdoc` o usa Keystatic para mantener descripciones, enlaces, tecnologías y categorías. La selección refleja los repositorios revisados el 20 de noviembre de 2026; no consulta GitHub desde el navegador ni se sincroniza automáticamente.
+- La búsqueda combina todos los términos con una categoría exacta, ignora acentos y conserva `q` y `tag` en la URL. El botón de restablecer permite volver al catálogo completo.
+- La galería utiliza un diálogo nativo: botones anterior/siguiente, teclas izquierda/derecha, Escape y retorno del foco al disparador.
+- El tema se aplica antes de pintar la página, se conserva al navegar y tolera el almacenamiento bloqueado. Los efectos de entrada usan un observador compartido y Web Animations, con limpieza al navegar y respeto por movimiento reducido.
+- El formulario comparte un controlador ES/EN que evita envíos duplicados. Requiere `RESEND_API_KEY` en Vercel y un remitente habilitado en Resend. Sin esa variable devuelve 503 con un correo de contacto. Las pruebas simulan el proveedor; no envían correos reales.
+
+El perfil traducido se mantiene en `src/i18n/about.ts`; la portada en `src/pages/index.astro`. Los campos YAML de perfil y portada también se actualizan como contenido del CMS; esas vistas todavía usan sus datos propios. No se añadieron como obtenidas certificaciones que están en preparación.
+
+```bash
+npm test
+npm run build
+```

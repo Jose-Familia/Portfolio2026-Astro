@@ -29,6 +29,7 @@ export default function FadeIn({
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const transforms: Record<string, string> = {
       up: "translateY(24px)",

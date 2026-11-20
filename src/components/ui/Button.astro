@@ -15,6 +15,8 @@ export interface Props {
   class?: string;
   id?: string;
   target?: string;
+  [key: `data-${string}`]: unknown;
+  'aria-pressed'?: boolean | 'true' | 'false';
 }
 
 const {
@@ -27,6 +29,7 @@ const {
   class: className = '',
   id,
   target,
+  ...attributes
 } = Astro.props;
 
 const isLink = !!href;
@@ -49,11 +52,11 @@ const classes = [baseStyles, variantStyles[variant], sizeStyles[size], className
 ---
 
 {isLink ? (
-  <a href={href} class={classes} id={id} target={target || (external ? '_blank' : undefined)} rel={external ? 'noopener noreferrer' : undefined}>
+  <a {...attributes} href={href} class={classes} id={id} target={target || (external ? '_blank' : undefined)} rel={external ? 'noopener noreferrer' : undefined}>
     <slot />
   </a>
 ) : (
-  <button type={type} class={classes} disabled={disabled} id={id}>
+  <button {...attributes} type={type} class={classes} disabled={disabled} id={id}>
     <slot />
   </button>
 )}

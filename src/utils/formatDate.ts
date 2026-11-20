@@ -5,6 +5,7 @@
 
 export function formatDate(date: Date, locale = "es-ES"): string {
   return new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -13,6 +14,7 @@ export function formatDate(date: Date, locale = "es-ES"): string {
 
 export function formatDateShort(date: Date, locale = "es-ES"): string {
   return new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",
     year: "numeric",
     month: "short",
     day: "numeric",

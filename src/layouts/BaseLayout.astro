@@ -2,7 +2,7 @@
 /**
  * BaseLayout.astro
  * Layout principal del sitio
- * 
+ *
  * Incluye:
  * - SEO y meta tags
  * - Estructura HTML base
@@ -30,8 +30,8 @@ export interface Props {
 
 const {
   title,
-  description = 'Portfolio profesional de desarrollo web - Frontend y Fullstack',
-  image = '/og-default.jpg',
+  description = 'José Familia: desarrollo de aplicaciones web y de escritorio, Operaciones TI y formación en cloud. Estudiante de Ingeniería en Sistemas en UNAPEC.',
+  image = '/social-card.svg',
   canonicalUrl = Astro.url.href,
   type = 'website',
   publishedTime,
@@ -51,29 +51,29 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <!-- Preconnect para recursos externos -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
+
     <!-- Fuentes -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    
+
+
     <!-- SEO básico -->
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={author} />
     <link rel="canonical" href={canonicalUrl} />
-    
+
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
-    
+
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={siteName} />
@@ -82,7 +82,7 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
     <meta property="og:image" content={new URL(image, Astro.site)} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_ES'} />
-    
+
     {type === 'article' && publishedTime && (
       <meta property="article:published_time" content={publishedTime} />
     )}
@@ -92,17 +92,17 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
     {type === 'article' && author && (
       <meta property="article:author" content={author} />
     )}
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(image, Astro.site)} />
-    
+
     <!-- Theme color para navegadores móviles -->
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
-    
+
     <!-- JSON-LD Schema -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
@@ -113,110 +113,40 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
         "https://github.com/Jose-Familia",
         "https://www.linkedin.com/in/jrfamilia/"
       ],
-      "jobTitle": "Software Developer",
-      "description": "Desarrollador de Software enfocado en crear aplicaciones web modernas, accesibles y de alto rendimiento.",
+      "jobTitle": "Analista I de redes",
+      "description": "Estudiante de Ingeniería en Sistemas en UNAPEC. Desarrollo de aplicaciones web y de escritorio, Operaciones TI y formación en cloud.",
       "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Astro", "Tailwind CSS"]
     })} />
-    
+
+    <script is:inline>
+      (() => {
+        let theme;
+        try { theme = localStorage.getItem('theme'); } catch {}
+        const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      })();
+    </script>
     <!-- Client Router para navegación suave -->
     <ClientRouter />
   </head>
-  
+
   <body class="flex flex-col min-h-screen antialiased">
     <!-- Skip link para accesibilidad -->
     <a href="#main-content" class="skip-link">
-      Skip to main content
+      {lang === 'en' ? 'Skip to main content' : 'Saltar al contenido'}
     </a>
-    
+
     <Header />
-    
+
     <main id="main-content" class="flex-1">
       <slot />
     </main>
-    
+
     <Footer />
-    
-    <!-- Script para modo oscuro -->
-    <script is:inline>
-      // Detectar preferencia del sistema y aplicar tema
-      function getThemePreference() {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      
-      function applyTheme() {
-        const theme = getThemePreference();
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-      }
-      
-      // Aplicar tema inmediatamente
-        applyTheme();
 
-        // Update tech logos according to applied theme
-        function updateTechIcons(){
-          try{
-            const theme = getThemePreference();
-            const imgs = document.querySelectorAll('img[data-light][data-dark]');
-            imgs.forEach(img => {
-              const light = img.getAttribute('data-light');
-              const dark = img.getAttribute('data-dark');
-              if(!light || !dark) return;
-              img.src = theme === 'dark' ? light : dark;
-            });
-          }catch(e){/* ignore */}
-        }
-        updateTechIcons();
-
-        // Scroll reveal: observe elements with .scroll-reveal and add .revealed when visible
-        function setupScrollReveal(){
-          if(typeof window === 'undefined') return;
-          try{
-            const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if(prefersReduced) {
-              // immediately reveal all
-              document.querySelectorAll('.scroll-reveal').forEach(el => el.classList.add('revealed'));
-              return;
-            }
-
-            const observer = new IntersectionObserver((entries, obs) => {
-              entries.forEach(entry => {
-                if(!entry.isIntersecting) return;
-                const el = entry.target;
-                // read --stagger (number) and multiply by 120ms
-                const cs = getComputedStyle(el);
-                const raw = cs.getPropertyValue('--stagger').trim();
-                const staggerNum = raw ? Number(raw) : 0;
-                const delay = Number.isFinite(staggerNum) ? (staggerNum * 120) : 0;
-                setTimeout(() => el.classList.add('revealed'), delay);
-                obs.unobserve(el);
-              });
-            }, { threshold: 0.12 });
-
-            document.querySelectorAll('.scroll-reveal').forEach(el => {
-              // ensure starting state
-              el.classList.remove('revealed');
-              observer.observe(el);
-            });
-          }catch(e){/* ignore errors */}
-        }
-        setupScrollReveal();
-      
-      // Re-aplicar tema after view transitions and update icons
-      document.addEventListener('astro:after-swap', () => { applyTheme(); updateTechIcons(); });
-      document.addEventListener('astro:page-load', () => { applyTheme(); updateTechIcons(); });
-
-      // Actualizar cuando cambie la preferencia del sistema
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme')) {
-          document.documentElement.classList.toggle('dark', e.matches);
-          updateTechIcons();
-        }
-      });
-
-      // Update icons when theme is changed in other tabs
-      window.addEventListener('storage', (e) => { if(e.key === 'theme'){ applyTheme(); updateTechIcons(); } });
+    <script>
+      import '@/scripts/site';
     </script>
   </body>
 </html>

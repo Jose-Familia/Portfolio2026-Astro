@@ -5,6 +5,7 @@
 
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
+import { escapeHtml } from "../../utils/escapeHtml";
 import { contactMessageSchema } from "../../utils/zodSchemas";
 
 // Email de destino
@@ -31,9 +32,6 @@ const subjectMap: Record<string, Record<string, string>> = {
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  // Instanciar Resend dentro del handler para evitar errores en build time
-  const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
   try {
     const formData = await request.formData();
 
@@ -60,6 +58,16 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
+    if (!import.meta.env.RESEND_API_KEY) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: lang === "en"
+          ? "The contact service is unavailable. Please email familiajoserene@gmail.com."
+          : "El servicio de contacto no está disponible. Escríbeme a familiajoserene@gmail.com.",
+      }), { status: 503, headers: { "Content-Type": "application/json" } });
+    }
+    const resend = new Resend(import.meta.env.RESEND_API_KEY);
+
     // Construir asunto
     const subjectText =
       subjectMap[lang]?.[subject] ||
@@ -80,15 +88,15 @@ export const POST: APIRoute = async ({ request }) => {
           </h2>
           
           <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 20px 0;">
-            <p style="margin: 0 0 10px 0;"><strong>${lang === "es" ? "Nombre" : "Name"}:</strong> ${name}</p>
-            <p style="margin: 0 0 10px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p style="margin: 0 0 10px 0;"><strong>${lang === "es" ? "Nombre" : "Name"}:</strong> ${escapeHtml(name)}</p>
+            <p style="margin: 0 0 10px 0;"><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
             <p style="margin: 0;"><strong>${lang === "es" ? "Asunto" : "Subject"}:</strong> ${subjectText}</p>
           </div>
           
           <div style="margin: 20px 0;">
             <h3 style="color: #374151; margin-bottom: 10px;">${lang === "es" ? "Mensaje" : "Message"}:</h3>
             <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; white-space: pre-wrap;">
-              ${message.replace(/\n/g, "<br>")}
+              ${escapeHtml(message).replace(/\n/g, "<br>")}
             </div>
           </div>
           

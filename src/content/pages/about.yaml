@@ -1,47 +1,30 @@
 title: Sobre mí
-intro: >-
-  Hola, soy un desarrollador frontend apasionado por crear experiencias web
-  excepcionales.
+intro: Desarrollo aplicaciones web y de escritorio y estudio Ingeniería en Sistemas Computacionales en UNAPEC.
 skills:
-  - category: Frontend
+  - category: Desarrollo
     items:
-      - name: React / Next.js
-        level: expert
-      - name: TypeScript
-        level: expert
-      - name: Vue.js / Nuxt
-        level: advanced
-      - name: Astro
-        level: advanced
-      - name: Tailwind CSS
-        level: expert
-  - category: Backend
-    items:
-      - name: Node.js
-        level: advanced
-      - name: PostgreSQL
+      - name: JavaScript / TypeScript
         level: intermediate
-      - name: GraphQL
-        level: advanced
-  - category: Herramientas
-    items:
-      - name: Git / GitHub
-        level: expert
-      - name: Docker
+      - name: Astro / React / Next.js
         level: intermediate
-      - name: Figma
-        level: advanced
+      - name: Node.js / NestJS / Python
+        level: intermediate
+  - category: Datos y herramientas
+    items:
+      - name: SQL / PostgreSQL / SQLite
+        level: intermediate
+      - name: Git / GitHub / Docker
+        level: intermediate
 stack:
-  - name: React
-    icon: react
-    url: https://reactjs.org
-  - name: TypeScript
-    icon: typescript
-    url: https://typescriptlang.org
   - name: Astro
     icon: astro
     url: https://astro.build
-  - name: Tailwind CSS
-    icon: tailwind
-    url: https://tailwindcss.com
-experience: []
+  - name: NestJS
+    icon: nestjs
+    url: https://nestjs.com
+experience:
+  - company: Banco Popular Dominicano
+    position: Analista I de redes
+    startDate: '2026-06-22'
+    current: true
+    description: Producción y monitoreo de aplicaciones y servicios con Dynatrace y Splunk.

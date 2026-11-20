@@ -27,6 +27,7 @@ export default function TextReveal({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const words = container.querySelectorAll<HTMLSpanElement>(".word");
 

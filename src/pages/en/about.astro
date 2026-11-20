@@ -17,11 +17,11 @@ const lang: Lang = 'en';
 const content = aboutContent[lang];
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+  return date.toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'short' });
 }
 
 function formatYear(date: Date): string {
-  return date.getFullYear().toString();
+  return date.getUTCFullYear().toString();
 }
 ---
 

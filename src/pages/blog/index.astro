@@ -22,6 +22,7 @@ const posts = allPosts
     publishDate: post.data.publishDate,
     coverImage: post.data.coverImage,
     category: post.data.category,
+    tags: post.data.tags,
     readingTime: post.data.readingTime || 5,
     featured: post.data.featured || false,
   }));
@@ -87,7 +88,7 @@ const regularPosts = posts.filter((p) => !p.featured);
           
           <!-- Posts destacados -->
           {featuredPosts.length > 0 && (
-            <div class="mb-16">
+            <div class="mb-16" data-featured-posts>
               <h2 class="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-6">
                 Artículos destacados
               </h2>
@@ -146,50 +147,44 @@ const regularPosts = posts.filter((p) => !p.featured);
 </BaseLayout>
 
 <script>
-  // Búsqueda y filtrado client-side
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
-  const categoryFilter = document.getElementById('category-filter') as HTMLSelectElement;
-  const postsGrid = document.getElementById('posts-grid');
-  const emptyState = document.getElementById('empty-state');
-  const resetBtn = document.getElementById('reset-filters');
-  
-  const filterPosts = () => {
-    const searchTerm = searchInput?.value.toLowerCase() || '';
-    const category = categoryFilter?.value || 'all';
-    
-    const cards = postsGrid?.querySelectorAll('article') || [];
-    let visibleCount = 0;
-    
-    cards.forEach((card) => {
-      const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
-      const excerpt = card.querySelector('p')?.textContent?.toLowerCase() || '';
-      const cardCategory = card.getAttribute('data-category') || '';
-      
-      const matchesSearch = title.includes(searchTerm) || excerpt.includes(searchTerm);
-      const matchesCategory = category === 'all' || cardCategory === category;
-      
-      if (matchesSearch && matchesCategory) {
-        card.classList.remove('hidden');
-        visibleCount++;
-      } else {
-        card.classList.add('hidden');
+  import { normalizeSearch } from '@/scripts/project-filters';
+  document.addEventListener('astro:page-load', () => {
+    const input = document.getElementById('search-input') as HTMLInputElement | null;
+    const select = document.getElementById('category-filter') as HTMLSelectElement | null;
+    if (!input || !select || input.dataset.initialized) return;
+    input.dataset.initialized = 'true';
+    const params = new URLSearchParams(location.search);
+    input.value = params.get('q') || '';
+    const category = params.get('category') || 'all';
+    select.value = [...select.options].some(option => option.value === category) ? category : 'all';
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-post-card]')];
+    const filter = (saveUrl = true) => {
+      let visible = 0;
+      const query = normalizeSearch(input.value);
+      cards.forEach(card => {
+        const match = normalizeSearch(card.dataset.search || '').includes(query)
+          && (select.value === 'all' || card.dataset.category === select.value);
+        card.hidden = !match;
+        if (match) visible++;
+      });
+      document.querySelectorAll<HTMLElement>('[data-featured-posts]').forEach(section => {
+        section.hidden = !section.querySelector('[data-post-card]:not([hidden])');
+      });
+      const heading = document.getElementById('posts-grid')?.previousElementSibling;
+      if (heading instanceof HTMLElement) heading.hidden = !document.querySelector('#posts-grid [data-post-card]:not([hidden])');
+      document.getElementById('empty-state')?.classList.toggle('hidden', visible > 0);
+      if (saveUrl) {
+        const url = new URL(location.href);
+        query ? url.searchParams.set('q', input.value.trim()) : url.searchParams.delete('q');
+        select.value === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', select.value);
+        history.replaceState(history.state, '', url);
       }
+    };
+    input.addEventListener('input', () => filter());
+    select.addEventListener('change', () => filter());
+    document.getElementById('reset-filters')?.addEventListener('click', () => {
+      input.value = ''; select.value = 'all'; filter(); input.focus();
     });
-    
-    // Mostrar estado vacío si no hay resultados
-    if (visibleCount === 0) {
-      emptyState?.classList.remove('hidden');
-    } else {
-      emptyState?.classList.add('hidden');
-    }
-  };
-  
-  searchInput?.addEventListener('input', filterPosts);
-  categoryFilter?.addEventListener('change', filterPosts);
-  
-  resetBtn?.addEventListener('click', () => {
-    if (searchInput) searchInput.value = '';
-    if (categoryFilter) categoryFilter.value = 'all';
-    filterPosts();
+    filter(false);
   });
 </script>

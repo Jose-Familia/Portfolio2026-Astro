@@ -15,6 +15,7 @@ export interface Props {
   publishDate: Date;
   coverImage?: string;
   category: string;
+  tags?: string[];
   readingTime?: number;
   featured?: boolean;
   index?: number;
@@ -27,6 +28,7 @@ const {
   publishDate,
   coverImage,
   category,
+  tags = [],
   readingTime,
   featured = false,
   index = 0,
@@ -49,6 +51,9 @@ const categoryLabels: Record<string, string> = {
     featured ? 'md:flex-row' : '',
   ]}
   style={`--stagger: ${index}`}
+  data-post-card
+  data-category={category}
+  data-search={[title, excerpt, ...tags].join(" ")}
 >
   <!-- Imagen de portada -->
   {coverImage && (

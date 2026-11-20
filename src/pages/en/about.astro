@@ -189,13 +189,7 @@ function formatYear(date: Date): string {
           <!-- Profile photo -->
           <div class="card p-6">
             <div class="aspect-square rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800">
-              <img
-                src="/images/jose-familia.jpg"
-                alt={content.name}
-                class="w-full h-full object-cover"
-                loading="lazy"
-                onerror="this.style.display='none'"
-              />
+              <div class="w-full h-full grid place-items-center text-7xl font-bold text-neutral-900 dark:text-white" aria-hidden="true">JF</div>
             </div>
             <h3 class="font-semibold text-lg mb-1">{content.name}</h3>
             <p class="text-neutral-600 dark:text-neutral-400 text-sm mb-1">

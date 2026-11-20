@@ -159,9 +159,15 @@ npm run build
 
 ## Formación, habilidades y artículos
 
-El perfil prioriza Ingeniería en Sistemas, desarrollo de aplicaciones e interés en cloud y TI. La experiencia laboral se conserva como contexto complementario en un desplegable. La versión española y la inglesa comparten los componentes `SkillsSection.astro` y `Certifications.astro`.
+El perfil prioriza Ingeniería en Sistemas, desarrollo de aplicaciones e interés en cloud y TI. La experiencia laboral tiene una sección visible entre formación y habilidades, con empresa, cargo, fechas y responsabilidades. La versión española y la inglesa comparten los componentes `SkillsSection.astro` y `Certifications.astro`.
 
 - `src/data/skills.ts` organiza los badges por área con claves de icono explícitas; `src/utils/techLogos.ts` resuelve sus insignias. Los SVG adicionales de Devicon se sirven localmente con su atribución y licencia MIT en `public/icons/tech/`.
 - Las credenciales existentes se muestran por fecha, con su institución, tipo, habilidades e identificador cuando está disponible. Los filtros separan certificaciones, programas y cursos.
 - Se añadieron seis artículos con ejemplos de estudio, referencias oficiales y portadas SVG. Sus fechas anteriores y variadas se eligieron a petición del autor; no representan fechas de implementación ni experiencias de trabajo. Los temas son Astro/React, NestJS, PostgreSQL, Docker, Kubernetes y AWS SQS.
 - Los artículos relacionados se seleccionan por categoría, etiquetas y fecha. El tiempo de lectura se mantiene consistente entre listados y fichas mediante `src/utils/readingTime.ts`, respetando los valores editoriales definidos en el contenido.
+
+## Temas y contraste
+
+La paleta semántica vive en `src/styles/global.css` y se utiliza mediante colores de Tailwind como `canvas`, `surface`, `ink`, `muted-ink` y `line`. Los textos principales, secundarios y de acento se comprueban contra las tres superficies de ambos temas con un contraste mínimo de 4.5:1.
+
+`src/scripts/theme.ts` gestiona selección explícita, preferencia del sistema, almacenamiento bloqueado, sincronización entre pestañas y los eventos de navegación de Astro. La selección se aplica antes del primer pintado y antes de intercambiar la página; también actualiza `color-scheme`, el color del navegador y la etiqueta del control. Los iconos con variantes siguen la clase del tema, en lugar de depender solo de la preferencia del sistema. Las marcas monocromas utilizan una base de contraste; las demás conservan sus colores.

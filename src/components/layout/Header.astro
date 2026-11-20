@@ -29,8 +29,8 @@ const currentPath = Astro.url.pathname;
         aria-label="Ir al inicio"
         transition:name="logo"
       >
-        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-500 text-white text-sm font-bold group-hover:bg-primary-600 transition-colors">JF</span>
-        <span class="hidden sm:inline text-neutral-900 dark:text-neutral-50">José Familia</span>
+        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-700 text-white text-sm font-bold group-hover:bg-primary-600 transition-colors">JF</span>
+        <span class="hidden sm:inline text-ink">José Familia</span>
       </a>
       
       <!-- Navegación desktop -->
@@ -45,8 +45,8 @@ const currentPath = Astro.url.pathname;
                 class:list={[
                   'relative px-4 py-2 text-sm font-medium rounded-lg transition-colors',
                   isActive
-                    ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800',
+                    ? 'text-accent-ink bg-primary-50 dark:bg-primary-900/20'
+                    : 'text-muted-ink hover:text-neutral-900 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800',
                 ]}
                 aria-current={isActive ? 'page' : undefined}
               >
@@ -97,8 +97,8 @@ const currentPath = Astro.url.pathname;
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-menu-overlay"></div>
     
     <!-- Panel -->
-    <div class="absolute right-0 top-0 h-full w-64 bg-white dark:bg-neutral-900 shadow-xl transform translate-x-full transition-transform duration-300" id="mobile-menu-panel">
-      <div class="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800">
+    <div class="absolute right-0 top-0 h-full w-64 bg-surface shadow-xl transform translate-x-full transition-transform duration-[240ms]" id="mobile-menu-panel">
+      <div class="flex items-center justify-between p-4 border-b border-line">
         <span class="font-semibold">Menú</span>
         <button
           type="button"

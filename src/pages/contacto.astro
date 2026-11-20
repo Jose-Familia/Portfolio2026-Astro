@@ -43,7 +43,7 @@ const contactInfo = [
             <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 animate-fade-in-up">
               Hablemos
             </h1>
-            <p class="text-xl text-neutral-600 dark:text-neutral-400 animate-fade-in-up" style="--stagger: 1">
+            <p class="text-xl text-muted-ink animate-fade-in-up" style="--stagger: 1">
               ¿Tienes un proyecto en mente o simplemente quieres saludar? 
               Me encantaría escucharte.
             </p>
@@ -56,19 +56,19 @@ const contactInfo = [
                 href={contact.href}
                 target={contact.href.startsWith('http') ? '_blank' : undefined}
                 rel={contact.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                class="flex items-center gap-4 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors group animate-fade-in-up"
+                class="flex items-center gap-4 p-4 rounded-xl bg-surface-alt border border-line hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors group animate-fade-in-up"
                 style={`--stagger: ${index + 2}`}
               >
-                <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-alt text-muted-ink group-hover:text-accent-ink transition-colors">
                   <Icon name={contact.icon} size={24} />
                 </div>
                 <div>
                   <p class="text-sm text-neutral-500">{contact.label}</p>
-                  <p class="font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  <p class="font-medium group-hover:text-accent-ink transition-colors">
                     {contact.value}
                   </p>
                 </div>
-                <Icon name="arrow-up-right" size={20} class="ml-auto text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
+                <Icon name="arrow-up-right" size={20} class="ml-auto text-neutral-400 group-hover:text-accent-ink transition-colors" />
               </a>
             ))}
           </div>

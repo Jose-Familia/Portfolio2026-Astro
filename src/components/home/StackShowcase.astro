@@ -12,7 +12,7 @@ const stack = aboutContent[lang].stack;
       const logo = getTechLogo(tech.icon);
       return (
         <a href={tech.url} target="_blank" rel="noopener noreferrer" class="group">
-          <span class="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 group-hover:scale-110 transition-transform">
+          <span class="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-lg bg-surface-alt border border-line group-hover:scale-110 transition-transform">
             {(logo?.light && logo?.dark) ? (
               <picture class="w-8 h-8 md:w-9 md:h-9 tech-logo" aria-hidden="true">
                 <source media="(prefers-color-scheme: dark)" srcset={logo.light} />

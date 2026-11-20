@@ -5,7 +5,7 @@ const { images, projectName } = Astro.props;
 <project-gallery class="block" data-project-name={projectName}>
   <div class="grid gap-4 sm:grid-cols-2">
     {images.map((image, index) => (
-      <button type="button" class="group overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4" data-gallery-image={image} aria-label={`Ampliar captura ${index + 1} de ${projectName}`}>
+      <button type="button" class="group overflow-hidden rounded-xl border border-line cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4" data-gallery-image={image} aria-label={`Ampliar captura ${index + 1} de ${projectName}`}>
         <img src={image} alt={`${projectName}, captura ${index + 1}`} class="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-[1.02]" loading="lazy" />
       </button>
     ))}

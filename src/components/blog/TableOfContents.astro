@@ -15,8 +15,8 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 ---
 
 {toc.length > 0 && (
-  <nav class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800" aria-label="Tabla de contenidos">
-    <h2 class="text-sm font-semibold text-neutral-900 dark:text-neutral-50 mb-3">
+  <nav class="p-4 rounded-xl bg-surface-alt border border-line" aria-label="Tabla de contenidos">
+    <h2 class="text-sm font-semibold text-ink mb-3">
       En este artículo
     </h2>
     <ul class="space-y-2 text-sm" role="list">
@@ -24,7 +24,7 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         <li class:list={[heading.depth === 3 && 'ml-4']}>
           <a
             href={`#${heading.slug}`}
-            class="block py-1 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1"
+            class="block py-1 text-muted-ink hover:text-accent-ink transition-colors line-clamp-1"
           >
             {heading.text}
           </a>

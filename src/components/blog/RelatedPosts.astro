@@ -15,7 +15,7 @@ const categoryLabels: Record<string, string> = {
 };
 ---
 {related.length > 0 && (
-  <section aria-labelledby="related-posts-title" class="pt-12 border-t border-neutral-200 dark:border-neutral-800">
+  <section aria-labelledby="related-posts-title" class="pt-12 border-t border-line">
     <div class="flex flex-wrap items-end justify-between gap-5 mb-8">
       <div>
         <p class="text-sm uppercase tracking-widest text-neutral-500 mb-3">Más ideas para construir</p>
@@ -26,7 +26,7 @@ const categoryLabels: Record<string, string> = {
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {related.map(post => (
         <a href={`/blog/${post.slug}`} class="related-card group" data-related-post aria-labelledby={`related-${post.slug}`}>
-          <div class="aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+          <div class="aspect-[16/10] overflow-hidden bg-surface-alt">
             {post.data.coverImage ? (
               <img src={post.data.coverImage} alt="" width="1440" height="900" loading="lazy" decoding="async" class="related-cover w-full h-full object-cover" transition:name={`blog-image-${post.slug}`} />
             ) : (
@@ -39,10 +39,10 @@ const categoryLabels: Record<string, string> = {
               <span class="text-neutral-500">{post.data.readingTime || estimateReadingTime(post.body)} min de lectura</span>
             </div>
             <h3 id={`related-${post.slug}`} class="text-xl font-semibold tracking-tight leading-snug mb-3 group-hover:text-primary-700 dark:group-hover:text-primary-300 transition-colors">{post.data.title}</h3>
-            <p class="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 line-clamp-3 mb-6">{post.data.excerpt}</p>
-            <div class="mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center justify-between gap-3 text-sm">
+            <p class="text-sm leading-relaxed text-muted-ink line-clamp-3 mb-6">{post.data.excerpt}</p>
+            <div class="mt-auto pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3 text-sm">
               <time datetime={post.data.publishDate.toISOString().slice(0,10)} class="text-neutral-500">{formatDateShort(post.data.publishDate)}</time>
-              <span class="font-medium text-neutral-900 dark:text-white">Leer artículo</span>
+              <span class="font-medium text-ink">Leer artículo</span>
             </div>
           </div>
         </a>
@@ -51,7 +51,7 @@ const categoryLabels: Record<string, string> = {
   </section>
 )}
 <style>
-  .related-card { @apply flex flex-col min-w-0 overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950; transition: border-color 180ms ease, box-shadow 180ms ease; }
+  .related-card { @apply flex flex-col min-w-0 overflow-hidden rounded-2xl border border-line bg-surface; transition: border-color 180ms ease, box-shadow 180ms ease; }
   .related-card:hover { @apply border-neutral-400 dark:border-neutral-600 shadow-lg; }
   .related-card:focus-visible { outline: 3px solid #0ea5e9; outline-offset: 4px; }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {

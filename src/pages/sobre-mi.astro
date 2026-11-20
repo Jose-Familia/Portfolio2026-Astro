@@ -6,6 +6,7 @@
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import SkillsSection from '@/components/about/SkillsSection.astro';
+import Experience from '@/components/about/Experience.astro';
 import Certifications from '@/components/about/Certifications.astro';
 import Icon from '@/components/ui/Icon.astro';
 import Badge from '@/components/ui/Badge.astro';
@@ -17,10 +18,6 @@ import { aboutContent } from '@/i18n/about';
 // Idioma actual
 const lang: Lang = 'es';
 const content = aboutContent[lang];
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('es-ES', { timeZone: 'UTC', year: 'numeric', month: 'short' });
-}
 
 function formatYear(date: Date): string {
   return date.getUTCFullYear().toString();
@@ -38,17 +35,18 @@ function formatYear(date: Date): string {
         
         <!-- Filosofía personal -->
         <blockquote class="border-l-4 border-primary-500 pl-6 my-8 animate-fade-in-up" style="--stagger: 1">
-          <p class="text-2xl font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+          <p class="text-2xl font-semibold text-ink mb-2">
             {content.philosophy.title}
           </p>
-          <p class="text-lg text-neutral-600 dark:text-neutral-400 italic">
+          <p class="text-lg text-muted-ink italic">
             {content.philosophy.description}
           </p>
         </blockquote>
         <nav class="flex flex-wrap gap-3 mt-7" aria-label="Secciones del perfil">
-          <a class="text-sm px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700" href="#formacion">Formación</a>
-          <a class="text-sm px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700" href="#habilidades">Habilidades</a>
-          <a class="text-sm px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700" href="#certificaciones">Credenciales</a>
+          <a class="text-sm px-4 py-2 rounded-full border border-line" href="#formacion">Formación</a>
+          <a class="text-sm px-4 py-2 rounded-full border border-line" href="#experiencia">Experiencia</a>
+          <a class="text-sm px-4 py-2 rounded-full border border-line" href="#habilidades">Habilidades</a>
+          <a class="text-sm px-4 py-2 rounded-full border border-line" href="#certificaciones">Credenciales</a>
         </nav>
       </header>
       
@@ -60,7 +58,7 @@ function formatYear(date: Date): string {
             <h2 class="text-2xl font-semibold mb-6">{t(lang, 'about.myStory')}</h2>
             <div class="prose-custom space-y-4">
               {content.bio.map((paragraph) => (
-                <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed">{paragraph}</p>
+                <p class="text-muted-ink leading-relaxed">{paragraph}</p>
               ))}
             </div>
           </section>
@@ -70,7 +68,7 @@ function formatYear(date: Date): string {
             <h2 class="text-2xl font-semibold mb-6">{t(lang, 'about.education')}</h2>
             <div class="space-y-8">
               {content.education.map((edu) => (
-                <div class="relative pl-8 pb-8 border-l-2 border-neutral-200 dark:border-neutral-800 last:pb-0">
+                <div class="relative pl-8 pb-8 border-l-2 border-line last:pb-0">
                   <div class="absolute left-0 top-0 w-4 h-4 -translate-x-1/2 rounded-full bg-primary-500"></div>
                   
                   <div class="flex flex-wrap items-center gap-2 mb-2">
@@ -80,7 +78,7 @@ function formatYear(date: Date): string {
                     )}
                   </div>
                   
-                  <p class="text-primary-600 dark:text-primary-400 font-medium mb-1">
+                  <p class="text-accent-ink font-medium mb-1">
                     {edu.institution}
                   </p>
                   
@@ -89,7 +87,7 @@ function formatYear(date: Date): string {
                     {edu.location && ` · ${edu.location}`}
                   </p>
                   
-                  <p class="text-neutral-600 dark:text-neutral-400">
+                  <p class="text-muted-ink">
                     {edu.description}
                   </p>
                 </div>
@@ -97,19 +95,9 @@ function formatYear(date: Date): string {
             </div>
           </section>
           
-          <SkillsSection groups={content.skills} lang={lang} />
+          <Experience experience={content.experience} lang={lang} />
 
-          <details class="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800">
-            <summary class="font-semibold cursor-pointer">Experiencia complementaria en TI</summary>
-            <p class="mt-4 text-sm text-neutral-500">La experiencia profesional complementa mi formación y mis proyectos de desarrollo.</p>
-            {content.experience.map(exp => (
-              <div class="mt-4 text-sm">
-                <p class="font-medium">{exp.position} · {exp.company}</p>
-                <p class="text-neutral-500 mt-1">{formatDate(exp.startDate)} — {t(lang, 'about.present')}</p>
-                <p class="text-neutral-600 dark:text-neutral-400 mt-2">{exp.description}</p>
-              </div>
-            ))}
-          </details>
+          <SkillsSection groups={content.skills} lang={lang} />
         </div>
         
         <!-- Sidebar -->
@@ -117,10 +105,10 @@ function formatYear(date: Date): string {
           <!-- Perfil -->
           <div class="card p-6">
             <div class="aspect-square rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800">
-              <div class="w-full h-full grid place-items-center text-7xl font-bold text-neutral-900 dark:text-white" aria-hidden="true">JF</div>
+              <div class="w-full h-full grid place-items-center text-7xl font-bold text-ink" aria-hidden="true">JF</div>
             </div>
             <h3 class="font-semibold text-lg mb-1">{content.name}</h3>
-            <p class="text-neutral-600 dark:text-neutral-400 text-sm mb-1">
+            <p class="text-muted-ink text-sm mb-1">
               {content.title}
             </p>
             <p class="text-neutral-500 text-xs mb-4 flex items-center gap-1">
@@ -152,7 +140,7 @@ function formatYear(date: Date): string {
           <!-- CTA Contacto -->
           <div class="card p-6 bg-primary-50 dark:bg-primary-950/50 border-primary-100 dark:border-primary-900">
             <h3 class="font-semibold mb-2">{t(lang, 'about.workTogether')}</h3>
-            <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            <p class="text-sm text-muted-ink mb-4">
               {t(lang, 'about.available')}
             </p>
             <Button href="/contacto" variant="primary" class="w-full">

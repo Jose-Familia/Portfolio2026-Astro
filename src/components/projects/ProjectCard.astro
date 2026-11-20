@@ -95,7 +95,7 @@ const projectUrl = `/proyectos/${slug}`;
     
     <!-- Título -->
     <h3 class:list={[
-      'font-semibold tracking-tight mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors',
+      'font-semibold tracking-tight mb-2 group-hover:text-accent-ink transition-colors',
       featured ? 'text-2xl' : 'text-xl',
     ]}>
       <a href={projectUrl} class="after:absolute after:inset-0">
@@ -105,7 +105,7 @@ const projectUrl = `/proyectos/${slug}`;
     
     <!-- Descripción -->
     <p class:list={[
-      'text-neutral-600 dark:text-neutral-400 mb-4 flex-1',
+      'text-muted-ink mb-4 flex-1',
       featured ? 'text-base' : 'text-sm line-clamp-2',
     ]}>
       {description}
@@ -129,7 +129,7 @@ const projectUrl = `/proyectos/${slug}`;
             href={links.live}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-accent-ink transition-colors"
             aria-label={`Ver demo de ${title}`}
           >
             <Icon name="external-link" size={16} />
@@ -141,7 +141,7 @@ const projectUrl = `/proyectos/${slug}`;
             href={links.github}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            class="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-accent-ink transition-colors"
             aria-label={`Ver código de ${title} en GitHub`}
           >
             <Icon name="github" size={16} />

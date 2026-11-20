@@ -1,27 +1,6 @@
-/** One lifecycle for theme and reveal effects across Astro navigations. */
-function getTheme() {
-  try {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || saved === 'light') return saved;
-  } catch { /* Theme still works when storage is disabled. */ }
-  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
+import { initializeTheme } from './theme';
 
-function applyTheme(theme = getTheme(), root = document.documentElement) {
-  root.classList.toggle('dark', theme === 'dark');
-  root.style.colorScheme = theme;
-}
-
-function updateIcons() {
-  const dark = document.documentElement.classList.contains('dark');
-  document.querySelectorAll<HTMLImageElement>('img[data-light][data-dark]').forEach(image => {
-    image.src = (dark ? image.dataset.light : image.dataset.dark)!;
-  });
-  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach(button => {
-    button.setAttribute('aria-label', dark ? 'Activar tema claro' : 'Activar tema oscuro');
-    button.setAttribute('aria-pressed', String(dark));
-  });
-}
+initializeTheme(window, document);
 
 let observer: IntersectionObserver | undefined;
 let animations: Animation[] = [];
@@ -56,24 +35,6 @@ function reveal() {
   document.querySelectorAll('.animate-fade-in-up, .scroll-reveal').forEach(element => observer!.observe(element));
 }
 
-// Delegation avoids adding another toggle handler after every navigation.
-document.addEventListener('click', event => {
-  if (!(event.target instanceof Element) || !event.target.closest('[data-theme-toggle]')) return;
-  const theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-  try { localStorage.setItem('theme', theme); } catch { /* Session-only selection. */ }
-  applyTheme(theme); updateIcons();
-});
-document.addEventListener('astro:before-swap', event => {
-  const nextDocument = (event as Event & { newDocument: Document }).newDocument;
-  // Preserve the active theme even when localStorage is unavailable.
-  applyTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light', nextDocument.documentElement);
-  clearMotion();
-});
-document.addEventListener('astro:page-load', () => { updateIcons(); reveal(); });
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-  applyTheme(); updateIcons();
-});
+document.addEventListener('astro:before-swap', clearMotion);
+document.addEventListener('astro:page-load', reveal);
 reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) clearMotion(); });
-window.addEventListener('storage', event => {
-  if (event.key === 'theme') { applyTheme(); updateIcons(); }
-});

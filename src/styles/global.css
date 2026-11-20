@@ -11,13 +11,19 @@
 /* Variables CSS personalizadas */
 @layer base {
   :root {
-    /* Colores semánticos - Modo claro */
-    --color-background: 255 255 255;
-    --color-foreground: 23 23 23;
-    --color-muted: 115 115 115;
-    --color-muted-foreground: 163 163 163;
-    --color-border: 229 229 229;
-    --color-accent: 14 165 233;
+    /* Shared palette for canvas, surfaces, content and controls. */
+    color-scheme: light;
+    --color-background: 247 249 252;
+    --color-surface: 255 255 255;
+    --color-surface-alt: 237 242 248;
+    --color-foreground: 23 31 44;
+    --color-muted: 70 84 104;
+    --color-subtle: 87 103 124;
+    --color-muted-foreground: 87 103 124;
+    --color-border: 208 218 230;
+    --color-accent: 2 132 199;
+    --color-accent-ink: 3 105 161;
+    --color-accent-soft: 224 242 254;
     --color-accent-foreground: 255 255 255;
 
     /* Espaciado del contenedor */
@@ -31,14 +37,19 @@
   }
 
   .dark {
-    /* Colores semánticos - Modo oscuro */
-    --color-background: 10 10 10;
-    --color-foreground: 250 250 250;
-    --color-muted: 163 163 163;
-    --color-muted-foreground: 115 115 115;
-    --color-border: 38 38 38;
+    color-scheme: dark;
+    --color-background: 14 17 23;
+    --color-surface: 22 28 38;
+    --color-surface-alt: 30 40 54;
+    --color-foreground: 238 243 250;
+    --color-muted: 189 201 218;
+    --color-subtle: 155 173 197;
+    --color-muted-foreground: 155 173 197;
+    --color-border: 63 79 101;
     --color-accent: 56 189 248;
-    --color-accent-foreground: 10 10 10;
+    --color-accent-ink: 125 211 252;
+    --color-accent-soft: 14 43 65;
+    --color-accent-foreground: 14 17 23;
   }
 
   /* Reset y estilos base */
@@ -70,7 +81,7 @@
   }
 
   body {
-    @apply bg-neutral-50/95 text-neutral-900 dark:bg-black dark:text-neutral-50;
+    @apply bg-canvas text-ink;
     @apply font-sans leading-relaxed;
     @apply min-h-screen;
     @apply transition-colors duration-300;
@@ -162,14 +173,14 @@
   }
 
   .btn-secondary {
-    @apply btn bg-transparent text-neutral-900 dark:text-neutral-50;
-    @apply border border-neutral-300 dark:border-neutral-700;
+    @apply btn bg-transparent text-ink;
+    @apply border border-line;
     @apply hover:bg-neutral-100 dark:hover:bg-neutral-800;
     @apply rounded-full;
   }
 
   .btn-ghost {
-    @apply btn bg-transparent text-neutral-600 dark:text-neutral-400;
+    @apply btn bg-transparent text-muted-ink;
     @apply hover:bg-neutral-100 dark:hover:bg-neutral-800;
     @apply hover:text-neutral-900 dark:hover:text-neutral-50;
   }
@@ -190,8 +201,8 @@
 
   /* Card base mejorada */
   .card {
-    @apply bg-white/90 dark:bg-neutral-900/90;
-    @apply border border-neutral-200 dark:border-neutral-800;
+    @apply bg-surface;
+    @apply border border-line;
     @apply rounded-3xl shadow-soft-lg dark:shadow-none overflow-hidden;
     @apply transition-all duration-300;
     @apply backdrop-blur-sm;
@@ -226,10 +237,10 @@
   /* Input base más moderno */
   .input {
     @apply w-full px-4 py-3 rounded-xl;
-    @apply bg-white/80 dark:bg-neutral-900/80;
-    @apply border border-neutral-300 dark:border-neutral-700;
-    @apply text-neutral-900 dark:text-neutral-50;
-    @apply placeholder:text-neutral-400 dark:placeholder:text-neutral-600;
+    @apply bg-surface/95;
+    @apply border border-line;
+    @apply text-ink;
+    @apply placeholder:text-subtle-ink;
     @apply transition-colors duration-200;
     @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
     @apply shadow-inner;
@@ -243,7 +254,7 @@
   .prose-custom {
     @apply prose prose-neutral dark:prose-invert max-w-none;
     @apply prose-headings:font-semibold prose-headings:tracking-tight;
-    @apply prose-a:text-primary-600 dark:prose-a:text-primary-400;
+    @apply prose-a:text-accent-ink;
     @apply prose-a:no-underline hover:prose-a:underline;
     @apply prose-code:bg-neutral-100 dark:prose-code:bg-neutral-800;
     @apply prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded;
@@ -407,9 +418,9 @@
 
   /* Glassmorphism */
   .glass {
-    @apply bg-white/80 dark:bg-neutral-900/80;
+    @apply bg-surface/95;
     @apply backdrop-blur-lg backdrop-saturate-150;
-    @apply border border-white/20 dark:border-neutral-800/50;
+    @apply border-b border-line;
   }
 
   /* Línea decorativa */
@@ -535,3 +546,18 @@
 [hidden] { display: none !important; }
 ::view-transition-old(root) { animation-duration: 160ms; }
 ::view-transition-new(root) { animation-duration: 220ms; }
+
+/* Keep secondary labels and field placeholders legible in both palettes. */
+.text-neutral-500 { color: rgb(var(--color-subtle)); }
+.dark .dark\:text-neutral-500 { color: rgb(var(--color-subtle)); }
+.input { border-color: rgb(var(--color-subtle) / .8); }
+.input::placeholder { color: rgb(var(--color-subtle)); opacity: 1; }
+:focus-visible { outline: 2px solid rgb(var(--color-accent)); outline-offset: 3px; }
+.theme-transition :where(body, header, main, section, article, aside, footer, nav, div, p, h1, h2, h3, span, a, button, input, select, textarea) {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition * { transition: none !important; }
+}

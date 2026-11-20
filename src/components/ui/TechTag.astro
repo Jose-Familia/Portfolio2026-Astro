@@ -1,108 +1,39 @@
 ---
-/**
- * TechTag.astro
- * Tag chip showing tech logo (light/dark) and name
- */
-
-import type { LogoVariant } from '@/utils/techLogos';
 import { getTechLogo } from '@/utils/techLogos';
-
 export interface Props {
-  name: string;
-  icon: string;
-  url?: string;
-  size?: 'sm' | 'md';
-  class?: string;
+  name: string; icon: string; url?: string; size?: 'sm' | 'md'; class?: string;
   style?: string | Record<string, string | number>;
 }
-
-const { name, icon, url, size = 'md', class: className = '', style = null } = Astro.props;
-const logo: LogoVariant | undefined = getTechLogo(icon);
-const hasBoth = !!(logo?.light && logo?.dark);
-const singleSrc = logo?.single || logo?.light || logo?.dark;
-
-const sizeClasses = {
-  sm: {
-    container: 'px-3 py-1 text-xs',
-    img: 'w-4 h-4',
-    gap: 'gap-2',
-  },
-  md: {
-    container: 'px-4 py-2 text-sm',
-    img: 'w-6 h-6',
-    gap: 'gap-2.5',
-  },
-}[size];
-
-const containerClasses = [
-  'inline-flex items-center rounded-full border transition-colors',
-  'bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800',
-  'hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700',
-  'text-neutral-700 dark:text-neutral-300',
-  sizeClasses.container,
-  sizeClasses.gap,
-  className,
-].join(' ');
-
-// normalize style prop: accept string or object and produce inline style
-let styleAttr: string | undefined;
-if (!style) styleAttr = undefined;
-else if (typeof style === 'string') styleAttr = style as string;
-else if (typeof style === 'object') {
-  styleAttr = Object.entries(style as Record<string, string | number>)
-    .map(([k, v]) => `${k}: ${v}`)
-    .join('; ');
-}
-
+const { name, icon, url, size = 'md', class: className = '', style } = Astro.props;
+const logo = getTechLogo(icon);
+const dual = Boolean(logo?.light && logo?.dark);
+const source = logo?.single || logo?.light || logo?.dark;
+const Tag = url ? 'a' : 'span';
+const styleAttribute = typeof style === 'object' ? Object.entries(style).map(([key,value]) => `${key}: ${value}`).join('; ') : style;
 ---
-
-{url ? (
-  <a href={url} target="_blank" rel="noopener noreferrer" class={containerClasses} style={styleAttr} aria-label={name}>
-    {hasBoth ? (
-      <span class="inline-flex items-center">
-        <span class={sizeClasses.img + ' tech-logo variant-container flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
-          <img
-            src={logo.dark}
-            alt=""
-            class="w-full h-full object-contain tech-logo-img"
-            data-light={logo.light}
-            data-dark={logo.dark}
-          />
-        </span>
-      </span>
-    ) : singleSrc ? (
-      <span class={sizeClasses.img + ' tech-logo flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
-        <img src={singleSrc} alt="" class="w-full h-full object-contain" width="24" height="24" loading="lazy" decoding="async" />
-      </span>
-    ) : null}
-    <span class="font-medium">{name}</span>
-  </a>
-  ) : (
-    <span class={containerClasses} style={styleAttr}>
-      {hasBoth ? (
-        <span class="inline-flex items-center">
-          <picture class={sizeClasses.img + ' tech-logo flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
-            <source media="(prefers-color-scheme: dark)" srcset={logo.light} />
-            <img
-              class="w-full h-full object-contain tech-logo-img"
-              src={logo.dark}
-              data-light={logo.light}
-              data-dark={logo.dark}
-              alt=""
-            />
-          </picture>
-        </span>
-      ) : singleSrc ? (
-        <span class={sizeClasses.img + ' tech-logo flex-shrink-0 rounded-md bg-white p-0.5'} aria-hidden="true">
-          <img src={singleSrc} alt="" class="w-full h-full object-contain" width="24" height="24" loading="lazy" decoding="async" />
-        </span>
-      ) : null}
-      <span class="font-medium">{name}</span>
+<Tag href={url} target={url ? '_blank' : undefined} rel={url ? 'noopener noreferrer' : undefined} class:list={['tech-tag', `tech-tag--${size}`, className]} style={styleAttribute}>
+  {source && (
+    <span class:list={['tech-icon', logo?.backplate && 'tech-icon--plate']} aria-hidden="true">
+      {dual ? (
+        <>
+          <img class="tech-image--light" src={logo!.light} alt="" width="24" height="24" loading="lazy" decoding="async" />
+          <img class="tech-image--dark" src={logo!.dark} alt="" width="24" height="24" loading="lazy" decoding="async" />
+        </>
+      ) : <img src={source} alt="" width="24" height="24" loading="lazy" decoding="async" />}
     </span>
   )}
-
+  <span class="font-medium">{name}</span>
+</Tag>
 <style>
-  .tech-logo { display: inline-block; }
-  .tech-logo img { width: 100%; height: 100%; display: block; object-fit: contain; }
-  /* No CSS toggling — JS will set the correct src for dual-variant images */
+  .tech-tag { display: inline-flex; align-items: center; gap: .625rem; border: 1px solid rgb(var(--color-border)); border-radius: 999px; background: rgb(var(--color-surface-alt)); color: rgb(var(--color-foreground)); transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease; }
+  .tech-tag--md { padding: .5rem .875rem; font-size: .875rem; }
+  .tech-tag--sm { padding: .25rem .625rem; font-size: .875rem; }
+  a.tech-tag:hover { border-color: rgb(var(--color-accent)); }
+  .tech-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 24px; height: 24px; padding: 1px; border-radius: 6px; }
+  .tech-tag--sm .tech-icon { width: 18px; height: 18px; }
+  .tech-icon img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .tech-icon--plate { background: #f8fafc; padding: 3px; }
+  .tech-icon .tech-image--dark { display: none; }
+  :global(.dark) .tech-icon .tech-image--light { display: none; }
+  :global(.dark) .tech-icon .tech-image--dark { display: block; }
 </style>

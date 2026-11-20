@@ -27,4 +27,5 @@ experience:
     position: Analista I de redes
     startDate: '2026-06-22'
     current: true
-    description: Experiencia complementaria en operaciones y monitoreo de aplicaciones y servicios de TI.
+    description: >-
+      Producción y monitoreo de aplicaciones y servicios de TI: seguimiento de alertas e incidentes, escalamiento y soporte en entornos Windows y Linux con Dynatrace y Splunk.

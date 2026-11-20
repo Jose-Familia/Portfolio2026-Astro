@@ -100,8 +100,7 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
     <meta name="twitter:image" content={new URL(image, Astro.site)} />
 
     <!-- Theme color para navegadores móviles -->
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f9fc" />
 
     <!-- JSON-LD Schema -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
@@ -125,6 +124,8 @@ const fullTitle = title === 'Inicio' ? siteName : `${title} | ${siteName}`;
         const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
         document.documentElement.classList.toggle('dark', dark);
         document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#0e1117' : '#f7f9fc');
       })();
     </script>
     <!-- Client Router para navegación suave -->

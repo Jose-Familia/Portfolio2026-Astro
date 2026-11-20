@@ -33,6 +33,7 @@ export type LogoVariant = {
   light?: string;
   dark?: string;
   single?: string;
+  backplate?: boolean;
 };
 
 export const logos: Record<string, LogoVariant> = {
@@ -52,24 +53,24 @@ export const logos: Record<string, LogoVariant> = {
 
   // Extras used across site
   javascript: { single: JavaScript },
-  nextjs: { single: NextjsSVG },
-  nextjs_icon: { single: NextjsSVG },
+  nextjs: { single: NextjsSVG, backplate: true },
+  nextjs_icon: { single: NextjsSVG, backplate: true },
   nestjs: { single: NestJS },
   docker: { single: Docker },
   html5: { single: HTML5 },
   git: { single: Git },
-  linux: { single: Linux },
+  linux: { single: Linux, backplate: true },
   postman: { single: Postman },
   vscode: { single: VSCode },
   python: { single: '/icons/tech/python.svg' },
   mongodb: { single: '/icons/tech/mongodb.svg' },
   redis: { single: '/icons/tech/redis.svg' },
   sqlite: { single: '/icons/tech/sqlite.svg' },
-  aws: { single: '/icons/tech/aws.svg' },
+  aws: { single: '/icons/tech/aws.svg', backplate: true },
   kubernetes: { single: '/icons/tech/kubernetes.svg' },
   terraform: { single: '/icons/tech/terraform.svg' },
   dynatrace: { single: '/icons/tech/dynatrace.svg' },
-  splunk: { single: '/icons/tech/splunk.svg' },
+  splunk: { single: '/icons/tech/splunk.svg', backplate: true },
 };
 
 export function getTechLogo(key: string): LogoVariant | undefined {

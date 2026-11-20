@@ -65,7 +65,7 @@ export const aboutContent = {
         startDate: new Date("2026-06-22"),
         current: true,
         description:
-          "Experiencia complementaria en operaciones y monitoreo de aplicaciones y servicios de TI.",
+          "Producción y monitoreo de aplicaciones y servicios de TI: seguimiento de alertas e incidentes, escalamiento y soporte en entornos Windows y Linux con Dynatrace y Splunk.",
       },
     ] as Experience[],
 
@@ -189,7 +189,7 @@ export const aboutContent = {
         startDate: new Date("2026-06-22"),
         current: true,
         description:
-          "Complementary experience in IT operations and monitoring of applications and services.",
+          "Production and monitoring of IT applications and services: alert and incident follow-up, escalation and support across Windows and Linux environments using Dynatrace and Splunk.",
       },
     ] as Experience[],
 

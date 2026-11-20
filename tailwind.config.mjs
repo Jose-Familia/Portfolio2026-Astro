@@ -6,6 +6,15 @@ export default {
     extend: {
       // Paleta de colores minimalista
       colors: {
+        canvas: 'rgb(var(--color-background) / <alpha-value>)',
+        surface: 'rgb(var(--color-surface) / <alpha-value>)',
+        'surface-alt': 'rgb(var(--color-surface-alt) / <alpha-value>)',
+        ink: 'rgb(var(--color-foreground) / <alpha-value>)',
+        'muted-ink': 'rgb(var(--color-muted) / <alpha-value>)',
+        'subtle-ink': 'rgb(var(--color-subtle) / <alpha-value>)',
+        line: 'rgb(var(--color-border) / <alpha-value>)',
+        'accent-ink': 'rgb(var(--color-accent-ink) / <alpha-value>)',
+        'accent-soft': 'rgb(var(--color-accent-soft) / <alpha-value>)',
         // Colores principales
         primary: {
           50: "#f0f9ff",

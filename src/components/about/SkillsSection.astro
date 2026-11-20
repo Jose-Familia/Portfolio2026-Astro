@@ -11,12 +11,12 @@ const { groups, lang = 'es' } = Astro.props;
   </div>
   <div class="space-y-4">
     {groups.map(group => (
-      <article class="p-5 sm:p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+      <article class="p-5 sm:p-6 rounded-2xl border border-line bg-surface">
         <div class="flex flex-wrap items-center gap-3 mb-2">
           <h3 class="text-lg font-semibold">{group.category}</h3>
           {group.practice && <span class="text-sm px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 dark:bg-sky-950 dark:text-sky-300">{group.practice}</span>}
         </div>
-        <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-5">{group.description}</p>
+        <p class="text-sm text-muted-ink mb-5">{group.description}</p>
         <ul class="flex flex-wrap gap-2" role="list">
           {group.items.map(skill => <li><TechTag name={skill.name} icon={skill.icon} size="md" /></li>)}
         </ul>

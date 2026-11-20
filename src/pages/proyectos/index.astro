@@ -12,7 +12,7 @@ const tags = [...new Set(projects.flatMap(project => project.data.tags))].sort()
       <header class="max-w-3xl mb-10">
         <p class="text-sm uppercase tracking-widest text-neutral-500 mb-4">Del problema a la implementación</p>
         <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-in-up">Proyectos</h1>
-        <p class="text-lg text-neutral-600 dark:text-neutral-400">Aplicaciones web y de escritorio con su contexto, decisiones técnicas y código. Explora cómo está construida cada solución.</p>
+        <p class="text-lg text-muted-ink">Aplicaciones web y de escritorio con su contexto, decisiones técnicas y código. Explora cómo está construida cada solución.</p>
       </header>
       <div class="mb-10 space-y-5">
         <div class="max-w-xl">
@@ -33,8 +33,8 @@ const tags = [...new Set(projects.flatMap(project => project.data.tags))].sort()
         <p class="text-neutral-500 mb-6">Prueba otra tecnología o elimina los filtros.</p>
         <button type="button" data-reset-projects class="btn-primary">Restablecer búsqueda</button>
       </div>
-      <div class="mt-16 pt-10 border-t border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center justify-between gap-6">
-        <p class="text-neutral-600 dark:text-neutral-400">¿Te interesa construir algo juntos?</p>
+      <div class="mt-16 pt-10 border-t border-line flex flex-wrap items-center justify-between gap-6">
+        <p class="text-muted-ink">¿Te interesa construir algo juntos?</p>
         <Button href="/contacto">Hablemos de tu proyecto</Button>
       </div>
     </div>
@@ -48,7 +48,7 @@ const tags = [...new Set(projects.flatMap(project => project.data.tags))].sort()
   });
 </script>
 <style>
-  .project-filter { @apply px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700 text-sm font-medium transition-colors; }
+  .project-filter { @apply px-4 py-2 rounded-full border border-line text-sm font-medium transition-colors; }
   .project-filter[aria-pressed="true"] { @apply bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-black dark:border-white; }
   .project-filter:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 </style>

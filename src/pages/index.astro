@@ -1,294 +1,87 @@
 ---
-/**
- * Home Page - Portfolio José Familia
- * Diseño minimalista con animaciones suaves
- */
-
 import Hero from '@/components/home/Hero.astro';
-import Magnetic from '@/components/ui/Magnetic';
 import TechTag from '@/components/ui/TechTag.astro';
+import Button from '@/components/ui/Button.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-
-const homeData = {
-  hero: {
-    title: 'Diseño y desarrollo aplicaciones',
-    subtitle: 'Soy José Familia, estudiante de Ingeniería en Sistemas Computacionales. Desarrollo aplicaciones y exploro cómo conectarlas con cloud, datos e infraestructura de TI.',
-    primaryCTA: { text: 'Ver Proyectos', link: '/proyectos' },
-    secondaryCTA: { text: 'Contacto', link: '/contacto' },
-  },
-};
-
-// Get featured projects
+import { aboutContent } from '@/i18n/about';
+import { estimateReadingTime } from '@/utils/readingTime';
+import { formatDateShort } from '@/utils/formatDate';
 const allProjects = await getCollection('projects');
-const featuredProjects = allProjects
-  .filter(project => project.data.featured)
-  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
-  .slice(0, 4);
-
-// Get recent blog posts
-const allPosts = await getCollection('blog');
-const recentPosts = allPosts
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
-  .slice(0, 3);
-
-const hasProjects = featuredProjects.length > 0;
-const hasPosts = recentPosts.length > 0;
-
-// Tech stack with icon keys for logo rendering
+const featuredProjects = allProjects.filter(project => project.data.featured)
+  .sort((a,b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()).slice(0,4);
+const posts = (await getCollection('blog')).filter(post => !post.data.draft);
+const recentPosts = [...posts].sort((a,b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()).slice(0,3);
 const technologies = [
-  { name: 'JavaScript', icon: 'javascript' },
-  { name: 'TypeScript', icon: 'typescript' },
-  { name: 'React', icon: 'react' },
-  { name: 'Next.js', icon: 'nextjs' },
-  { name: 'Astro', icon: 'astro' },
-  { name: 'Node.js', icon: 'nodejs' },
-  { name: 'NestJS', icon: 'nestjs' },
-  { name: 'PostgreSQL', icon: 'postgresql' },
-  { name: 'Docker', icon: 'docker' },
-  { name: 'Tailwind CSS', icon: 'tailwindcss' },
+  {name:'TypeScript',icon:'typescript'}, {name:'React',icon:'react'}, {name:'Next.js',icon:'nextjs'},
+  {name:'Astro',icon:'astro'}, {name:'Node.js',icon:'nodejs'}, {name:'NestJS',icon:'nestjs'},
+  {name:'PostgreSQL',icon:'postgresql'}, {name:'Docker',icon:'docker'},
 ];
 ---
-
 <BaseLayout title="Inicio">
-  <!-- Hero -->
   <Hero
-    title="Diseño y desarrollo aplicaciones"
-    subtitle={homeData.hero.subtitle}
-    primaryCTA={homeData.hero.primaryCTA}
-    secondaryCTA={homeData.hero.secondaryCTA}
+    title="Diseño y desarrollo"
+    subtitle="Soy José Familia, estudiante de Ingeniería en Sistemas Computacionales en UNAPEC. Construyo aplicaciones web y de escritorio, y profundizo en backend, datos y cloud."
+    primaryCTA={{text:'Explorar proyectos',link:'/proyectos'}}
+    secondaryCTA={{text:'Conocer mi perfil',link:'/sobre-mi'}}
   />
-  
-  <!-- About Section -->
-  <section id="about" class="py-24 md:py-32 bg-canvas">
+  <div class="container-main">
+    <nav class="portfolio-overview" aria-label="Explorar el portfolio">
+      <a href="/proyectos"><span class="overview-value">{allProjects.length} proyectos</span><span>Código y decisiones técnicas</span></a>
+      <a href="/blog"><span class="overview-value">{posts.length} artículos</span><span>Apuntes para construir mejor</span></a>
+      <a href="/sobre-mi#formacion"><span class="overview-value">UNAPEC</span><span>Ingeniería en Sistemas</span></a>
+      <a href="/sobre-mi#certificaciones"><span class="overview-value">{aboutContent.es.certifications.length} credenciales</span><span>Desarrollo y bases de datos</span></a>
+    </nav>
+  </div>
+  <section id="about" class="editorial-section">
     <div class="container-main">
-      <div class="max-w-4xl">
-        <!-- Encabezado -->
-        <span class="text-sm font-semibold text-ink tracking-wide uppercase mb-4 block animate-fade-in-up">
-          Sobre mí
-        </span>
-        
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink mb-8 leading-tight animate-fade-in-up" style="--stagger: 1">
-          Código limpio,<br />
-          <span class="text-subtle-ink">diseño intencional</span>
-        </h2>
-        
-        <!-- Texto -->
-        <div class="space-y-6 mb-10">
-          <p class="text-lg text-muted-ink leading-relaxed animate-fade-in-up" style="--stagger: 2">
-            Mi formación en Ingeniería en Sistemas Computacionales en UNAPEC es el punto de partida. Me interesa diseñar y desarrollar aplicaciones, comprender sus datos y conectar el software con la infraestructura que lo hace posible.
-          </p>
-          
-          <p class="text-muted-ink leading-relaxed animate-fade-in-up" style="--stagger: 3">
-            Construyo proyectos web y de escritorio, y profundizo en backend, bases de datos y arquitectura cloud. Me interesa entender el recorrido completo de una aplicación: cómo se usa, cómo se construye y cómo se mantiene.
-          </p>
+      <div class="intro-grid">
+        <div class="animate-fade-in-up"><p class="eyebrow mb-5">Formación y enfoque</p><h2 class="section-display">Entender el sistema.<br /><em>Cuidar cada detalle.</em></h2></div>
+        <div class="intro-copy animate-fade-in-up">
+          <p>Mi formación en Ingeniería en Sistemas Computacionales es el punto de partida. Me interesa diseñar aplicaciones útiles y comprender cómo se conectan sus interfaces, su lógica y sus datos.</p>
+          <p>Aprendo construyendo: proyectos web y de escritorio, práctica en backend y exploración de cloud e infraestructura. Documento las decisiones, los problemas y lo que descubro en el camino.</p>
+          <a href="/sobre-mi" class="editorial-link">Formación, experiencia y habilidades</a>
         </div>
-        
-        <!-- Stack Tecnológico -->
-        <div class="mb-10 animate-fade-in-up" style="--stagger: 4">
-          <p class="text-sm text-subtle-ink mb-5 uppercase tracking-wide font-medium">Stack Tecnológico</p>
-          <div class="flex flex-wrap gap-2">
-            {technologies.map((tech, index) => (
-              <TechTag
-                name={tech.name}
-                icon={tech.icon}
-                size="md"
-                class="animate-fade-in-up"
-                style={{ '--stagger': 4 + index * 0.3 }}
-              />
-            ))}
-          </div>
-        </div>
-        
-        <!-- Link -->
-        <a 
-          href="/sobre-mi" 
-          class="inline-flex items-center gap-2 text-ink font-semibold hover:gap-3 transition-all group animate-fade-in-up"
-          style="--stagger: 8"
-        >
-          Conoce mi historia
-          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </a>
       </div>
+      <div class="stack-strip animate-fade-in-up"><p class="eyebrow">Tecnologías que utilizo</p><div class="flex flex-wrap gap-2">{technologies.map(tech=><TechTag name={tech.name} icon={tech.icon} size="md" />)}</div></div>
     </div>
   </section>
-  
-  <!-- Projects Section -->
-  {hasProjects && (
-    <section class="py-24 md:py-32 bg-surface-alt">
+  {featuredProjects.length > 0 && (
+    <section class="editorial-section" aria-labelledby="selected-projects-title">
       <div class="container-main">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 animate-fade-in-up">
-          <div>
-            <span class="text-sm font-semibold text-ink tracking-wide uppercase mb-4 block">
-              Proyectos
-            </span>
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-ink">
-              Trabajo seleccionado
-            </h2>
-          </div>
-          <a 
-            href="/proyectos" 
-            class="inline-flex items-center gap-2 text-muted-ink hover:text-neutral-900 dark:hover:text-white font-medium transition-colors group"
-          >
-            Ver todos los proyectos
-            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-        </div>
-        
+        <header class="editorial-section-heading animate-fade-in-up">
+          <div><p class="eyebrow mb-4">Del problema a la implementación</p><h2 id="selected-projects-title" class="section-display">Proyectos seleccionados</h2></div>
+          <a href="/proyectos" class="editorial-link">Ver todos los proyectos</a>
+        </header>
         <div class="grid md:grid-cols-2 gap-8">
-          {featuredProjects.map((project, index) => (
-            <a 
-              href={`/proyectos/${project.slug}`}
-              class="group block relative overflow-hidden rounded-2xl bg-canvas border border-line hover:border-black dark:hover:border-white transition-all duration-300 hover:shadow-xl animate-fade-in-up"
-              style={`--stagger: ${index}`}
-            >
-              <!-- Image -->
-              <div class="aspect-[16/10] bg-surface-alt overflow-hidden">
-                {project.data.thumbnail ? (
-                  <img 
-                    src={project.data.thumbnail} 
-                    alt={project.data.title}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div class="w-full h-full flex items-center justify-center text-neutral-300 dark:text-neutral-700">
-                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                )}
-              </div>
-              
-              <!-- Content -->
-              <div class="p-6">
-                <div class="flex items-start justify-between gap-4 mb-3">
-                  <h3 class="text-xl font-bold text-ink group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
-                    {project.data.title}
-                  </h3>
-                  <svg class="w-5 h-5 text-neutral-400 group-hover:text-black dark:group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10" />
-                  </svg>
-                </div>
-                <p class="text-muted-ink text-sm line-clamp-2 mb-4">
-                  {project.data.description}
-                </p>
-                <div class="flex flex-wrap gap-2">
-                  {project.data.technologies?.slice(0, 4).map((tech: string) => (
-                    <span class="text-xs px-3 py-1 rounded-full bg-surface-alt text-muted-ink font-medium">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          {featuredProjects.map((project,index)=>(
+            <a href={`/proyectos/${project.slug}`} class="home-project group animate-fade-in-up" style={`--stagger:${index}`}>
+              <div class="home-project-cover">{project.data.thumbnail && <img src={project.data.thumbnail} alt={`Vista previa de ${project.data.title}`} width="1440" height="900" loading="lazy" decoding="async" />}</div>
+              <div class="home-project-content"><p class="eyebrow mb-3">{project.data.technologies.slice(0,3).join(' · ')}</p><h3>{project.data.title}</h3><p>{project.data.description}</p><span class="editorial-link">Explorar proyecto</span></div>
             </a>
           ))}
         </div>
       </div>
     </section>
   )}
-  
-  <!-- Blog Section -->
-  {hasPosts && (
-    <section class="py-24 md:py-32 bg-canvas">
+  {recentPosts.length > 0 && (
+    <section class="editorial-section" aria-labelledby="recent-articles-title">
       <div class="container-main">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 animate-fade-in-up">
-          <div>
-            <span class="text-sm font-semibold text-ink tracking-wide uppercase mb-4 block">
-              Blog
-            </span>
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-ink">
-              Artículos recientes
-            </h2>
-          </div>
-          <a 
-            href="/blog" 
-            class="inline-flex items-center gap-2 text-muted-ink hover:text-black dark:hover:text-white font-medium transition-colors group"
-          >
-            Ver todos los artículos
-            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-        </div>
-        
-        <div class="space-y-4">
-          {recentPosts.map((post, index) => (
-            <a 
-              href={`/blog/${post.slug}`}
-              class="group flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-2xl border border-transparent hover:border-neutral-200 dark:hover:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-all animate-fade-in-up"
-              style={`--stagger: ${index}`}
-            >
-              <div class="md:w-40 flex-shrink-0">
-                <time class="text-sm text-neutral-500 font-medium">
-                  {new Date(post.data.publishDate).toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                  })}
-                </time>
-              </div>
-              <div class="flex-1 min-w-0">
-                <h3 class="text-lg font-bold text-ink group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors mb-2">
-                  {post.data.title}
-                </h3>
-                <p class="text-muted-ink text-sm line-clamp-1">
-                  {post.data.excerpt}
-                </p>
-              </div>
-              <svg class="w-5 h-5 text-neutral-400 group-hover:text-black dark:group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+        <header class="editorial-section-heading animate-fade-in-up"><div><p class="eyebrow mb-4">Notas de ingeniería</p><h2 id="recent-articles-title" class="section-display">Lo que voy aprendiendo</h2></div><a href="/blog" class="editorial-link">Explorar el blog</a></header>
+        <div class="home-articles">
+          {recentPosts.map((post,index)=>(
+            <a href={`/blog/${post.slug}`} class="home-article animate-fade-in-up" style={`--stagger:${index}`}>
+              {post.data.coverImage && <img src={post.data.coverImage} alt="" width="1440" height="900" loading="lazy" decoding="async" />}
+              <div><p class="article-meta"><time datetime={post.data.publishDate.toISOString().slice(0,10)}>{formatDateShort(post.data.publishDate)}</time><span>{post.data.readingTime || estimateReadingTime(post.body)} min de lectura</span></p><h3>{post.data.title}</h3><p class="article-excerpt">{post.data.excerpt}</p></div>
+              <span class="article-read">Leer artículo</span>
             </a>
           ))}
         </div>
       </div>
     </section>
   )}
-  
-  <!-- CTA Section -->
-  <section class="py-24 md:py-32 relative overflow-hidden bg-canvas">
-    <!-- Decoración de fondo -->
-    <div class="absolute inset-0 opacity-5 dark:hidden">
-      <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0); background-size: 40px 40px;"></div>
-    </div>
-    
-    <div class="container-main relative">
-      <div class="max-w-3xl mx-auto text-center animate-fade-in-up">
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink mb-6">
-          ¿Quieres colaborar conmigo?
-        </h2>
-        <p class="text-lg text-muted-ink mb-10 max-w-xl mx-auto">
-          Me interesan las colaboraciones y oportunidades en desarrollo de aplicaciones, backend y cloud. Conversemos sobre lo que estás construyendo.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <Magnetic client:visible strength={0.1}>
-            <a 
-              href="/contacto"
-              class="group inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-semibold rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all shadow-lg"
-            >
-              Conectar ahora
-              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-          </Magnetic>
-          <a 
-            href="mailto:familiajoserene@gmail.com"
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold rounded-full border-2 border-neutral-400 dark:border-neutral-600 text-muted-ink hover:border-neutral-900 dark:hover:border-white hover:text-neutral-900 dark:hover:text-white transition-all"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            Enviar email
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="contact-band" aria-labelledby="home-contact-title"><div class="container-main contact-band-grid">
+    <div><p class="eyebrow mb-5">Conversemos</p><h2 id="home-contact-title" class="section-display">Las buenas ideas<br />empiezan con <em>una conversación.</em></h2></div>
+    <div><p>Me interesan las colaboraciones y oportunidades en desarrollo de aplicaciones, backend y cloud. Cuéntame qué estás construyendo.</p><div class="flex flex-wrap gap-3 mt-7"><Button href="/contacto" size="lg">Hablemos de tu proyecto</Button><a href="mailto:familiajoserene@gmail.com" class="editorial-link self-center">Enviar email</a></div></div>
+  </div></section>
 </BaseLayout>

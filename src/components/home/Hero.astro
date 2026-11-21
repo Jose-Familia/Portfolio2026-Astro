@@ -1,74 +1,49 @@
 ---
-/**
- * Hero.astro
- * Sección hero principal para la página de inicio
- * Diseño minimalista con animaciones sutiles
- */
-
 import Button from '@/components/ui/Button.astro';
-
-export interface Props {
+import TechTag from '@/components/ui/TechTag.astro';
+interface Props {
   title: string;
   subtitle?: string;
-  primaryCTA?: {
-    text: string;
-    link: string;
-  };
-  secondaryCTA?: {
-    text: string;
-    link: string;
-  };
+  primaryCTA?: { text: string; link: string };
+  secondaryCTA?: { text: string; link: string };
 }
-
 const { title, subtitle, primaryCTA, secondaryCTA } = Astro.props;
+const areas = [
+  { title: 'Interfaces', detail: 'Experiencias claras y accesibles', icon: 'react', technology: 'React' },
+  { title: 'Backend', detail: 'Lógica, contratos y aplicaciones', icon: 'nestjs', technology: 'NestJS' },
+  { title: 'Datos', detail: 'Modelado y persistencia', icon: 'postgresql', technology: 'PostgreSQL' },
+  { title: 'Cloud', detail: 'Despliegue y arquitectura · en formación', icon: 'aws', technology: 'AWS' },
+];
 ---
-
-<section class="relative min-h-[85vh] flex items-center overflow-hidden dark:bg-canvas">
-  <!-- Fondo con gradiente sutil -->
-  <div class="absolute inset-0 -z-10">
-    <!-- Fondo en modo claro con gradiente -->
-    <div class="absolute inset-0 bg-gradient-to-br from-neutral-50 via-white to-neutral-100/50 dark:hidden"></div>
-    <!-- Fondo sólido en modo oscuro -->
-    <div class="absolute inset-0 hidden dark:block bg-canvas"></div>
-    <!-- Patrón de puntos decorativo -->
-    <div class="absolute inset-0 opacity-[0.02] dark:hidden" style="background-image: radial-gradient(circle, currentColor 1px, transparent 1px); background-size: 32px 32px;"></div>
-    <!-- Efecto de gradiente animado -->
-    <div class="absolute top-0 left-1/4 w-96 h-96 bg-neutral-200/30 rounded-full blur-3xl dark:hidden"></div>
-    <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-neutral-200/20 rounded-full blur-3xl dark:hidden" style="animation-delay: 1s"></div>
-  </div>
-  
-  <div class="container-main py-20 md:py-32">
-    <div class="max-w-4xl">
-      <p class="text-sm uppercase tracking-[.16em] text-subtle-ink mb-8 animate-fade-in-up">
-        José Familia · Desarrollo de aplicaciones
-      </p>
-      <!-- Título principal -->
-      <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-ink animate-fade-in-up">
-        {title}
+<section class="home-hero" aria-labelledby="hero-title">
+  <div class="container-main hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow animate-fade-in-up">José Familia · Ingeniería en Sistemas</p>
+      <h1 id="hero-title" class="hero-title animate-fade-in-up" style="--stagger:1">
+        {title}<br /><em>aplicaciones</em><br />con propósito.
       </h1>
-      
-      <!-- Subtítulo -->
-      {subtitle && (
-        <p class="text-xl md:text-2xl text-muted-ink max-w-2xl mb-10 animate-fade-in-up" style="--stagger: 2">
-          {subtitle}
-        </p>
-      )}
-      
-      <!-- CTAs -->
-      <div class="flex flex-wrap gap-4 animate-fade-in-up" style="--stagger: 3">
-        {primaryCTA && (
-          <Button href={primaryCTA.link} variant="primary" size="lg">
-            {primaryCTA.text}
-          </Button>
-        )}
-        {secondaryCTA && (
-          <Button href={secondaryCTA.link} variant="secondary" size="lg">
-            {secondaryCTA.text}
-          </Button>
-        )}
+      {subtitle && <p class="hero-description animate-fade-in-up" style="--stagger:2">{subtitle}</p>}
+      <div class="flex flex-wrap gap-3 mt-8 animate-fade-in-up" style="--stagger:3">
+        {primaryCTA && <Button href={primaryCTA.link} size="lg">{primaryCTA.text}</Button>}
+        {secondaryCTA && <Button href={secondaryCTA.link} variant="secondary" size="lg">{secondaryCTA.text}</Button>}
       </div>
-      
+      <p class="hero-location">Santo Domingo, República Dominicana</p>
     </div>
+    <aside class="focus-panel animate-fade-in-up" style="--stagger:3" aria-labelledby="focus-panel-title">
+      <div class="focus-panel-heading">
+        <span class="eyebrow">Del diseño al despliegue</span>
+        <span class="focus-symbol" aria-hidden="true">{ '{ }' }</span>
+      </div>
+      <h2 id="focus-panel-title">Las piezas que<br />me interesa conectar.</h2>
+      <dl class="focus-areas">
+        {areas.map(area => (
+          <div class="focus-area">
+            <div><dt>{area.title}</dt><dd>{area.detail}</dd></div>
+            <TechTag name={area.technology} icon={area.icon} size="sm" />
+          </div>
+        ))}
+      </dl>
+      <p class="focus-panel-note">Aprendizaje continuo, proyectos propios y fundamentos de ingeniería.</p>
+    </aside>
   </div>
 </section>
- 

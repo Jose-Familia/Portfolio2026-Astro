@@ -25,12 +25,12 @@ const currentPath = Astro.url.pathname;
       <!-- Logo -->
       <a
         href="/"
-        class="group flex items-center gap-2 text-xl font-bold tracking-tight hover:text-primary-600 transition-colors"
+        class="site-brand group flex items-center gap-3"
         aria-label="Ir al inicio"
         transition:name="logo"
       >
-        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-700 text-white text-sm font-bold group-hover:bg-primary-600 transition-colors">JF</span>
-        <span class="hidden sm:inline text-ink">José Familia</span>
+        <span class="brand-mark">JF</span>
+        <span class="brand-name hidden sm:inline text-ink">José Familia</span>
       </a>
       
       <!-- Navegación desktop -->
@@ -43,9 +43,9 @@ const currentPath = Astro.url.pathname;
               <a
                 href={item.href}
                 class:list={[
-                  'relative px-4 py-2 text-sm font-medium rounded-lg transition-colors',
+                  'site-nav-link relative px-3 py-2 text-sm font-medium transition-colors',
                   isActive
-                    ? 'text-accent-ink bg-primary-50 dark:bg-primary-900/20'
+                    ? 'text-accent-ink'
                     : 'text-muted-ink hover:text-neutral-900 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800',
                 ]}
                 aria-current={isActive ? 'page' : undefined}

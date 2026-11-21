@@ -171,3 +171,9 @@ El perfil prioriza Ingeniería en Sistemas, desarrollo de aplicaciones e interé
 La paleta semántica vive en `src/styles/global.css` y se utiliza mediante colores de Tailwind como `canvas`, `surface`, `ink`, `muted-ink` y `line`. Los textos principales, secundarios y de acento se comprueban contra las tres superficies de ambos temas con un contraste mínimo de 4.5:1.
 
 `src/scripts/theme.ts` gestiona selección explícita, preferencia del sistema, almacenamiento bloqueado, sincronización entre pestañas y los eventos de navegación de Astro. La selección se aplica antes del primer pintado y antes de intercambiar la página; también actualiza `color-scheme`, el color del navegador y la etiqueta del control. Los iconos con variantes siguen la clase del tema, en lugar de depender solo de la preferencia del sistema. Las marcas monocromas utilizan una base de contraste; las demás conservan sus colores.
+
+## Dirección visual editorial
+
+La actualización visual toma como referencia la composición editorial de cristianbaeza.com: titulares serif, etiquetas monoespaciadas, portada en dos columnas y separadores finos. Conserva el acento azul, los dos temas, el contenido propio y todas las funciones existentes. `src/styles/editorial.css` contiene esta capa visual; Instrument Serif se sirve localmente mediante `@fontsource/instrument-serif` con variantes normal e itálica.
+
+La portada presenta las áreas de aprendizaje, accesos con cantidades derivadas de las colecciones, proyectos seleccionados y artículos recientes con sus banners. Educación y experiencia mantienen su componente de línea de tiempo compartido; las tres credenciales seleccionadas y las insignias de habilidades siguen disponibles en ambos idiomas.

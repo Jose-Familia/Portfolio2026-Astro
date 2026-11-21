@@ -1,0 +1,49 @@
+---
+import Badge from '@/components/ui/Badge.astro';
+import { t, type Lang } from '@/i18n';
+
+interface Entry {
+  title: string;
+  organization: string;
+  location?: string;
+  startDate: Date;
+  endDate?: Date;
+  current: boolean;
+  description: string;
+}
+interface Props {
+  id: string;
+  title: string;
+  entries: Entry[];
+  lang: Lang;
+  datePrecision?: 'year' | 'month';
+}
+const { id, title, entries, lang, datePrecision = 'year' } = Astro.props;
+const formatDate = (date: Date) => datePrecision === 'year'
+  ? date.getUTCFullYear().toString()
+  : date.toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', { timeZone: 'UTC', month: 'short', year: 'numeric' });
+---
+{entries.length > 0 && (
+  <section id={id} class="scroll-mt-28" aria-labelledby={`${id}-title`}>
+    <h2 id={`${id}-title`} class="text-2xl font-semibold mb-6">{title}</h2>
+    <div class="space-y-8">
+      {entries.map(entry => (
+        <div class="relative pl-8 pb-8 border-l-2 border-line last:pb-0">
+          <div class="absolute left-0 top-0 w-4 h-4 -translate-x-1/2 rounded-full bg-primary-500" aria-hidden="true"></div>
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <h3 class="text-lg font-semibold">{entry.title}</h3>
+            {entry.current && <Badge variant="success" size="sm">{t(lang, 'about.current')}</Badge>}
+          </div>
+          <p class="text-accent-ink font-medium mb-1">{entry.organization}</p>
+          <p class="text-sm text-subtle-ink mb-3">
+            <time datetime={entry.startDate.toISOString().slice(0, 10)}>{formatDate(entry.startDate)}</time>
+            {(entry.current || entry.endDate) && ' — '}
+            {entry.current ? t(lang, 'about.present') : entry.endDate && <time datetime={entry.endDate.toISOString().slice(0, 10)}>{formatDate(entry.endDate)}</time>}
+            {entry.location && ` · ${entry.location}`}
+          </p>
+          <p class="text-muted-ink">{entry.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+)}

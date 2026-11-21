@@ -9,7 +9,7 @@ const filters = [
   { key: 'certification', label: en ? 'Certifications' : 'Certificaciones' },
   { key: 'program', label: en ? 'Programs' : 'Programas' },
   { key: 'course', label: en ? 'Courses' : 'Cursos' },
-];
+].filter(filter => filter.key === 'all' || certifications.some(cert => groupOf(cert.type) === filter.key));
 const issuerMark = (issuer: string) => issuer.startsWith('DataCamp') ? 'DC' : issuer.startsWith('Oracle') ? 'ONE' : issuer.startsWith('Coursera') ? 'UNAM' : issuer.startsWith('freeCodeCamp') ? 'fCC' : 'G';
 const issuerTone = (issuer: string) => issuer.startsWith('DataCamp') ? 'green' : issuer.startsWith('Oracle') ? 'red' : issuer.startsWith('freeCodeCamp') ? 'neutral' : 'blue';
 const sorted = [...certifications].sort((a,b) => b.date.getTime() - a.date.getTime());
@@ -19,7 +19,7 @@ const sorted = [...certifications].sort((a,b) => b.date.getTime() - a.date.getTi
     <div class="max-w-2xl">
       <p class="text-sm uppercase tracking-widest text-neutral-500 mb-3">{en ? 'Continuous learning' : 'Aprendizaje continuo'}</p>
       <h2 id="certificates-title" class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">{en ? 'Certifications & education' : 'Certificaciones y formación'}</h2>
-      <p class="text-muted-ink">{en ? 'Complementary education in development, data and technology. Each credential keeps its original issuer and type.' : 'Formación complementaria en desarrollo, datos y tecnología. Cada credencial conserva su institución y tipo de formación.'}</p>
+      <p class="text-muted-ink">{en ? 'Selected credentials in application development and databases.' : 'Una selección de credenciales en desarrollo de aplicaciones y bases de datos.'}</p>
     </div>
     <a href={en ? '/en/contact' : '/contacto'} class="text-sm font-medium underline underline-offset-4">{en ? 'Let’s connect' : 'Conversemos'}</a>
   </div>

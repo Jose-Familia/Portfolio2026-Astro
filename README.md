@@ -159,10 +159,10 @@ npm run build
 
 ## Formación, habilidades y artículos
 
-El perfil prioriza Ingeniería en Sistemas, desarrollo de aplicaciones e interés en cloud y TI. La experiencia laboral tiene una sección visible entre formación y habilidades, con empresa, cargo, fechas y responsabilidades. La versión española y la inglesa comparten los componentes `SkillsSection.astro` y `Certifications.astro`.
+El perfil prioriza Ingeniería en Sistemas, desarrollo de aplicaciones e interés en cloud y TI. La experiencia laboral tiene una sección visible entre formación y habilidades, con empresa, cargo, fechas y responsabilidades. Educación y experiencia comparten `ProfileTimeline.astro`, con el mismo formato de línea de tiempo en español e inglés. Las dos versiones también comparten `SkillsSection.astro` y `Certifications.astro`.
 
 - `src/data/skills.ts` organiza los badges por área con claves de icono explícitas; `src/utils/techLogos.ts` resuelve sus insignias. Los SVG adicionales de Devicon se sirven localmente con su atribución y licencia MIT en `public/icons/tech/`.
-- Las credenciales existentes se muestran por fecha, con su institución, tipo, habilidades e identificador cuando está disponible. Los filtros separan certificaciones, programas y cursos.
+- Se muestran tres credenciales seleccionadas por su relación con desarrollo y datos: SQL Associate (DataCamp), Oracle Next Education: Frontend y Diseño Web Responsivo (freeCodeCamp). Conservan su fecha, institución, tipo, habilidades e identificador cuando está disponible. Los filtros solo muestran categorías con credenciales.
 - Se añadieron seis artículos con ejemplos de estudio, referencias oficiales y portadas SVG. Sus fechas anteriores y variadas se eligieron a petición del autor; no representan fechas de implementación ni experiencias de trabajo. Los temas son Astro/React, NestJS, PostgreSQL, Docker, Kubernetes y AWS SQS.
 - Los artículos relacionados se seleccionan por categoría, etiquetas y fecha. El tiempo de lectura se mantiene consistente entre listados y fichas mediante `src/utils/readingTime.ts`, respetando los valores editoriales definidos en el contenido.
 
